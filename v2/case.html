@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study — Freddy Gonzalez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" id="t-home">Home</a></li>
+      <li><a href="about.html" id="t-about">About</a></li>
+      <li><a href="work.html" class="active" id="t-work">Work</a></li>
+      <li><a href="contact.html" id="t-contact">Contact</a></li>
+      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
+    </ul>
+    <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </nav>
+
+  <main>
+    <div class="container section-pad" style="padding-top:8rem" id="caseContent">
+      <!-- Populated by JS -->
+      <p style="color:var(--muted)">Loading...</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-logo">Freddy Gonzalez</div>
+    <span class="footer-copy" id="t-copy">© 2024 Freddy Gonzalez. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="mailto:tipovisual@gmail.com" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script>
+    document.getElementById('langBtn').textContent = Lang.current === 'en' ? 'ES' : 'EN';
+    document.getElementById('t-home').textContent = Lang.get('nav.home');
+    document.getElementById('t-about').textContent = Lang.get('nav.about');
+    document.getElementById('t-work').textContent = Lang.get('nav.work');
+    document.getElementById('t-contact').textContent = Lang.get('nav.contact');
+    document.getElementById('t-copy').textContent = Lang.get('footer.copy');
+
+    // Get case study id from URL
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const cs = caseStudies.find(c => c.id === id);
+
+    if (!cs) {
+      document.getElementById('caseContent').innerHTML = `
+        <p style="color:var(--muted)">Case study not found.</p>
+        <a href="work.html" class="btn btn-ghost" style="margin-top:1rem">← Back to Work</a>`;
+    } else {
+      const title   = Lang.cs(cs, 'title');
+      const cat     = Lang.cs(cs, 'category');
+      const desc    = Lang.cs(cs, 'description');
+      const chall   = Lang.cs(cs, 'challenge');
+      const sol     = Lang.cs(cs, 'solution');
+      const learn   = Lang.cs(cs, 'learnings');
+      const nextCs  = caseStudies.find(c => c.id === cs.next) || caseStudies[0];
+      const nextTitle = Lang.cs(nextCs, 'title');
+
+      document.title = `${title} — Freddy Gonzalez`;
+
+      document.getElementById('caseContent').innerHTML = `
+        <a href="work.html" class="btn btn-ghost btn-sm" style="margin-bottom:2rem;border-radius:100px">
+          ← ${Lang.get('case.back').replace('← ','')}
+        </a>
+
+        <div class="section-label">${cat}</div>
+        <h1 class="section-title">${title}</h1>
+        <p class="section-sub" style="margin-bottom:3rem;max-width:700px">${desc}</p>
+
+        <!-- Hero image placeholder -->
+        <div class="cs-hero">${cs.emoji}</div>
+
+        <!-- Meta -->
+        <div class="cs-meta">
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">${Lang.get('case.role')}</div>
+            <div class="cs-meta-value">${cs.role}</div>
+          </div>
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">${Lang.get('case.duration')}</div>
+            <div class="cs-meta-value">${cs.duration}</div>
+          </div>
+          <div class="cs-meta-item">
+            <div class="cs-meta-label">${Lang.get('case.tools')}</div>
+            <div class="cs-meta-value">${cs.tools.join(', ')}</div>
+          </div>
+        </div>
+
+        <!-- Challenge -->
+        <div class="cs-section">
+          <h2>${Lang.get('case.challenge')}</h2>
+          <p>${chall}</p>
+          <div class="cs-images">
+            <div class="cs-img-box">RESEARCH IMAGE 01</div>
+            <div class="cs-img-box">RESEARCH IMAGE 02</div>
+          </div>
+        </div>
+
+        <!-- Process -->
+        <div class="cs-section">
+          <h2>${Lang.get('case.process')}</h2>
+
+          <h3>${Lang.get('case.research')}</h3>
+          <p>${Lang.current === 'es' ? cs.process.researchEs : cs.process.research}</p>
+
+          <h3>${Lang.get('case.ideation')}</h3>
+          <p>${Lang.current === 'es' ? cs.process.ideationEs : cs.process.ideation}</p>
+          <div class="cs-images">
+            <div class="cs-img-box">IDEATION IMAGE 01</div>
+            <div class="cs-img-box">IDEATION IMAGE 02</div>
+          </div>
+
+          <h3>${Lang.get('case.wireframes')}</h3>
+          <p>${Lang.current === 'es' ? cs.process.wireframesEs : cs.process.wireframes}</p>
+
+          <h3>${Lang.get('case.testing')}</h3>
+          <p>${Lang.current === 'es' ? cs.process.testingEs : cs.process.testing}</p>
+          <div class="cs-images">
+            <div class="cs-img-box">TESTING IMAGE 01</div>
+            <div class="cs-img-box">TESTING IMAGE 02</div>
+          </div>
+        </div>
+
+        <!-- Solution -->
+        <div class="cs-section">
+          <h2>${Lang.get('case.solution')}</h2>
+          <p>${sol}</p>
+          <div class="cs-images">
+            <div class="cs-img-box">SOLUTION IMAGE 01</div>
+            <div class="cs-img-box">SOLUTION IMAGE 02</div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div class="cs-section">
+          <h2>${Lang.get('case.results')}</h2>
+          <div class="metrics-grid">
+            ${cs.metrics.map(m => `
+              <div class="metric-card">
+                <div class="metric-val">${m.value}</div>
+                <div class="metric-label">${Lang.current === 'es' ? m.labelEs : m.label}</div>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        <!-- Learnings -->
+        <div class="cs-section">
+          <h2>${Lang.get('case.learnings')}</h2>
+          <p>${learn}</p>
+        </div>
+
+        <!-- Next project -->
+        <div style="margin-top:1rem">
+          <p style="font-size:0.7rem;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem">${Lang.get('case.next')}</p>
+          <a href="case.html?id=${nextCs.id}" class="next-project-card">
+            <div class="next-label">${nextCs.emoji}</div>
+            <div class="next-title">${nextTitle}</div>
+            <span class="btn btn-ghost" style="margin:0 auto">${Lang.get('work.viewCase')} →</span>
+          </a>
+        </div>
+      `;
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    });
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

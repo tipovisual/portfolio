@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Freddy Gonzalez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" id="t-home">Home</a></li>
+      <li><a href="about.html" class="active" id="t-about">About</a></li>
+      <li><a href="work.html" id="t-work">Work</a></li>
+      <li><a href="contact.html" id="t-contact">Contact</a></li>
+      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
+    </ul>
+    <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </nav>
+
+  <main>
+    <div class="container section-pad" style="padding-top:8rem">
+
+      <!-- HEADER -->
+      <div class="section-label" id="t-label">About Me</div>
+
+      <!-- BIO GRID -->
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:4rem;align-items:start;margin-bottom:5rem">
+        <div>
+          <div style="aspect-ratio:1;border-radius:20px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:5rem;margin-bottom:1.5rem">👨‍💻</div>
+          <div style="display:flex;flex-direction:column;gap:0.75rem">
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--muted)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Panamá, Ciudad de Panamá
+            </div>
+            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.85rem;color:var(--muted)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              tipovisual@gmail.com
+            </div>
+          </div>
+        </div>
+        <div>
+          <h1 class="section-title" id="t-title">About Me</h1>
+          <p class="section-sub" style="margin-bottom:1.5rem" id="t-bio">A graphic design background ignited my passion for how people interact with technology.</p>
+          <a href="#" class="btn btn-ghost" id="t-download">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Download Resume
+          </a>
+        </div>
+      </div>
+
+      <!-- SKILLS + EXPERIENCE GRID -->
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:4rem;margin-bottom:5rem">
+
+        <!-- SKILLS -->
+        <div>
+          <div class="section-label" id="t-skills-label">Skills</div>
+
+          <div class="skills-group">
+            <h3 id="t-tech-label">Technical Skills</h3>
+            <div>
+              <span class="skill-tag">Information Architecture</span>
+              <span class="skill-tag">Human-centered Design</span>
+              <span class="skill-tag">Design Systems</span>
+              <span class="skill-tag">Figma</span>
+              <span class="skill-tag">Prototypes Design</span>
+              <span class="skill-tag">Usability Principles</span>
+              <span class="skill-tag">Design Thinking</span>
+              <span class="skill-tag">Lean UX</span>
+              <span class="skill-tag">Problem Solving</span>
+              <span class="skill-tag">Cross Teams Communication</span>
+            </div>
+          </div>
+
+          <div class="skills-group">
+            <h3 id="t-soft-label">Soft Skills</h3>
+            <div>
+              <span class="skill-tag">Fast Learner</span>
+              <span class="skill-tag">Teamwork</span>
+              <span class="skill-tag">Agile Principles</span>
+              <span class="skill-tag">Design Ops</span>
+              <span class="skill-tag">Self Organization</span>
+              <span class="skill-tag">Effective Time Management</span>
+              <span class="skill-tag">Critical Thinking</span>
+              <span class="skill-tag">Business Needs Understanding</span>
+              <span class="skill-tag">Ability to Multitask</span>
+            </div>
+          </div>
+
+          <div class="skills-group">
+            <h3 id="t-tools-label">Tools</h3>
+            <div>
+              <span class="skill-tag">Figma</span>
+              <span class="skill-tag">Adobe Illustrator</span>
+              <span class="skill-tag">Adobe Photoshop</span>
+              <span class="skill-tag">Adobe After Effects</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXPERIENCE -->
+        <div>
+          <div class="section-label" id="t-exp-label">Experience</div>
+
+          <div class="exp-item">
+            <div class="exp-title" id="e1-title">UI Designer in Product Team</div>
+            <div class="exp-company">MFtech s.a / Zinli</div>
+            <div class="exp-period" id="e1-period">December 2019 – Present</div>
+            <div class="exp-desc" id="e1-desc">Working on a digital wallet mobile app, focusing on user interface design and user experience optimization.</div>
+          </div>
+
+          <div class="exp-item">
+            <div class="exp-title" id="e2-title">Design Lead and Product Designer</div>
+            <div class="exp-company">Keylime Technologies s.a.</div>
+            <div class="exp-period">September 2014 – November 2019</div>
+            <div class="exp-desc" id="e2-desc">Led design initiatives and product development, creating user-centered solutions and design systems.</div>
+          </div>
+
+          <div class="exp-item">
+            <div class="exp-title" id="e3-title">UX/UI Designer</div>
+            <div class="exp-company">Vozz News s.a.</div>
+            <div class="exp-period">July 2016 – May 2019</div>
+            <div class="exp-desc" id="e3-desc">Designed user experience and interface for a news digest mobile application, focusing on content presentation and readability.</div>
+          </div>
+
+          <div class="exp-item">
+            <div class="exp-title" id="e4-title">UX Research</div>
+            <div class="exp-company">Cochez & Cia s.a.</div>
+            <div class="exp-period">June 2019 – August 2019</div>
+            <div class="exp-desc" id="e4-desc">Conducted user research for a retail, logistics and inventory manager mobile app, identifying user needs and pain points.</div>
+          </div>
+
+          <div class="exp-item">
+            <div class="exp-title" id="e5-title">Instructor</div>
+            <div class="exp-company">CVT Center s.a.</div>
+            <div class="exp-period">August 2014 – January 2023</div>
+            <div class="exp-desc" id="e5-desc">Taught courses at a visual design academy, sharing knowledge and best practices in UX/UI design.</div>
+          </div>
+
+          <div class="exp-item">
+            <div class="exp-title" id="e6-title">Founder</div>
+            <div class="exp-company">TWI Studio c.a</div>
+            <div class="exp-period">March 2008 – December 2013</div>
+            <div class="exp-desc" id="e6-desc">Founded and managed a design studio, providing creative solutions for various clients.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="section-label" id="t-edu-label">Education</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:0.5rem">
+
+        <div class="edu-item">
+          <div class="edu-degree" id="edu1-deg">UX/UI Design Courses</div>
+          <div class="edu-inst">Platzi, Coursera, The Interaction Design Foundation</div>
+          <div class="edu-year">2017 – 2024</div>
+          <div class="cert-grid">
+            <div class="cert-item"><span class="cert-dot"></span>AI for designers</div>
+            <div class="cert-item"><span class="cert-dot"></span>Information architecture</div>
+            <div class="cert-item"><span class="cert-dot"></span>Human-centered design</div>
+            <div class="cert-item"><span class="cert-dot"></span>Design systems</div>
+            <div class="cert-item"><span class="cert-dot"></span>Design thinking</div>
+            <div class="cert-item"><span class="cert-dot"></span>Lean UX & Scrum</div>
+            <div class="cert-item"><span class="cert-dot"></span>Usability principles</div>
+            <div class="cert-item"><span class="cert-dot"></span>Prototypes design</div>
+            <div class="cert-item"><span class="cert-dot"></span>Color semiotics</div>
+            <div class="cert-item"><span class="cert-dot"></span>Interface design principles</div>
+          </div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-degree" id="edu2-deg">Graphic Designer Degree</div>
+          <div class="edu-inst">Instituto de Diseño de Valencia</div>
+          <div class="edu-year">2004 – 2007</div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-degree">Screen Essentials for UI Designers</div>
+          <div class="edu-inst">learnux.io</div>
+          <div class="edu-year">2020</div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-logo">Freddy Gonzalez</div>
+    <span class="footer-copy" id="t-copy">© 2024 Freddy Gonzalez. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="mailto:tipovisual@gmail.com" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script>
+    document.getElementById('langBtn').textContent = Lang.current === 'en' ? 'ES' : 'EN';
+    document.getElementById('t-home').textContent = Lang.get('nav.home');
+    document.getElementById('t-about').textContent = Lang.get('nav.about');
+    document.getElementById('t-work').textContent = Lang.get('nav.work');
+    document.getElementById('t-contact').textContent = Lang.get('nav.contact');
+    document.getElementById('t-label').textContent = Lang.get('about.label');
+    document.getElementById('t-title').textContent = Lang.get('about.title');
+    document.getElementById('t-bio').textContent = Lang.get('about.bio');
+    document.getElementById('t-download').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> ${Lang.get('about.download')}`;
+    document.getElementById('t-skills-label').textContent = Lang.get('about.skillsTitle');
+    document.getElementById('t-tech-label').textContent = Lang.get('about.techSkills');
+    document.getElementById('t-soft-label').textContent = Lang.get('about.softSkills');
+    document.getElementById('t-tools-label').textContent = Lang.get('about.tools');
+    document.getElementById('t-exp-label').textContent = Lang.get('about.expTitle');
+    document.getElementById('t-edu-label').textContent = Lang.get('about.eduTitle');
+    document.getElementById('t-copy').textContent = Lang.get('footer.copy');
+
+    if (Lang.current === 'es') {
+      document.getElementById('e1-title').textContent = 'Diseñador UI en Equipo de Producto';
+      document.getElementById('e1-period').textContent = 'Diciembre 2019 – Presente';
+      document.getElementById('e1-desc').textContent = 'Trabajando en una aplicación móvil de billetera digital, enfocado en el diseño de interfaz y optimización de experiencia de usuario.';
+      document.getElementById('e2-title').textContent = 'Líder de Diseño y Diseñador de Producto';
+      document.getElementById('e2-desc').textContent = 'Lideré iniciativas de diseño y desarrollo de productos, creando soluciones centradas en el usuario y sistemas de diseño.';
+      document.getElementById('e3-title').textContent = 'Diseñador UX/UI';
+      document.getElementById('e3-desc').textContent = 'Diseñé la experiencia de usuario e interfaz para una aplicación móvil de resumen de noticias.';
+      document.getElementById('e4-title').textContent = 'Investigador UX';
+      document.getElementById('e4-desc').textContent = 'Realicé investigación de usuarios para una aplicación móvil de gestión de retail, logística e inventario.';
+      document.getElementById('e5-title').textContent = 'Instructor';
+      document.getElementById('e5-desc').textContent = 'Impartí cursos en una academia de diseño visual, compartiendo conocimientos y mejores prácticas en diseño UX/UI.';
+      document.getElementById('e6-title').textContent = 'Fundador';
+      document.getElementById('e6-desc').textContent = 'Fundé y gestioné un estudio de diseño, proporcionando soluciones creativas para varios clientes.';
+      document.getElementById('edu1-deg').textContent = 'Cursos de Diseño UX/UI';
+      document.getElementById('edu2-deg').textContent = 'Título de Diseñador Gráfico';
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    });
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freddy Gonzalez — UX/UI Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active" id="t-home">Home</a></li>
+      <li><a href="about.html" id="t-about">About</a></li>
+      <li><a href="work.html" id="t-work">Work</a></li>
+      <li><a href="contact.html" id="t-contact">Contact</a></li>
+      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
+    </ul>
+    <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-grid"></div>
+      <div class="hero-content">
+        <div class="hero-tag fade-up" id="t-hero-tag">Available for new projects</div>
+        <h1 class="fade-up d1">Designing<br><em>experiences</em><br>that matter</h1>
+        <p class="hero-sub fade-up d2" id="t-hero-sub">Crafting intuitive and accessible products that prioritize usability, functionality, and visual harmony.</p>
+        <div class="hero-actions fade-up d3">
+          <a href="work.html" class="btn btn-primary" id="t-hero-cta">View My Work
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="contact.html" class="btn btn-ghost" id="t-hero-contact">Get in Touch</a>
+        </div>
+      </div>
+      <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        <span>SCROLL</span>
+      </div>
+    </section>
+
+    <!-- CASE STUDIES PREVIEW -->
+    <div class="bg-surface">
+      <div class="container section-pad">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;flex-wrap:wrap;gap:1rem">
+          <div>
+            <div class="section-label" id="t-work-label">Selected Work</div>
+            <h2 class="section-title" id="t-work-title">Case Studies</h2>
+          </div>
+          <a href="work.html" class="btn btn-ghost" id="t-view-all">View All Work →</a>
+        </div>
+        <div class="cases-grid" id="homeCases"></div>
+      </div>
+    </div>
+
+    <!-- ABOUT PREVIEW -->
+    <div class="container section-pad">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center">
+        <div style="aspect-ratio:1;border-radius:20px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:6rem">👨‍💻</div>
+        <div>
+          <div class="section-label" id="t-about-label">About Me</div>
+          <h2 class="section-title" id="t-about-title">UX Designer & Researcher</h2>
+          <p class="section-sub" style="margin-bottom:2rem" id="t-about-desc">A graphic design background ignited my passion for how people interact with technology. This curiosity led me to the world of HCI, where I discovered the power of user-centered design.</p>
+          <a href="about.html" class="btn btn-primary" id="t-about-btn">About Me
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT CTA -->
+    <div class="bg-surface">
+      <div class="container section-pad" style="text-align:center">
+        <div class="section-label" style="justify-content:center" id="t-contact-label">Contact</div>
+        <h2 class="section-title" id="t-contact-title">Interested in working together?</h2>
+        <p class="section-sub" style="max-width:500px;margin:0 auto 2rem" id="t-contact-sub">Let's connect and create impactful experiences together.</p>
+        <a href="contact.html" class="btn btn-primary" id="t-contact-cta">Send Message
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Freddy Gonzalez</div>
+    <span class="footer-copy" id="t-copy" title="">© 2024 Freddy Gonzalez. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="social-btn" title="LinkedIn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="mailto:tipovisual@gmail.com" class="social-btn" title="Email">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script>
+    // Apply language
+    document.getElementById('langBtn').textContent = Lang.current === 'en' ? 'ES' : 'EN';
+    document.getElementById('t-home').textContent = Lang.get('nav.home');
+    document.getElementById('t-about').textContent = Lang.get('nav.about');
+    document.getElementById('t-work').textContent = Lang.get('nav.work');
+    document.getElementById('t-contact').textContent = Lang.get('nav.contact');
+    document.getElementById('t-hero-tag').textContent = Lang.get('hero.tag');
+    document.getElementById('t-hero-sub').textContent = Lang.get('hero.sub');
+    document.getElementById('t-hero-cta').innerHTML = Lang.get('hero.cta') + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+    document.getElementById('t-hero-contact').textContent = Lang.get('hero.contact');
+    document.getElementById('t-work-label').textContent = Lang.get('work.label');
+    document.getElementById('t-work-title').textContent = Lang.get('work.title');
+    document.getElementById('t-view-all').textContent = Lang.get('work.viewAll') + ' →';
+    document.getElementById('t-about-label').textContent = Lang.get('about.label');
+    document.getElementById('t-about-title').textContent = Lang.get('about.title');
+    document.getElementById('t-about-desc').textContent = Lang.get('about.bio').substring(0, 150) + '...';
+    document.getElementById('t-about-btn').innerHTML = Lang.get('nav.about') + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+    document.getElementById('t-contact-label').textContent = Lang.get('contact.label');
+    document.getElementById('t-contact-title').textContent = Lang.get('contact.title');
+    document.getElementById('t-contact-sub').textContent = Lang.get('contact.sub');
+    document.getElementById('t-contact-cta').innerHTML = Lang.get('contact.send') + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
+    document.getElementById('t-copy').textContent = Lang.get('footer.copy');
+
+    // Render home cases (first 4)
+    const grid = document.getElementById('homeCases');
+    caseStudies.slice(0, 4).forEach((cs, i) => {
+      const title = Lang.cs(cs, 'title');
+      const cat = Lang.cs(cs, 'category');
+      const desc = Lang.cs(cs, 'description');
+      const card = document.createElement('a');
+      card.href = `case.html?id=${cs.id}`;
+      card.className = `case-card${i === 0 ? ' featured' : ''}`;
+      card.innerHTML = `
+        <div class="case-img">
+          <div>
+            <div class="case-emoji${i===0?' featured':''}">${cs.emoji}</div>
+            <div class="case-cat-small">${cat.toUpperCase()}</div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div class="case-tag-label">${cat}</div>
+          <div class="case-title">${title}</div>
+          <div class="case-desc">${desc}</div>
+          <div class="case-footer">
+            <div class="case-tags">${cs.tags.slice(0,2).map(t=>`<span class="tag-pill">${t}</span>`).join('')}</div>
+            <div class="case-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+
+    // Nav scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    // Secret admin access: click copyright 3 times
+    let clicks = 0, timer;
+    document.getElementById('t-copy').addEventListener('click', () => {
+      clicks++;
+      clearTimeout(timer);
+      timer = setTimeout(() => clicks = 0, 1500);
+      if (clicks >= 3) { window.location.href = 'admin.html'; clicks = 0; }
+    });
+  </script>
+</body>
+</html>
