@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freddy Gonzalez — Professional Roadmap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --success: #10b981;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 50px;
+    }
+
+    .header {
+      background: #0f172a;
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+      border-bottom: 4px solid var(--primary);
+    }
+
+    .header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: -40px auto 0;
+      padding: 0 20px;
+    }
+
+    .stats-bar {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-around;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-item { text-align: center; }
+    .stat-value { font-family: 'Syne', sans-serif; font-size: 1.5rem; color: var(--primary); display: block; }
+    .stat-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+
+    /* Timeline Styles */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .phase-section {
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    .phase-badge {
+      position: absolute;
+      left: -40px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--border);
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    .phase-section.completed .phase-badge {
+      background: var(--success);
+      border-color: var(--success);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+    }
+
+    .phase-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .phase-date {
+      font-size: 0.85rem;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 2px 10px;
+      border-radius: 100px;
+      font-weight: bold;
+    }
+
+    .task-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .task-card:hover {
+      border-color: var(--primary);
+      transform: translateX(5px);
+    }
+
+    .checkbox {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .task-card.done .checkbox {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .task-card.done .checkbox::after {
+      content: '✓';
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .task-card.done .task-info h3 {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .task-info h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+      transition: color 0.2s;
+    }
+
+    .task-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .stack-tag {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 1px 8px;
+      border-radius: 4px;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Professional Roadmap</h1>
+  <p>Freddy Gonzalez — Senior UX/UI & Fullstack Developer</p>
+</div>
+
+<div class="container">
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-value" id="progress-percent">0%</span>
+      <span class="stat-label">Progreso Total</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value" id="tasks-count">0/12</span>
+      <span class="stat-label">Hitos Alcanzados</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">10</span>
+      <span class="stat-label">Días Meta</span>
+    </div>
+  </div>
+
+  <div class="timeline" id="roadmap-container">
+    
+    <div class="phase-section" id="phase-1">
+      <div class="phase-badge"></div>
+      <h2 class="phase-title">Fase 1: Infraestructura Senior <span class="phase-date">Días 1-2</span></h2>
+      
+      <div class="task-card" data-id="t1">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Repositorio GitHub</h3>
+          <p>Crear repo freddy-portfolio-v2 y subir el código limpio (HTML/CSS/JS).</p>
+          <span class="stack-tag">GitHub</span>
+        </div>
+      </div>
+
+      <div class="task-card" data-id="t2">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Cloudflare Pages Deployment</h3>
+          <p>Conectar el repo a Cloudflare para despliegue automático por cada push.</p>
+          <span class="stack-tag">Cloudflare</span>
+        </div>
+      </div>
+
+      <div class="task-card" data-id="t3">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Setup Supabase</h3>
+          <p>Crear proyecto en Supabase y obtener las API Keys (URL y Anon Key).</p>
+          <span class="stack-tag">Supabase</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-section" id="phase-2">
+      <div class="phase-badge"></div>
+      <h2 class="phase-title">Fase 2: Datos en la Nube <span class="phase-date">Días 3-5</span></h2>
+      
+      <div class="task-card" data-id="t4">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Esquema de Base de Datos</h3>
+          <p>Crear tabla 'projects' con columnas para title, description, category y tags.</p>
+          <span class="stack-tag">SQL / Supabase</span>
+        </div>
+      </div>
+
+      <div class="task-card" data-id="t5">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Migración de Contenido</h3>
+          <p>Insertar los datos de 'Educastic' y otros casos de estudio en la tabla.</p>
+          <span class="stack-tag">Supabase DB</span>
+        </div>
+      </div>
+
+      <div class="task-card" data-id="t6">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Refactorización de Work.html</h3>
+          <p>Cambiar el fetch local de JSON por una consulta directa a la API de Supabase.</p>
+          <span class="stack-tag">JS / Supabase Client</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-section" id="phase-3">
+      <div class="phase-badge"></div>
+      <h2 class="phase-title">Fase 3: Optimización y Experiencia <span class="phase-date">Días 6-8</span></h2>
+      
+      <div class="task-card" data-id="t7">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Capa Dinámica Case.html</h3>
+          <p>Hacer que la página de detalle cargue toda la historia del proyecto desde la DB.</p>
+          <span class="stack-tag">Fullstack JS</span>
+        </div>
+      </div>
+
+      <div class="task-card" data-id="t8">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Optimización de Imágenes</h3>
+          <p>Configurar Cloudflare Images o caching para mejorar el LCP de los proyectos.</p>
+          <span class="stack-tag">Performance</span>
+        </div>
+      </div>
+
+      <div class="task-card" data-id="t9">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Validación de Multi-idioma</h3>
+          <p>Asegurar que i18n funcione perfectamente con los datos que vienen de Supabase.</p>
+          <span class="stack-tag">i18n</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-section" id="phase-4">
+      <div class="phase-badge"></div>
+      <h2 class="phase-title">Fase 4: Lanzamiento y SEO <span class="phase-date">Días 9-10</span></h2>
+      
+      <div class="task-card" data-id="t10">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Metadatos y OpenGraph</h3>
+          <p>Configurar tags dinámicas para que al compartir en LinkedIn se vea la tarjeta del caso.</p>
+          <span class="stack-tag">SEO</span>
+        </div>
+      </div>
+
+      <div class="task-card" data-id="t11">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Analytics Setup</h3>
+          <p>Conectar Google Analytics o Vercel Analytics para medir tráfico en casos de estudio.</p>
+          <span class="stack-tag">Marketing Tech</span>
+        </div>
+      </div>
+
+      <div class="task-card" data-id="t12">
+        <div class="checkbox"></div>
+        <div class="task-info">
+          <h3>Deploy Final</h3>
+          <p>Verificación final de links, formularios y certificados SSL en Cloudflare.</p>
+          <span class="stack-tag">Go Live 🚀</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="footer-note">Este roadmap se guarda localmente en tu navegador. Úsalo para nuestra próxima sesión.</p>
+</div>
+
+<script>
+  // SISTEMA DE PERSISTENCIA Y ACTUALIZACIÓN
+  const cards = document.querySelectorAll('.task-card');
+  const storageKey = 'freddy_roadmap_state';
+
+  function updateProgress() {
+    const total = cards.length;
+    const done = document.querySelectorAll('.task-card.done').length;
+    const percent = Math.round((done / total) * 100);
+    
+    document.getElementById('progress-percent').textContent = percent + '%';
+    document.getElementById('tasks-count').textContent = `${done}/${total}`;
+
+    // Actualizar estado de las fases
+    document.querySelectorAll('.phase-section').forEach(phase => {
+      const phaseTasks = phase.querySelectorAll('.task-card');
+      const phaseDone = phase.querySelectorAll('.task-card.done');
+      if (phaseTasks.length === phaseDone.length) {
+        phase.classList.add('completed');
+      } else {
+        phase.classList.remove('completed');
+      }
+    });
+
+    // Guardar en LocalStorage
+    const state = {};
+    cards.forEach(card => {
+      state[card.dataset.id] = card.classList.contains('done');
+    });
+    localStorage.setItem(storageKey, JSON.stringify(state));
+  }
+
+  // Cargar estado inicial
+  const savedState = JSON.parse(localStorage.getItem(storageKey)) || {};
+  cards.forEach(card => {
+    if (savedState[card.dataset.id]) {
+      card.classList.add('done');
+    }
+
+    card.addEventListener('click', () => {
+      card.classList.toggle('done');
+      updateProgress();
+    });
+  });
+
+  // Ejecutar progreso inicial
+  updateProgress();
+</script>
+
+</body>
+</html>

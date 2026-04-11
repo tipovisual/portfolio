@@ -46,51 +46,84 @@
     </div>
   </footer>
 
-  <script src="js/data.js"></script>
   <script src="js/i18n.js"></script>
   <script>
-    document.getElementById('langBtn').textContent = Lang.current === 'en' ? 'ES' : 'EN';
-    document.getElementById('t-home').textContent = Lang.get('nav.home');
-    document.getElementById('t-about').textContent = Lang.get('nav.about');
-    document.getElementById('t-work').textContent = Lang.get('nav.work');
-    document.getElementById('t-contact').textContent = Lang.get('nav.contact');
-    document.getElementById('t-label').textContent = Lang.get('work.label');
-    document.getElementById('t-title').textContent = Lang.get('work.title');
-    document.getElementById('t-sub').textContent = Lang.get('work.sub');
-    document.getElementById('t-copy').textContent = Lang.get('footer.copy');
+    // 1. Traducciones y UI Inicial
+    function initUI() {
+        document.getElementById('langBtn').textContent = Lang.current === 'en' ? 'ES' : 'EN';
+        document.getElementById('t-home').textContent = Lang.get('nav.home');
+        document.getElementById('t-about').textContent = Lang.get('nav.about');
+        document.getElementById('t-work').textContent = Lang.get('nav.work');
+        document.getElementById('t-contact').textContent = Lang.get('nav.contact');
+        document.getElementById('t-label').textContent = Lang.get('work.label');
+        document.getElementById('t-title').textContent = Lang.get('work.title');
+        document.getElementById('t-sub').textContent = Lang.get('work.sub');
+        document.getElementById('t-copy').textContent = Lang.get('footer.copy');
+    }
 
-    const grid = document.getElementById('workGrid');
-    caseStudies.forEach((cs, i) => {
-      const title = Lang.cs(cs, 'title');
-      const cat = Lang.cs(cs, 'category');
-      const desc = Lang.cs(cs, 'description');
-      const card = document.createElement('a');
-      card.href = `case.html?id=${cs.id}`;
-      card.className = `case-card${i === 0 ? ' featured' : ''}`;
-      card.innerHTML = `
-        <div class="case-img">
-          <div>
-            <div class="case-emoji">${cs.emoji}</div>
-            <div class="case-cat-small">${cat.toUpperCase()}</div>
-          </div>
-        </div>
-        <div class="case-body">
-          <div class="case-tag-label">${cat}</div>
-          <div class="case-title">${title}</div>
-          <div class="case-desc">${desc}</div>
-          <div class="case-footer">
-            <div class="case-tags">${cs.tags.slice(0,2).map(t=>`<span class="tag-pill">${t}</span>`).join('')}</div>
-            <div class="case-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-          </div>
-        </div>`;
-      grid.appendChild(card);
-    });
+    // 2. Motor Dinámico con Formato Original
+    async function renderWorkGrid() {
+        const grid = document.getElementById('workGrid');
+        const lang = Lang.current;
+        
+        try {
+            const resIndex = await fetch('./projects/index.json');
+            if (!resIndex.ok) throw new Error("No se encontró index.json");
+            
+            const data = await resIndex.json();
+            grid.innerHTML = ''; 
 
+            for (const projectId of data.activeProjects) {
+                try {
+                    const resProject = await fetch(`./projects/${projectId}/content.json`);
+                    if (!resProject.ok) continue;
+                    const cs = await resProject.json();
+
+                    // Construcción de la tarjeta con tus clases originales de style.css
+                    const card = document.createElement('a');
+                    card.href = `case.html?id=${cs.id}`;
+                    card.className = 'case-card';
+                    
+                    card.innerHTML = `
+                        <div class="case-img">
+                            <div>
+                                <div class="case-emoji">${cs.emoji}</div>
+                                <div class="case-cat-small">${cs.category[lang].toUpperCase()}</div>
+                            </div>
+                        </div>
+                        <div class="case-body">
+                            <div class="case-tag-label">${cs.category[lang]}</div>
+                            <div class="case-title">${cs.title[lang]}</div>
+                            <div class="case-desc">${cs.description[lang]}</div>
+                            <div class="case-footer">
+                                <div class="case-tags">
+                                    ${cs.tags.slice(0,2).map(t => `<span class="tag-pill">${t}</span>`).join('')}
+                                </div>
+                                <div class="case-arrow">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>`;
+                    grid.appendChild(card);
+                } catch (err) { console.error("Error en proyecto:", projectId); }
+            }
+        } catch (error) {
+            console.error("Error en Work:", error);
+        }
+    }
+
+    // Ejecutar
+    initUI();
+    renderWorkGrid();
+
+    // Navegación y Menú
     window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+        document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
     });
     function toggleMenu() {
-      document.getElementById('navLinks').classList.toggle('open');
+        document.getElementById('navLinks').classList.toggle('open');
     }
   </script>
 </body>

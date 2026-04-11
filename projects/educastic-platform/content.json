@@ -1,0 +1,65 @@
+{
+  "id": "educastic-platform",
+  "emoji": "🎓",
+  "featured": true,
+  "title": {
+    "en": "Educastic Platform",
+    "es": "Plataforma Educastic"
+  },
+  "category": {
+    "en": "EdTech Design",
+    "es": "Diseño EdTech"
+  },
+  "description": {
+    "en": "Digital ecosystem for school management and interactive learning, focusing on user-centered experiences for students and teachers.",
+    "es": "Ecosistema digital para gestión escolar y aprendizaje interactivo, enfocado en experiencias centradas en el usuario para estudiantes y profesores."
+  },
+  "tags": ["UX Research", "UI Design", "Figma"],
+  "meta": {
+    "role": "Lead UX/UI Designer",
+    "duration": "6 Months",
+    "tools": ["Figma", "Adobe CC", "Miro"]
+  },
+  "story": {
+    "challenge": {
+      "en": "The existing educational tools were fragmented and difficult to use for non-technical teachers, leading to low adoption rates.",
+      "es": "Las herramientas educativas existentes estaban fragmentadas y eran difíciles de usar para profesores no técnicos, lo que resultaba en bajas tasas de adopción."
+    },
+    "process": {
+      "research": {
+        "title": { "en": "User Interviews", "es": "Entrevistas de Usuario" },
+        "text": { 
+          "en": "Conducted 15+ interviews with educators to identify pain points in digital grade management.",
+          "es": "Realicé más de 15 entrevistas con educadores para identificar puntos críticos en la gestión digital de calificaciones." 
+        }
+      },
+      "ideation": {
+        "title": { "en": "User Flow Mapping", "es": "Mapeo de Flujos" },
+        "text": { 
+          "en": "Designed a simplified dashboard that prioritizes daily tasks and student performance alerts.",
+          "es": "Diseñé un panel simplificado que prioriza las tareas diarias y las alertas de rendimiento estudiantil." 
+        }
+      },
+      "wireframes": {
+        "title": { "en": "Hi-Fi Prototyping", "es": "Prototipado de Alta Fidelidad" },
+        "text": { 
+          "en": "Iterative testing with real users to refine the accessibility of the interface.",
+          "es": "Pruebas iterativas con usuarios reales para refinar la accesibilidad de la interfaz." 
+        }
+      }
+    },
+    "solution": {
+      "en": "A unified platform that reduced administrative task time by 35% and increased teacher engagement.",
+      "es": "Una plataforma unificada que redujo el tiempo de tareas administrativas en un 35% e incrementó la participación docente."
+    }
+  },
+  "metrics": [
+    { "value": "35%", "label": { "en": "Time Saved", "es": "Tiempo Ahorrado" } },
+    { "value": "90%", "label": { "en": "Satisfaction", "es": "Satisfacción" } },
+    { "value": "20k", "label": { "en": "Active Users", "es": "Usuarios Activos" } }
+  ],
+  "learnings": {
+    "en": "Simplicity is the ultimate sophistication in complex educational ecosystems.",
+    "es": "La simplicidad es la máxima sofisticación en ecosistemas educativos complejos."
+  }
+}

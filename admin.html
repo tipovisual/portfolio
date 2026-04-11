@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* LOGIN */
+    /* Estilos de Login y Admin ya incluidos en tu código anterior */
     .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
     .login-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 50% 50% at 30% 50%, rgba(124,106,247,0.1) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 70% 50%, rgba(106,247,200,0.05) 0%, transparent 60%); }
     .login-card { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 3rem; width: 100%; max-width: 420px; }
@@ -16,65 +16,37 @@
     .login-sub { font-size: 0.75rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-bottom: 2rem; letter-spacing: 0.08em; }
     .login-error { background: rgba(247,124,106,0.1); border: 1px solid rgba(247,124,106,0.3); border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--accent2); display: none; margin-bottom: 1rem; }
     .login-error.show { display: block; }
-    .login-back { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--muted); font-family: 'Space Mono', monospace; text-align: center; cursor: pointer; transition: color 0.2s; display: block; text-decoration: none; }
-    .login-back:hover { color: var(--text); }
-
-    /* ADMIN PANEL */
     .admin-wrap { display: none; }
     .admin-topbar { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.25rem 4rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: rgba(10,10,15,0.95); backdrop-filter: blur(20px); }
     .admin-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--white); }
-    .admin-badge { font-size: 0.65rem; padding: 0.25rem 0.75rem; border-radius: 100px; background: rgba(124,106,247,0.15); color: var(--accent); border: 1px solid rgba(124,106,247,0.3); font-family: 'Space Mono', monospace; margin-left: 0.75rem; }
     .admin-inner { max-width: 900px; margin: 0 auto; padding: 8rem 4rem 4rem; }
     .admin-panel { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 1.5rem; }
     .admin-panel-header { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(124,106,247,0.05); }
     .admin-panel-title { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--accent); letter-spacing: 0.1em; }
-    .live-badge { font-size: 0.65rem; padding: 0.25rem 0.75rem; border-radius: 100px; background: rgba(106,247,200,0.1); color: var(--accent3); border: 1px solid rgba(106,247,200,0.2); font-family: 'Space Mono', monospace; display: flex; align-items: center; gap: 0.4rem; }
-    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent3); animation: pulse 2s infinite; }
     .admin-tabs { display: flex; gap: 0.5rem; padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); }
     .admin-tab { padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; border: 1px solid var(--border); color: var(--muted); background: transparent; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
     .admin-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
-    .admin-tab:hover:not(.active) { color: var(--text); border-color: rgba(255,255,255,0.2); }
     .tab-content { padding: 2rem; }
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
     .cs-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.75rem; }
     .cs-item-info { display: flex; align-items: center; gap: 1rem; }
-    .cs-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(124,106,247,0.1); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .cs-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(124,106,247,0.1); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
     .cs-name { font-size: 0.875rem; color: var(--text); font-weight: 500; }
     .cs-cat { font-size: 0.7rem; color: var(--muted); font-family: 'Space Mono', monospace; }
     .cs-actions { display: flex; gap: 0.5rem; }
-    .btn-icon { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: all 0.2s; }
+    .btn-icon { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; text-decoration: none; }
     .btn-icon:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
-    .add-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--accent); color: var(--white); border: none; border-radius: 10px; font-size: 0.85rem; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; margin-top: 1rem; }
-    .add-btn:hover { background: #6b5ae6; }
-    .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.75rem; }
-    .toggle-label { font-size: 0.875rem; color: var(--text); }
-    .toggle { width: 40px; height: 22px; background: var(--border); border-radius: 100px; cursor: pointer; position: relative; transition: background 0.2s; border: none; flex-shrink: 0; }
-    .toggle.on { background: var(--accent); }
-    .toggle::after { content: ''; width: 16px; height: 16px; border-radius: 50%; background: var(--white); position: absolute; top: 3px; left: 3px; transition: transform 0.2s; }
-    .toggle.on::after { transform: translateX(18px); }
-
+    .add-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--accent); color: var(--white); border: none; border-radius: 10px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; margin-top: 1rem; }
+    
     /* MODAL */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 200; align-items: center; justify-content: center; padding: 2rem; }
     .modal-overlay.open { display: flex; }
     .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; max-width: 520px; width: 100%; }
-    .modal h3 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--white); margin-bottom: 0.4rem; }
-    .modal-sub { color: var(--muted); font-size: 0.875rem; margin-bottom: 2rem; }
-    .modal-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
-    .btn-cancel { padding: 0.7rem 1.5rem; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; transition: all 0.2s; }
-    .btn-cancel:hover { color: var(--white); }
-
-    @media (max-width: 768px) {
-      .admin-topbar { padding: 1rem 1.5rem; }
-      .admin-inner { padding: 6rem 1.5rem 2rem; }
-      .settings-grid { grid-template-columns: 1fr; }
-    }
   </style>
 </head>
 <body>
 
-  <!-- ===== LOGIN ===== -->
   <div class="login-wrap" id="loginWrap">
     <div class="login-bg"></div>
     <div class="login-card">
@@ -83,246 +55,162 @@
       <div class="login-error" id="loginError">Incorrect password. Please try again.</div>
       <form onsubmit="handleLogin(event)">
         <div class="form-group">
-          <label style="font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:0.5rem;display:block">Password</label>
-          <input type="password" id="passwordInput" placeholder="Enter your password" required
-            style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1.2rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;width:100%;margin-bottom:1rem;transition:border-color 0.2s"
-            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+          <label style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;font-family:'Space Mono';margin-bottom:0.5rem;display:block">Password</label>
+          <input type="password" id="passwordInput" placeholder="Enter your password" required style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1.2rem;color:var(--text);width:100%;margin-bottom:1rem;">
         </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
-          Access Admin Panel
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Access Admin Panel</button>
       </form>
-      <a href="index.html" class="login-back">← Back to Portfolio</a>
     </div>
   </div>
 
-  <!-- ===== ADMIN ===== -->
   <div class="admin-wrap" id="adminWrap">
     <div class="admin-topbar">
-      <div style="display:flex;align-items:center">
-        <span class="admin-logo">Freddy Gonzalez</span>
-        <span class="admin-badge">ADMIN</span>
-      </div>
-      <div style="display:flex;gap:0.75rem">
-        <a href="index.html" class="btn btn-ghost btn-sm">View Portfolio</a>
-        <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
-      </div>
+      <span class="admin-logo">Freddy Gonzalez <span class="admin-badge">ADMIN</span></span>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
     </div>
 
     <div class="admin-inner">
-      <div class="section-label">Dashboard</div>
-      <h1 class="section-title" style="margin-bottom:2rem">Portfolio Manager</h1>
-
       <div class="admin-panel">
-        <div class="admin-panel-header">
-          <span class="admin-panel-title">CONTENT MANAGER</span>
-          <span class="live-badge"><span class="live-dot"></span> LIVE</span>
-        </div>
+        <div class="admin-panel-header"><span class="admin-panel-title">CONTENT MANAGER</span></div>
         <div class="admin-tabs">
-          <button class="admin-tab active" onclick="switchTab(this, 'tab-cs')">Case Studies</button>
-          <button class="admin-tab" onclick="switchTab(this, 'tab-settings')">Settings</button>
+          <button class="admin-tab active">Case Studies</button>
         </div>
         <div class="tab-content">
-
-          <!-- CASE STUDIES TAB -->
-          <div class="tab-pane active" id="tab-cs">
-            <div id="csList"></div>
-            <button class="add-btn" onclick="openModal()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Add Case Study
-            </button>
-          </div>
-
-          <!-- SETTINGS TAB -->
-          <div class="tab-pane" id="tab-settings">
-            <div class="settings-grid">
-              <div class="form-group">
-                <label>Designer Name</label>
-                <input type="text" value="Freddy Gonzalez">
-              </div>
-              <div class="form-group">
-                <label>Job Title</label>
-                <input type="text" value="UX/UI Designer">
-              </div>
-              <div class="form-group">
-                <label>Email</label>
-                <input type="email" value="contact@tipovisual.com">
-              </div>
-              <div class="form-group">
-                <label>Location</label>
-                <input type="text" value="Panamá, Ciudad de Panamá">
-              </div>
-              <div class="form-group">
-                <label>LinkedIn</label>
-                <input type="text" value="linkedin.com/in/freddy-gonzalez-13a13a3a/">
-              </div>
-              <div class="form-group">
-                <label>Admin Password</label>
-                <input type="password" id="newPassword" placeholder="Set new password">
-              </div>
-            </div>
-            <div class="toggle-row">
-              <span class="toggle-label">Language Selector (EN/ES)</span>
-              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-            </div>
-            <div class="toggle-row">
-              <span class="toggle-label">Available for new projects badge</span>
-              <button class="toggle on" onclick="this.classList.toggle('on')"></button>
-            </div>
-            <button class="add-btn" style="margin-top:1.5rem" onclick="saveSettings()">Save Settings</button>
-          </div>
-
+          <div id="csList"></div>
+          <button class="add-btn" onclick="openModal()">+ Add Case Study</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ADD MODAL -->
   <div class="modal-overlay" id="addModal">
     <div class="modal">
       <h3>New Case Study</h3>
-      <p class="modal-sub">Fill in the details for the new project</p>
+      <p style="color:var(--muted); font-size:0.8rem; margin-bottom:1.5rem;">Genera la base para tu nuevo proyecto.</p>
       <div class="form-group">
         <label>Title</label>
         <input type="text" id="newTitle" placeholder="Project title">
       </div>
       <div class="form-group">
         <label>Category</label>
-        <input type="text" id="newCategory" placeholder="e.g. Mobile App, Web Design">
+        <input type="text" id="newCategory" placeholder="e.g. UX Design">
       </div>
       <div class="form-group">
         <label>Description</label>
-        <textarea id="newDesc" placeholder="Brief description" style="min-height:100px"></textarea>
+        <textarea id="newDesc" placeholder="Brief description"></textarea>
       </div>
       <div class="form-group">
         <label>Tags (comma separated)</label>
-        <input type="text" id="newTags" placeholder="UX Research, Mobile, Fintech">
+        <input type="text" id="newTags" placeholder="UX, Research, UI">
       </div>
-      <div class="modal-actions">
+      <div style="display:flex; gap:1rem; justify-content:flex-end; margin-top:2rem;">
         <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="addCase()">Add Case Study</button>
+        <button class="btn btn-primary" onclick="generateCase()">Generate JSON</button>
       </div>
     </div>
   </div>
 
-  <script src="js/data.js"></script>
   <script src="js/i18n.js"></script>
   <script>
-    // ===== PASSWORD =====
-    // Change this to your desired password
     const ADMIN_PASSWORD = 'freddy2024';
 
     function handleLogin(e) {
       e.preventDefault();
-      const pw = document.getElementById('passwordInput').value;
-      if (pw === ADMIN_PASSWORD) {
-        document.getElementById('loginError').classList.remove('show');
-        document.getElementById('passwordInput').value = '';
+      if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
         document.getElementById('loginWrap').style.display = 'none';
         document.getElementById('adminWrap').style.display = 'block';
         renderList();
       } else {
         document.getElementById('loginError').classList.add('show');
-        document.getElementById('passwordInput').value = '';
-        document.getElementById('passwordInput').focus();
       }
     }
 
-    function logout() {
-      document.getElementById('adminWrap').style.display = 'none';
-      document.getElementById('loginWrap').style.display = 'flex';
-      setTimeout(() => document.getElementById('passwordInput').focus(), 100);
-    }
+    function logout() { location.reload(); }
 
-    // ===== TABS =====
-    function switchTab(btn, tabId) {
-      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById(tabId).classList.add('active');
-    }
-
-    // ===== CASE STUDIES LIST =====
-    function renderList() {
+    async function renderList() {
       const list = document.getElementById('csList');
-      const emojis = ['📦','💳','🛒','🎓','💰','🎯','🚀','💡','🎨','📱'];
-      list.innerHTML = caseStudies.map((cs, i) => `
-        <div class="cs-item">
-          <div class="cs-item-info">
-            <div class="cs-icon">${cs.emoji || emojis[i % emojis.length]}</div>
-            <div>
-              <div class="cs-name">${cs.title}</div>
-              <div class="cs-cat">${cs.category}</div>
-            </div>
-          </div>
-          <div class="cs-actions">
-            <a href="case.html?id=${cs.id}" target="_blank" class="btn-icon" title="Preview">👁</a>
-            <button class="btn-icon" title="Delete" onclick="deleteCase(${i})">🗑</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function deleteCase(i) {
-      if (confirm(`Delete "${caseStudies[i].title}"?\n\nThis cannot be undone.`)) {
-        caseStudies.splice(i, 1);
-        renderList();
+      list.innerHTML = '<p style="color:var(--muted)">Cargando proyectos desde index.json...</p>';
+      
+      try {
+        const resIndex = await fetch('./projects/index.json');
+        if (!resIndex.ok) throw new Error();
+        const { activeProjects } = await resIndex.json();
+        
+        let html = '';
+        for (const id of activeProjects) {
+            try {
+                const resP = await fetch(`./projects/${id}/content.json`);
+                const cs = await resP.json();
+                html += `
+                  <div class="cs-item">
+                    <div class="cs-item-info">
+                      <div class="cs-icon">${cs.emoji}</div>
+                      <div>
+                        <div class="cs-name">${cs.title.es}</div>
+                        <div class="cs-cat">ID: ${cs.id}</div>
+                      </div>
+                    </div>
+                    <div class="cs-actions">
+                      <a href="case.html?id=${cs.id}" target="_blank" class="btn-icon">👁</a>
+                      <button class="btn-icon" onclick="alert('Copia el JSON de la carpeta projects/${cs.id}/content.json para editarlo')">📋</button>
+                    </div>
+                  </div>`;
+            } catch(e) { console.error("Error en proyecto: " + id); }
+        }
+        list.innerHTML = html || '<p>No hay proyectos activos.</p>';
+      } catch (err) {
+        list.innerHTML = '<p style="color:var(--accent2)">Error: Verifica que projects/index.json exista.</p>';
       }
     }
 
-    // ===== ADD MODAL =====
-    function openModal() {
-      document.getElementById('addModal').classList.add('open');
-      document.getElementById('newTitle').focus();
-    }
+    function openModal() { document.getElementById('addModal').classList.add('open'); }
+    function closeModal() { document.getElementById('addModal').classList.remove('open'); }
 
-    function closeModal() {
-      document.getElementById('addModal').classList.remove('open');
-      ['newTitle','newCategory','newDesc','newTags'].forEach(id => document.getElementById(id).value = '');
-    }
-
-    function addCase() {
+    function generateCase() {
       const title = document.getElementById('newTitle').value.trim();
-      const category = document.getElementById('newCategory').value.trim();
+      const cat = document.getElementById('newCategory').value.trim();
       const desc = document.getElementById('newDesc').value.trim();
-      const tagsRaw = document.getElementById('newTags').value;
-      if (!title) { alert('Please enter a title.'); return; }
-      const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [category];
-      const emojis = ['🎯','🚀','💡','⚡','🎨','🔮','🌐','📱'];
-      caseStudies.push({
-        id: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        title, titleEs: title,
-        category, categoryEs: category,
-        description: desc, descriptionEs: desc,
-        tags, emoji: emojis[Math.floor(Math.random() * emojis.length)],
-        role: 'UX Designer', duration: 'TBD',
-        tools: [], challenge: '', challengeEs: '',
-        process: { research:'', researchEs:'', ideation:'', ideationEs:'', wireframes:'', wireframesEs:'', testing:'', testingEs:'' },
-        solution: '', solutionEs: '',
-        metrics: [], learnings: '', learningsEs: '',
-        next: caseStudies[0]?.id || ''
-      });
-      renderList();
+      const tags = document.getElementById('newTags').value.split(',').map(t => t.trim());
+
+      if (!title) return alert("Title is required");
+
+      const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      
+      const config = {
+        id: id,
+        emoji: "🎨",
+        featured: false,
+        title: { en: title, es: title },
+        category: { en: cat, es: cat },
+        description: { en: desc, es: desc },
+        tags: tags,
+        meta: { role: "UX/UI Designer", duration: "2 months", tools: ["Figma"] },
+        story: {
+          challenge: { en: "The challenge was...", es: "El reto era..." },
+          process: {
+            research: { title: { en: "Research", es: "Investigación" }, text: { en: "...", es: "..." } },
+            ideation: { title: { en: "Ideation", es: "Ideación" }, text: { en: "...", es: "..." } },
+            wireframes: { title: { en: "Design", es: "Diseño" }, text: { en: "...", es: "..." } }
+          },
+          solution: { en: "The solution was...", es: "La solución fue..." }
+        },
+        metrics: [{ value: "100%", label: { en: "Success", es: "Éxito" } }],
+        learnings: { en: "I learned...", es: "Aprendí..." }
+      };
+
+      const jsonStr = JSON.stringify(config, null, 2);
+      const newWin = window.open("", "_blank");
+      newWin.document.write(`<pre>${jsonStr}</pre>`);
+      
+      alert(`¡JSON Generado!\n1. Crea la carpeta: projects/${id}\n2. Crea el archivo content.json y pega el código.\n3. Añade "${id}" a projects/index.json`);
       closeModal();
     }
-
-    // ===== SETTINGS =====
-    function saveSettings() {
-      const newPw = document.getElementById('newPassword').value.trim();
-      if (newPw) {
-        alert(`Password updated!\n\nRemember to update it in admin.html:\nconst ADMIN_PASSWORD = '${newPw}';`);
-      } else {
-        alert('Settings saved!');
-      }
-    }
-
-    // ===== MODAL CLOSE ON OVERLAY =====
+    // Cierra el modal si haces clic en el fondo oscuro
     document.getElementById('addModal').addEventListener('click', function(e) {
       if (e.target === this) closeModal();
     });
 
-    // Focus password on load
+    // Asegura que el foco esté en el password al cargar
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('passwordInput').focus();
     });

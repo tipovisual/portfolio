@@ -202,3 +202,27 @@ footer { border-top: 1px solid var(--border); padding: 2.5rem 4rem; display: fle
   .cs-images { grid-template-columns: 1fr; }
   footer { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
 }
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.case-card {
+  text-decoration: none;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.case-img {
+  aspect-ratio: 16/9;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+}
