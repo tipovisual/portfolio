@@ -1,98 +1,36 @@
-<script type="module">
-  // Importamos el cliente de Supabase
-  import { supabase } from './js/supabase-config.js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freddy González — UX/UI Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
-  // 1. TRADUCCIONES BÁSICAS DE LA PÁGINA (Se mantiene igual)
-  function applyTranslations() {
-      document.getElementById('langBtn').textContent = Lang.current === 'en' ? 'ES' : 'EN';
-      document.getElementById('t-home').textContent = Lang.get('nav.home');
-      document.getElementById('t-about').textContent = Lang.get('nav.about');
-      document.getElementById('t-work').textContent = Lang.get('nav.work');
-      document.getElementById('t-contact').textContent = Lang.get('nav.contact');
-      document.getElementById('t-hero-tag').textContent = Lang.get('hero.tag');
-      document.getElementById('t-hero-sub').textContent = Lang.get('hero.sub');
-      document.getElementById('t-hero-cta').innerHTML = Lang.get('hero.cta') + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-      document.getElementById('t-hero-contact').textContent = Lang.get('hero.contact');
-      document.getElementById('t-work-label').textContent = Lang.get('work.label');
-      document.getElementById('t-work-title').textContent = Lang.get('work.title');
-      document.getElementById('t-view-all').textContent = Lang.get('work.viewAll') + ' →';
-      document.getElementById('t-about-label').textContent = Lang.get('about.label');
-      document.getElementById('t-about-title').textContent = Lang.get('about.title');
-      document.getElementById('t-about-desc').textContent = Lang.get('about.bio').substring(0, 150) + '...';
-      document.getElementById('t-about-btn').innerHTML = Lang.get('nav.about') + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-      document.getElementById('t-contact-label').textContent = Lang.get('contact.label');
-      document.getElementById('t-contact-title').textContent = Lang.get('contact.title');
-      document.getElementById('t-contact-sub').textContent = Lang.get('contact.sub');
-      document.getElementById('t-contact-cta').innerHTML = Lang.get('contact.send') + ' <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
-      document.getElementById('t-copy').textContent = Lang.get('footer.copy');
-  }
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active" id="t-home">Home</a></li>
+      <li><a href="about.html" id="t-about">About</a></li>
+      <li><a href="work.html" id="t-work">Work</a></li>
+      <li><a href="contact.html" id="t-contact">Contact</a></li>
+      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
+    </ul>
+    <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </nav>
 
-  // 2. RENDER DINÁMICO DE PROYECTOS DESDE SUPABASE
-  async function renderFeaturedWork() {
-      const grid = document.getElementById('workGrid');
-      const lang = Lang.current;
-      
-      try {
-          // Consultamos Supabase (Traemos los últimos 2 para el Home)
-          const { data: projects, error } = await supabase
-            .from('portfolio_projects')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(2);
-
-          if (error) throw error;
-          if (!projects || projects.length === 0) {
-              grid.innerHTML = `<p style="color:var(--muted)">Proyectos próximamente...</p>`;
-              return;
-          }
-
-          grid.innerHTML = ''; 
-
-          projects.forEach(cs => {
-              const card = document.createElement('a');
-              card.href = `case.html?id=${cs.slug}`;
-              card.className = 'case-card';
-              
-              // Mantenemos tu estructura HTML exacta de index.html
-              card.innerHTML = `
-                  <div class="case-img">
-                      <div>
-                          <div class="case-emoji">${cs.emoji}</div>
-                          <div class="case-cat-small">${cs.category[lang].toUpperCase()}</div>
-                      </div>
-                  </div>
-                  <div class="case-body">
-                      <div class="case-tag-label">${cs.category[lang]}</div>
-                      <div class="case-title">${cs.title[lang]}</div>
-                      <div class="case-desc">${cs.description[lang]}</div>
-                  </div>`;
-              grid.appendChild(card);
-          });
-      } catch (error) {
-          grid.innerHTML = `<p style="color:var(--muted)">Error cargando proyectos...</p>`;
-          console.error("Error Home Supabase:", error);
-      }
-  }
-
-  // 3. FUNCIONES DE NAVEGACIÓN (Se mantienen igual)
-  window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
-  });
-
-  function toggleMenu() {
-      document.getElementById('navLinks').classList.toggle('open');
-  }
-
-  // 4. ACCESO SECRETO ADMIN (Se mantiene igual)
-  let clicks = 0, timer;
-  document.getElementById('t-copy').addEventListener('click', () => {
-      clicks++;
-      clearTimeout(timer);
-      timer = setTimeout(() => clicks = 0, 1500);
-      if (clicks >= 3) { window.location.href = 'admin.html'; clicks = 0; }
-  });
-
-  // INICIALIZACIÓN
-  applyTranslations();
-  renderFeaturedWork();
-</script>
+  <main>
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-grid"></div>
+      <div class="hero-content">
+        <div class="hero-tag fade-up" id="t-hero-tag">Available for new projects</div>
+        <h1 class="fade-up d1">Designing<br><em>experiences</em><br>that matter</h1>
+        <p class="hero-sub fade-up d2" id="t-hero-sub">Crafting intuitive and accessible products that prioritize usability, functionality, and visual harmony.</p>
+        <div class="hero-actions fade-up d3">
+          <a href="work.html" class="btn btn-primary" id="t-hero-cta">View
