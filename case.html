@@ -24,76 +24,59 @@
   <script type="module">
   import { supabase } from './js/supabase-config.js';
 
-  async function renderCase() {
-    if (!window.Lang) {
-      setTimeout(renderCase, 100);
-      return;
-    }
-
+async function loadCase() {
     const container = document.getElementById('caseContent');
     const params = new URLSearchParams(window.location.search);
     const slug = params.get('id');
-    const lang = window.Lang.current;
-
-    if (!slug) return;
+    
+    if (!slug) return console.error("No se encontró el slug en la URL");
 
     try {
-      const { data: cs, error } = await supabase
-        .from('portfolio_projects')
-        .select('*')
-        .eq('slug', slug)
-        .single();
+        const { data: cs, error } = await supabase
+            .from('portfolio_projects')
+            .select('*')
+            .eq('slug', slug)
+            .single();
 
-      if (error || !cs) throw new Error("Proyecto no encontrado");
+        if (error || !cs) throw new Error("Proyecto no encontrado en la base de datos");
 
-      // Normalización de datos para que funcionen proyectos viejos y nuevos
-      const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || "";
-      const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || "";
-      const role = cs.meta?.role || "UX/UI Designer";
-      const tools = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : "";
+        const lang = (window.Lang && window.Lang.current) ? window.Lang.current : 'es';
+        
+        // Capa de compatibilidad (Puente entre datos viejos y nuevos)
+        const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || "";
+        const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || "";
+        const role = cs.meta?.role || "UX/UI Designer";
+        const tools = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : (cs.meta?.tools || "");
+        const img = cs.image_url || cs.meta?.cover || "";
 
-      container.innerHTML = `
-        <div class="fade-up">
-          <a href="work.html" class="btn btn-ghost btn-sm" style="margin-bottom:2rem;">
-            ← ${lang === 'es' ? 'Volver' : 'Back'}
-          </a>
-          <div class="section-label">${cs.category[lang]}</div>
-          <h1 class="section-title" style="font-size: clamp(2.5rem, 8vw, 4rem);">${cs.title[lang]}</h1>
-          <p class="section-sub" style="margin-bottom:4rem; max-width:800px;">${cs.description[lang]}</p>
+        container.innerHTML = `
+            <div class="container fade-up" style="padding-top: 8rem;">
+                <a href="work.html" class="btn btn-ghost" style="margin-bottom:2rem;">← Volver</a>
+                <h1 class="serif" style="font-size:3.5rem; margin-bottom:1rem;">${cs.title[lang]}</h1>
+                <p style="color:var(--muted); font-size:1.2rem; margin-bottom:3rem;">${cs.description[lang]}</p>
+                
+                <div class="cs-hero" style="background:url('${img}') center/cover; height:60vh; border-radius:24px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; margin-bottom:4rem;">
+                    ${!img ? `<span style="font-size:6rem">${cs.emoji}</span>` : ''}
+                </div>
 
-          <div class="cs-hero" style="background-image: url('${cs.image_url || ''}'); background-size: cover; background-position: center; aspect-ratio: 16/9; border-radius: 24px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin-bottom: 4rem;">
-            ${!cs.image_url ? `<span style="font-size: 8rem;">${cs.emoji}</span>` : ''}
-          </div>
+                <div class="cs-meta" style="display:flex; gap:3rem; margin-bottom:4rem;">
+                    <div><label style="display:block; color:var(--accent); font-family:'Space Mono'; font-size:0.7rem;">ROLE</label><strong>${role}</strong></div>
+                    <div><label style="display:block; color:var(--accent); font-family:'Space Mono'; font-size:0.7rem;">TOOLS</label><strong>${tools}</strong></div>
+                </div>
 
-          <div class="cs-meta">
-            <div class="cs-meta-item">
-              <div class="cs-meta-label">ROLE</div>
-              <div class="cs-meta-value">${role}</div>
-            </div>
-            <div class="cs-meta-item">
-              <div class="cs-meta-label">TOOLS</div>
-              <div class="cs-meta-value">${tools}</div>
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem; margin-top: 4rem;">
-            <div class="cs-section">
-              <h2 class="section-title" style="font-size:2rem;">The Challenge</h2>
-              <p class="section-sub">${challenge}</p>
-            </div>
-            <div class="cs-section">
-              <h2 class="section-title" style="font-size:2rem;">The Solution</h2>
-              <p class="section-sub">${solution}</p>
-            </div>
-          </div>
-        </div>`;
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem;">
+                    <div><h2 class="serif">The Challenge</h2><p style="color:var(--muted); line-height:1.7;">${challenge}</p></div>
+                    <div><h2 class="serif">The Solution</h2><p style="color:var(--muted); line-height:1.7;">${solution}</p></div>
+                </div>
+            </div>`;
+            
     } catch (err) {
-      console.error(err);
-      container.innerHTML = `<h2>Project not found</h2>`;
+        console.error("Error cargando detalle:", err.message);
+        if(container) container.innerHTML = `<h2>Error: ${err.message}</h2>`;
     }
-  }
+}
 
-  document.addEventListener('DOMContentLoaded', renderCase);
+loadCase();
 </script>
 </body>
 </html>

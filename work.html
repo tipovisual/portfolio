@@ -24,55 +24,60 @@
   <script type="module">
   import { supabase } from './js/supabase-config.js';
 
-  async function renderWork() {
-    if (!window.Lang) {
-      setTimeout(renderWork, 100);
-      return;
-    }
-
-    const lang = window.Lang.current;
+async function startRendering() {
+    console.log("1. Iniciando renderizado...");
     const grid = document.getElementById('workGrid');
-    
+    if (!grid) return console.error("No se encontró el elemento #workGrid");
+
     try {
-      const { data: projects, error } = await supabase
-        .from('portfolio_projects')
-        .select('*')
-        .order('created_at', { ascending: false });
+        // Pedir datos a Supabase
+        console.log("2. Llamando a Supabase...");
+        const { data: projects, error } = await supabase
+            .from('portfolio_projects')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      
-      grid.innerHTML = '';
-      projects.forEach(cs => {
-        const title = cs.title[lang] || cs.title['es'];
-        const description = cs.description[lang] || cs.description['es'];
-        const category = (cs.category[lang] || cs.category['es']).toUpperCase();
-        const image = cs.image_url || '';
+        if (error) throw error;
+        console.log("3. Datos recibidos:", projects.length, "proyectos encontrados.");
 
-        const card = document.createElement('a');
-        card.href = `case.html?id=${cs.slug}`;
-        card.className = 'case-card';
-        card.innerHTML = `
-          <div class="case-img" style="background-image: url('${image}'); background-size: cover; background-position: center;">
-            ${!image ? `<div class="case-emoji">${cs.emoji}</div>` : ''}
-          </div>
-          <div class="case-body">
-            <div class="case-tag-label">${category}</div>
-            <div class="case-title">${title}</div>
-            <div class="case-desc">${description}</div>
-            <div class="case-footer">
-               <div class="case-arrow">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-               </div>
-            </div>
-          </div>`;
-        grid.appendChild(card);
-      });
+        // Detectar idioma (si Lang no existe, usamos 'es' por defecto)
+        const lang = (window.Lang && window.Lang.current) ? window.Lang.current : 'es';
+        console.log("4. Idioma detectado:", lang);
+
+        grid.innerHTML = ''; // Limpiar grid
+
+        projects.forEach(cs => {
+            // Extraer datos con seguridad total
+            const title = cs.title?.[lang] || cs.title?.['es'] || 'Untitled';
+            const desc = cs.description?.[lang] || cs.description?.['es'] || '';
+            const cat = (cs.category?.[lang] || cs.category?.['es'] || 'UX/UI').toUpperCase();
+            const img = cs.image_url || cs.meta?.cover || '';
+
+            const card = document.createElement('a');
+            card.href = `case.html?id=${cs.slug}`;
+            card.className = 'case-card';
+            card.innerHTML = `
+                <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;background-position:center;` : 'background:var(--surface2)'}">
+                    ${!img ? `<div class="case-emoji" style="display:flex;align-items:center;justify-center;height:100%;font-size:3rem;">${cs.emoji || '🎨'}</div>` : ''}
+                </div>
+                <div class="case-body">
+                    <div class="case-tag-label" style="color:var(--accent); font-family:'Space Mono'; font-size:0.7rem; margin-bottom:0.5rem;">${cat}</div>
+                    <div class="case-title" style="font-family:'DM Serif Display'; font-size:1.4rem; color:var(--white); margin-bottom:0.5rem;">${title}</div>
+                    <div class="case-desc" style="color:var(--muted); font-size:0.9rem;">${desc}</div>
+                </div>`;
+            grid.appendChild(card);
+        });
+        console.log("5. Renderizado completado con éxito.");
+
     } catch (err) {
-      console.error("Error en galería:", err);
+        console.error("ERROR CRÍTICO:", err.message);
+        grid.innerHTML = `<p style="color:red">Error: ${err.message}</p>`;
     }
-  }
+}
 
-  document.addEventListener('DOMContentLoaded', renderWork);
+// Ejecutar inmediatamente y también al cargar el DOM
+startRendering();
+document.addEventListener('DOMContentLoaded', startRendering);
 </script>
 </body>
 </html>
