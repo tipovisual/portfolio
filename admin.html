@@ -5,215 +5,215 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin — Freddy Gonzalez</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* Estilos de Login y Admin ya incluidos en tu código anterior */
+    /* Mantenemos tu estética de Login */
     .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; position: relative; overflow: hidden; }
-    .login-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 50% 50% at 30% 50%, rgba(124,106,247,0.1) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 70% 50%, rgba(106,247,200,0.05) 0%, transparent 60%); }
-    .login-card { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 3rem; width: 100%; max-width: 420px; }
-    .login-logo { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--white); margin-bottom: 0.25rem; }
-    .login-sub { font-size: 0.75rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-bottom: 2rem; letter-spacing: 0.08em; }
-    .login-error { background: rgba(247,124,106,0.1); border: 1px solid rgba(247,124,106,0.3); border-radius: 10px; padding: 0.75rem 1rem; font-size: 0.8rem; color: var(--accent2); display: none; margin-bottom: 1rem; }
-    .login-error.show { display: block; }
-    .admin-wrap { display: none; }
-    .admin-topbar { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.25rem 4rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: rgba(10,10,15,0.95); backdrop-filter: blur(20px); }
-    .admin-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--white); }
-    .admin-inner { max-width: 900px; margin: 0 auto; padding: 8rem 4rem 4rem; }
-    .admin-panel { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-bottom: 1.5rem; }
-    .admin-panel-header { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(124,106,247,0.05); }
-    .admin-panel-title { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--accent); letter-spacing: 0.1em; }
-    .admin-tabs { display: flex; gap: 0.5rem; padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); }
-    .admin-tab { padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; border: 1px solid var(--border); color: var(--muted); background: transparent; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
-    .admin-tab.active { background: var(--accent); border-color: var(--accent); color: var(--white); }
-    .tab-content { padding: 2rem; }
-    .tab-pane { display: none; }
-    .tab-pane.active { display: block; }
-    .cs-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.75rem; }
-    .cs-item-info { display: flex; align-items: center; gap: 1rem; }
-    .cs-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(124,106,247,0.1); display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-    .cs-name { font-size: 0.875rem; color: var(--text); font-weight: 500; }
-    .cs-cat { font-size: 0.7rem; color: var(--muted); font-family: 'Space Mono', monospace; }
-    .cs-actions { display: flex; gap: 0.5rem; }
-    .btn-icon { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; text-decoration: none; }
-    .btn-icon:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
-    .add-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--accent); color: var(--white); border: none; border-radius: 10px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; margin-top: 1rem; }
+    .login-card { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 3rem; width: 100%; max-width: 420px; z-index: 10; }
     
-    /* MODAL */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 200; align-items: center; justify-content: center; padding: 2rem; }
-    .modal-overlay.open { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; max-width: 520px; width: 100%; }
+    .admin-wrap { display: none; padding-top: 80px; }
+    .admin-inner { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+    
+    /* Mejoras al formulario de Supabase */
+    .admin-panel { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .full-width { grid-column: span 2; }
+    
+    .project-list-item { 
+      display: flex; justify-content: space-between; align-items: center; 
+      padding: 1rem; background: var(--surface); border: 1px solid var(--border); 
+      border-radius: 12px; margin-bottom: 0.5rem; 
+    }
+    .preview-img-tag { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; margin-top: 1rem; display: none; border: 1px solid var(--border); }
+    
+    label { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); margin-bottom: 0.5rem; display: block; }
+    input, textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); color: white; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem; }
   </style>
 </head>
 <body>
 
+  <!-- LOGIN SECTION -->
   <div class="login-wrap" id="loginWrap">
-    <div class="login-bg"></div>
-    <div class="login-card">
-      <div class="login-logo">Freddy Gonzalez</div>
-      <div class="login-sub">ADMIN ACCESS — PORTFOLIO MANAGER</div>
-      <div class="login-error" id="loginError">Incorrect password. Please try again.</div>
-      <form onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;font-family:'Space Mono';margin-bottom:0.5rem;display:block">Password</label>
-          <input type="password" id="passwordInput" placeholder="Enter your password" required style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.9rem 1.2rem;color:var(--text);width:100%;margin-bottom:1rem;">
-        </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Access Admin Panel</button>
+    <div class="hero-bg"></div>
+    <div class="login-card fade-up">
+      <div class="footer-logo" style="font-size: 1.5rem; margin-bottom: 1rem;">Freddy Gonzalez</div>
+      <p style="color:var(--muted); font-size:0.8rem; margin-bottom:2rem;">DATABASE ACCESS</p>
+      <form id="loginForm">
+        <input type="password" id="passInput" placeholder="Password" required>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center">Unlock Dashboard</button>
       </form>
     </div>
   </div>
 
+  <!-- ADMIN SECTION -->
   <div class="admin-wrap" id="adminWrap">
-    <div class="admin-topbar">
-      <span class="admin-logo">Freddy Gonzalez <span class="admin-badge">ADMIN</span></span>
-      <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
-    </div>
+    <nav id="navbar">
+        <span class="nav-logo">Freddy Admin</span>
+        <button class="lang-btn" onclick="location.reload()">Logout</button>
+    </nav>
 
     <div class="admin-inner">
-      <div class="admin-panel">
-        <div class="admin-panel-header"><span class="admin-panel-title">CONTENT MANAGER</span></div>
-        <div class="admin-tabs">
-          <button class="admin-tab active">Case Studies</button>
-        </div>
-        <div class="tab-content">
-          <div id="csList"></div>
-          <button class="add-btn" onclick="openModal()">+ Add Case Study</button>
-        </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+          <h2 class="serif">Manage Projects</h2>
+          <button class="btn btn-primary btn-sm" onclick="document.getElementById('projectForm').scrollIntoView()">+ New Project</button>
+      </div>
+
+      <!-- LIST OF PROJECTS FROM SUPABASE -->
+      <div id="projectsList" style="margin-bottom: 4rem;">
+        <p class="mono" style="font-size:0.8rem; color:var(--muted)">Loading projects from Supabase...</p>
+      </div>
+
+      <!-- FORM TO ADD -->
+      <div class="admin-panel" id="projectFormContainer">
+        <h3 class="serif" style="margin-bottom:1.5rem">Add New Case Study</h3>
+        <form id="projectForm">
+            <div class="form-grid">
+                <div>
+                    <label>Title (ES)</label>
+                    <input type="text" id="t_es" placeholder="Ej: Educastic" required>
+                </div>
+                <div>
+                    <label>Title (EN)</label>
+                    <input type="text" id="t_en" placeholder="Ej: Educastic" required>
+                </div>
+                <div>
+                    <label>Slug</label>
+                    <input type="text" id="slug" placeholder="educastic-ux" required>
+                </div>
+                <div>
+                    <label>Emoji</label>
+                    <input type="text" id="emoji" placeholder="🚀">
+                </div>
+                <div class="full-width">
+                    <label>Description (ES)</label>
+                    <textarea id="d_es" rows="2"></textarea>
+                </div>
+                <div class="full-width">
+                    <label>Description (EN)</label>
+                    <textarea id="d_en" rows="2"></textarea>
+                </div>
+                <div class="full-width">
+                    <label>Featured Image (Cover)</label>
+                    <input type="file" id="fileInput" accept="image/*">
+                    <img id="imgPreview" class="preview-img-tag">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="saveBtn" style="margin-top:2rem; width:100%; justify-content:center">Save to Cloud Database</button>
+        </form>
       </div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="addModal">
-    <div class="modal">
-      <h3>New Case Study</h3>
-      <p style="color:var(--muted); font-size:0.8rem; margin-bottom:1.5rem;">Genera la base para tu nuevo proyecto.</p>
-      <div class="form-group">
-        <label>Title</label>
-        <input type="text" id="newTitle" placeholder="Project title">
-      </div>
-      <div class="form-group">
-        <label>Category</label>
-        <input type="text" id="newCategory" placeholder="e.g. UX Design">
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea id="newDesc" placeholder="Brief description"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Tags (comma separated)</label>
-        <input type="text" id="newTags" placeholder="UX, Research, UI">
-      </div>
-      <div style="display:flex; gap:1rem; justify-content:flex-end; margin-top:2rem;">
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="generateCase()">Generate JSON</button>
-      </div>
-    </div>
-  </div>
+  <script type="module">
+    import { supabase } from './js/supabase-config.js';
 
-  <script src="js/i18n.js"></script>
-  <script>
-    const ADMIN_PASSWORD = 'freddy2024';
+    const ADMIN_PASS = 'freddy2024';
+    const loginForm = document.getElementById('loginForm');
+    const projectForm = document.getElementById('projectForm');
+    const fileInput = document.getElementById('fileInput');
+    const imgPreview = document.getElementById('imgPreview');
 
-    function handleLogin(e) {
-      e.preventDefault();
-      if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
-        document.getElementById('loginWrap').style.display = 'none';
-        document.getElementById('adminWrap').style.display = 'block';
-        renderList();
-      } else {
-        document.getElementById('loginError').classList.add('show');
-      }
-    }
-
-    function logout() { location.reload(); }
-
-    async function renderList() {
-      const list = document.getElementById('csList');
-      list.innerHTML = '<p style="color:var(--muted)">Cargando proyectos desde index.json...</p>';
-      
-      try {
-        const resIndex = await fetch('./projects/index.json');
-        if (!resIndex.ok) throw new Error();
-        const { activeProjects } = await resIndex.json();
-        
-        let html = '';
-        for (const id of activeProjects) {
-            try {
-                const resP = await fetch(`./projects/${id}/content.json`);
-                const cs = await resP.json();
-                html += `
-                  <div class="cs-item">
-                    <div class="cs-item-info">
-                      <div class="cs-icon">${cs.emoji}</div>
-                      <div>
-                        <div class="cs-name">${cs.title.es}</div>
-                        <div class="cs-cat">ID: ${cs.id}</div>
-                      </div>
-                    </div>
-                    <div class="cs-actions">
-                      <a href="case.html?id=${cs.id}" target="_blank" class="btn-icon">👁</a>
-                      <button class="btn-icon" onclick="alert('Copia el JSON de la carpeta projects/${cs.id}/content.json para editarlo')">📋</button>
-                    </div>
-                  </div>`;
-            } catch(e) { console.error("Error en proyecto: " + id); }
+    // 1. LOGIN LOGIC
+    loginForm.onsubmit = (e) => {
+        e.preventDefault();
+        if (document.getElementById('passInput').value === ADMIN_PASS) {
+            document.getElementById('loginWrap').style.display = 'none';
+            document.getElementById('adminWrap').style.display = 'block';
+            fetchProjects();
+        } else {
+            alert("Wrong password");
         }
-        list.innerHTML = html || '<p>No hay proyectos activos.</p>';
-      } catch (err) {
-        list.innerHTML = '<p style="color:var(--accent2)">Error: Verifica que projects/index.json exista.</p>';
-      }
+    };
+
+    // 2. IMAGE PREVIEW
+    fileInput.onchange = () => {
+        const [file] = fileInput.files;
+        if (file) {
+            imgPreview.src = URL.createObjectURL(file);
+            imgPreview.style.display = 'block';
+        }
+    };
+
+    // 3. FETCH PROJECTS FROM SUPABASE
+    async function fetchProjects() {
+        const listDiv = document.getElementById('projectsList');
+        const { data, error } = await supabase
+            .from('portfolio_projects')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) return listDiv.innerHTML = "Error loading projects.";
+
+        listDiv.innerHTML = data.map(p => `
+            <div class="project-list-item">
+                <div>
+                    <span style="margin-right:10px">${p.emoji}</span>
+                    <strong class="mono" style="font-size:0.9rem">${p.title.es}</strong>
+                    <div style="font-size:0.7rem; color:var(--muted)">slug: ${p.slug}</div>
+                </div>
+                <button class="btn-icon" onclick="deleteProject('${p.id}')" style="color:var(--accent2); border-color:rgba(247,124,106,0.2)">✕</button>
+            </div>
+        `).join('');
     }
 
-    function openModal() { document.getElementById('addModal').classList.add('open'); }
-    function closeModal() { document.getElementById('addModal').classList.remove('open'); }
+    // 4. SAVE TO SUPABASE (Storage + DB)
+    projectForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('saveBtn');
+        btn.disabled = true;
+        btn.textContent = "Processing...";
 
-    function generateCase() {
-      const title = document.getElementById('newTitle').value.trim();
-      const cat = document.getElementById('newCategory').value.trim();
-      const desc = document.getElementById('newDesc').value.trim();
-      const tags = document.getElementById('newTags').value.split(',').map(t => t.trim());
+        try {
+            let imageUrl = '';
+            const file = fileInput.files[0];
 
-      if (!title) return alert("Title is required");
+            if (file) {
+                const fileName = `${Date.now()}-${file.name}`;
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from('projects')
+                    .upload(`covers/${fileName}`, file);
+                
+                if (uploadError) throw uploadError;
+                
+                const { data: publicUrlData } = supabase.storage
+                    .from('projects')
+                    .getPublicUrl(`covers/${fileName}`);
+                
+                imageUrl = publicUrlData.publicUrl;
+            }
 
-      const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      
-      const config = {
-        id: id,
-        emoji: "🎨",
-        featured: false,
-        title: { en: title, es: title },
-        category: { en: cat, es: cat },
-        description: { en: desc, es: desc },
-        tags: tags,
-        meta: { role: "UX/UI Designer", duration: "2 months", tools: ["Figma"] },
-        story: {
-          challenge: { en: "The challenge was...", es: "El reto era..." },
-          process: {
-            research: { title: { en: "Research", es: "Investigación" }, text: { en: "...", es: "..." } },
-            ideation: { title: { en: "Ideation", es: "Ideación" }, text: { en: "...", es: "..." } },
-            wireframes: { title: { en: "Design", es: "Diseño" }, text: { en: "...", es: "..." } }
-          },
-          solution: { en: "The solution was...", es: "La solución fue..." }
-        },
-        metrics: [{ value: "100%", label: { en: "Success", es: "Éxito" } }],
-        learnings: { en: "I learned...", es: "Aprendí..." }
-      };
+            const { error } = await supabase.from('portfolio_projects').insert([{
+                slug: document.getElementById('slug').value,
+                emoji: document.getElementById('emoji').value,
+                image_url: imageUrl,
+                title: { es: document.getElementById('t_es').value, en: document.getElementById('t_en').value },
+                description: { es: document.getElementById('d_es').value, en: document.getElementById('d_en').value },
+                category: { es: "Case Study", en: "Case Study" }
+            }]);
 
-      const jsonStr = JSON.stringify(config, null, 2);
-      const newWin = window.open("", "_blank");
-      newWin.document.write(`<pre>${jsonStr}</pre>`);
-      
-      alert(`¡JSON Generado!\n1. Crea la carpeta: projects/${id}\n2. Crea el archivo content.json y pega el código.\n3. Añade "${id}" a projects/index.json`);
-      closeModal();
-    }
-    // Cierra el modal si haces clic en el fondo oscuro
-    document.getElementById('addModal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
-    });
+            if (error) throw error;
 
-    // Asegura que el foco esté en el password al cargar
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('passwordInput').focus();
-    });
+            alert("Project Live!");
+            projectForm.reset();
+            imgPreview.style.display = 'none';
+            fetchProjects();
+
+        } catch (err) {
+            alert("Error: " + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "Save to Cloud Database";
+        }
+    };
+
+    // Global delete function
+    window.deleteProject = async (id) => {
+        if (!confirm("Delete this project?")) return;
+        const { error } = await supabase.from('portfolio_projects').delete().eq('id', id);
+        if (!error) fetchProjects();
+    };
+
   </script>
 </body>
 </html>
