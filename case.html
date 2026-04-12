@@ -1,11 +1,21 @@
+<script src="js/i18n.js"></script>
 <script type="module">
     import { supabase } from './js/supabase-config.js';
 
     async function renderProject() {
+      // 1. VALIDACIÓN DE SEGURIDAD PARA i18n
+      // Si Lang no está listo, esperamos un poco o usamos window.Lang
+      const i18n = window.Lang;
+      if (!i18n) {
+          console.warn("Retrying i18n connection...");
+          setTimeout(renderProject, 100);
+          return;
+      }
+
       const container = document.getElementById('caseContent');
       const params = new URLSearchParams(window.location.search);
       const slug = params.get('id');
-      const lang = Lang.current;
+      const lang = i18n.current; // Usamos la constante validada
 
       if (!slug) { window.location.href = 'work.html'; return; }
 
@@ -16,24 +26,19 @@
           .eq('slug', slug)
           .single();
 
-        if (error || !cs) throw new Error("Not found");
+        if (error || !cs) throw new Error("Project not found");
 
-        // --- 1. PROCESAMIENTO DE DATOS (FUERA DEL HTML PARA EVITAR ERRORES) ---
-        // Normalizamos los textos buscando en 'content' o 'story'
+        // 2. PROCESAMIENTO DE DATOS (NORMALIZACIÓN)
         const challengeText = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || "";
         const solutionText = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || "";
-        
-        // Normalizamos los metadatos
-        const roleText = cs.meta?.role || "UX/UI Designer";
+        const roleText = cs.meta?.role || "Designer";
         const dateText = cs.meta?.duration || new Date(cs.created_at).getFullYear();
-        
-        // Manejo seguro del Array de Tools
         const toolsArray = Array.isArray(cs.meta?.tools) ? cs.meta.tools : [];
         const toolsText = toolsArray.join(', ');
 
         document.title = `${cs.title[lang]} — Freddy Gonzalez`;
 
-        // --- 2. RENDERIZADO (USANDO VARIABLES YA LIMPIAS) ---
+        // 3. RENDERIZADO
         container.innerHTML = `
           <article class="container fade-up" style="padding-top: 8rem; padding-bottom: 8rem;">
             <a href="work.html" class="btn btn-ghost btn-sm" style="margin-bottom:3rem;">
@@ -88,9 +93,11 @@
         `;
 
       } catch (err) {
+        console.error(err);
         container.innerHTML = `<div style="text-align:center; padding: 10rem 0;"><h2>Project not found</h2></div>`;
       }
     }
 
+    // Aseguramos que el DOM esté listo antes de arrancar
     document.addEventListener('DOMContentLoaded', renderProject);
 </script>
