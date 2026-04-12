@@ -1,103 +1,81 @@
-<script src="js/i18n.js"></script>
-<script type="module">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study — Freddy Gonzalez</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
+    <ul class="nav-links">
+      <li><a href="work.html">← Back to Work</a></li>
+      <li><button class="lang-btn" onclick="window.Lang.toggle(); location.reload();" id="langBtn">ES</button></li>
+    </ul>
+  </nav>
+
+  <main id="caseContent">
+    <div class="container section-pad" style="padding-top:10rem; text-align:center;">
+      <p class="mono">Loading project...</p>
+    </div>
+  </main>
+
+  <script src="js/i18n.js"></script>
+  <script type="module">
     import { supabase } from './js/supabase-config.js';
 
     async function renderProject() {
-      // 1. VALIDACIÓN DE SEGURIDAD PARA i18n
-      // Si Lang no está listo, esperamos un poco o usamos window.Lang
       const i18n = window.Lang;
-      if (!i18n) {
-          console.warn("Retrying i18n connection...");
-          setTimeout(renderProject, 100);
-          return;
-      }
-
+      if (!i18n) { setTimeout(renderProject, 50); return; }
+      
       const container = document.getElementById('caseContent');
       const params = new URLSearchParams(window.location.search);
       const slug = params.get('id');
-      const lang = i18n.current; // Usamos la constante validada
+      const lang = i18n.current;
 
       if (!slug) { window.location.href = 'work.html'; return; }
 
       try {
-        const { data: cs, error } = await supabase
-          .from('portfolio_projects')
-          .select('*')
-          .eq('slug', slug)
-          .single();
+        const { data: cs, error } = await supabase.from('portfolio_projects').select('*').eq('slug', slug).single();
+        if (error || !cs) throw new Error();
 
-        if (error || !cs) throw new Error("Project not found");
-
-        // 2. PROCESAMIENTO DE DATOS (NORMALIZACIÓN)
-        const challengeText = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || "";
-        const solutionText = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || "";
-        const roleText = cs.meta?.role || "Designer";
-        const dateText = cs.meta?.duration || new Date(cs.created_at).getFullYear();
-        const toolsArray = Array.isArray(cs.meta?.tools) ? cs.meta.tools : [];
-        const toolsText = toolsArray.join(', ');
+        // NORMALIZACIÓN DE DATOS (Viejo y Nuevo)
+        const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || "";
+        const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || "";
+        const role = cs.meta?.role || "Designer";
+        const tools = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : "";
+        const imgUrl = cs.image_url || cs.meta?.cover || "";
 
         document.title = `${cs.title[lang]} — Freddy Gonzalez`;
 
-        // 3. RENDERIZADO
         container.innerHTML = `
           <article class="container fade-up" style="padding-top: 8rem; padding-bottom: 8rem;">
-            <a href="work.html" class="btn btn-ghost btn-sm" style="margin-bottom:3rem;">
-              ← ${lang === 'es' ? 'Volver' : 'Back'}
-            </a>
-
             <div class="section-label">${cs.category[lang] || 'Case Study'}</div>
-            <h1 class="serif" style="font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; margin-bottom: 2rem;">
-                ${cs.title[lang]}
-            </h1>
-            <p class="section-sub" style="font-size: 1.25rem; max-width: 800px; margin-bottom: 4rem;">
-                ${cs.description[lang]}
-            </p>
+            <h1 class="serif" style="font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; margin-bottom: 2rem;">${cs.title[lang]}</h1>
+            <p class="section-sub" style="font-size: 1.25rem; max-width: 800px; margin-bottom: 4rem;">${cs.description[lang]}</p>
 
-            <div class="cs-hero" style="background-image: url('${cs.image_url}'); background-size: cover; background-position: center; height: 70vh; border-radius: 32px; border: 1px solid var(--border); margin-bottom: 5rem; display: flex; align-items: center; justify-content: center;">
-                ${!cs.image_url ? `<span style="font-size: 6rem;">${cs.emoji}</span>` : ''}
+            <div class="cs-hero" style="background-image: url('${imgUrl}'); background-size: cover; background-position: center; height: 65vh; border-radius: 32px; border: 1px solid var(--border); margin-bottom: 5rem; display: flex; align-items: center; justify-content: center;">
+                ${!imgUrl ? `<span style="font-size: 6rem;">${cs.emoji}</span>` : ''}
             </div>
 
             <div class="cs-meta" style="margin-bottom: 6rem;">
-              <div class="cs-meta-item">
-                <div class="cs-meta-label">ROLE</div>
-                <div class="cs-meta-value">${roleText}</div>
-              </div>
-              <div class="cs-meta-item">
-                <div class="cs-meta-label">YEAR</div>
-                <div class="cs-meta-value">${dateText}</div>
-              </div>
-              <div class="cs-meta-item">
-                <div class="cs-meta-label">TOOLS</div>
-                <div class="cs-meta-value">${toolsText}</div>
-              </div>
+              <div class="cs-meta-item"><div class="cs-meta-label">ROLE</div><div class="cs-meta-value">${role}</div></div>
+              <div class="cs-meta-item"><div class="cs-meta-label">YEAR</div><div class="cs-meta-value">${new Date(cs.created_at).getFullYear()}</div></div>
+              <div class="cs-meta-item"><div class="cs-meta-label">TOOLS</div><div class="cs-meta-value">${tools}</div></div>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem;">
-                ${challengeText ? `
-                <div class="cs-section">
-                    <h2 class="serif" style="font-size: 2.2rem; margin-bottom: 1.5rem;">The Challenge</h2>
-                    <p style="color: var(--muted); line-height: 1.8;">${challengeText}</p>
-                </div>` : ''}
-
-                ${solutionText ? `
-                <div class="cs-section">
-                    <h2 class="serif" style="font-size: 2.2rem; margin-bottom: 1.5rem;">The Solution</h2>
-                    <p style="color: var(--muted); line-height: 1.8;">${solutionText}</p>
-                </div>` : ''}
-            </div>
-
-            <div style="margin-top: 8rem; padding-top: 4rem; border-top: 1px solid var(--border); text-align: center;">
-                <a href="work.html" class="btn btn-primary">Back to Portfolio</a>
+                ${challenge ? `<div class="cs-section"><h2 class="serif" style="font-size: 2rem; margin-bottom: 1.5rem;">The Challenge</h2><p style="color: var(--muted); line-height: 1.8;">${challenge}</p></div>` : ''}
+                ${solution ? `<div class="cs-section"><h2 class="serif" style="font-size: 2rem; margin-bottom: 1.5rem;">The Solution</h2><p style="color: var(--muted); line-height: 1.8;">${solution}</p></div>` : ''}
             </div>
           </article>
         `;
-
       } catch (err) {
-        console.error(err);
         container.innerHTML = `<div style="text-align:center; padding: 10rem 0;"><h2>Project not found</h2></div>`;
       }
     }
-
-    // Aseguramos que el DOM esté listo antes de arrancar
     document.addEventListener('DOMContentLoaded', renderProject);
-</script>
+  </script>
+</body>
+</html>

@@ -62,33 +62,14 @@
   <script type="module">
     import { supabase } from './js/supabase-config.js';
 
-    // 1. TRADUCCIONES
-    function applyTranslations() {
-        const lang = Lang.current;
-        const elements = {
-            'langBtn': lang === 'en' ? 'ES' : 'EN',
-            't-home': Lang.get('nav.home'),
-            't-about': Lang.get('nav.about'),
-            't-work': Lang.get('nav.work'),
-            't-contact': Lang.get('nav.contact'),
-            't-hero-tag': Lang.get('hero.tag'),
-            't-hero-sub': Lang.get('hero.sub'),
-            't-work-label': Lang.get('work.label'),
-            't-work-title': Lang.get('work.title'),
-            't-view-all': Lang.get('work.viewAll') + ' →',
-            't-copy': Lang.get('footer.copy')
-        };
-        for (const [id, value] of Object.entries(elements)) {
-            const el = document.getElementById(id);
-            if (el) el.textContent = value;
-        }
-    }
-
-    // 2. RENDER SUPABASE
     async function renderFeaturedWork() {
         const grid = document.getElementById('workGrid');
         if (!grid) return;
-        const lang = Lang.current;
+
+        // Validar que Lang esté cargado
+        const i18n = window.Lang;
+        if (!i18n) { setTimeout(renderFeaturedWork, 50); return; }
+        const lang = i18n.current;
         
         try {
             const { data: projects, error } = await supabase
@@ -101,44 +82,33 @@
             grid.innerHTML = ''; 
 
             projects.forEach(cs => {
+                const title = cs.title[lang] || cs.title['es'] || 'Untitled';
+                const desc = cs.description[lang] || cs.description['es'] || '';
+                const cat = (cs.category?.[lang] || cs.category?.['es'] || 'Case Study').toUpperCase();
+                const imgUrl = cs.image_url || cs.meta?.cover || "";
+
                 const card = document.createElement('a');
                 card.href = `case.html?id=${cs.slug}`;
                 card.className = 'case-card';
                 card.innerHTML = `
                     <div class="case-img" style="${imgUrl ? `background-image: url('${imgUrl}'); background-size: cover; background-position: center;` : ''}">
-            ${!imgUrl ? `
-                <div style="text-align:center">
-                    <div class="case-emoji">${cs.emoji || '🎨'}</div>
-                    <div class="case-cat-small">${cat}</div>
-                </div>
-            ` : ''}
-        </div>
-        <div class="case-body">
-            <div class="case-tag-label">${cat}</div>
-            <div class="case-title">${title}</div>
-            <div class="case-desc">${desc}</div>
-            <div class="case-footer">
-                <div class="case-arrow">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </div>
-            </div>
-        </div>`;
+                        ${!imgUrl ? `<div style="text-align:center"><div class="case-emoji">${cs.emoji || '🎨'}</div><div class="case-cat-small">${cat}</div></div>` : ''}
+                    </div>
+                    <div class="case-body">
+                        <div class="case-tag-label">${cat}</div>
+                        <div class="case-title">${title}</div>
+                        <div class="case-desc">${desc}</div>
+                    </div>`;
                 grid.appendChild(card);
             });
         } catch (error) {
             console.error("Error Home:", error);
-            grid.innerHTML = `<p style="color:var(--muted)">Próximamente...</p>`;
         }
     }
 
-    // INICIALIZACIÓN SEGURA
     document.addEventListener('DOMContentLoaded', () => {
-        applyTranslations();
         renderFeaturedWork();
-
-        // Acceso Secreto (Protegido)
+        // Lógica de acceso secreto
         let clicks = 0, timer;
         const copyBtn = document.getElementById('t-copy');
         if (copyBtn) {
@@ -150,11 +120,6 @@
             });
         }
     });
-
-    // Menú Mobile
-    window.toggleMenu = () => {
-        document.getElementById('navLinks').classList.toggle('open');
-    };
   </script>
 </body>
 </html>
