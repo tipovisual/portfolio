@@ -105,19 +105,26 @@
                 card.href = `case.html?id=${cs.slug}`;
                 card.className = 'case-card';
                 card.innerHTML = `
-                    <div class="case-img" style="background-image: url('${cs.image_url || ''}'); background-size: cover; background-position: center;">
-        ${!cs.image_url ? `
-            <div>
-                <div class="case-emoji">${cs.emoji}</div>
-                <div class="case-cat-small">${(cs.category[lang] || cs.category['es']).toUpperCase()}</div>
+                    <div class="case-img" style="${imgUrl ? `background-image: url('${imgUrl}'); background-size: cover; background-position: center;` : ''}">
+            ${!imgUrl ? `
+                <div style="text-align:center">
+                    <div class="case-emoji">${cs.emoji || '🎨'}</div>
+                    <div class="case-cat-small">${cat}</div>
+                </div>
+            ` : ''}
+        </div>
+        <div class="case-body">
+            <div class="case-tag-label">${cat}</div>
+            <div class="case-title">${title}</div>
+            <div class="case-desc">${desc}</div>
+            <div class="case-footer">
+                <div class="case-arrow">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
             </div>
-        ` : ''}
-    </div>
-    <div class="case-body">
-        <div class="case-tag-label">${cs.category[lang] || cs.category['es']}</div>
-        <div class="case-title">${cs.title[lang] || cs.title['es']}</div>
-        <div class="case-desc">${cs.description[lang] || cs.description['es']}</div>
-    </div>`;
+        </div>`;
                 grid.appendChild(card);
             });
         } catch (error) {
