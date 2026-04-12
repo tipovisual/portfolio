@@ -43,62 +43,57 @@
     </div>
   </main>
 
-  <script src="js/i18n.js"></script>
   <script type="module">
-    import { supabase } from './js/supabase-config.js';
+  import { supabase } from './js/supabase-config.js';
 
-    async function init() {
-        const i18n = window.Lang;
-        if (!i18n) { setTimeout(init, 100); return; }
-        
-        const lang = i18n.current;
-        // Traducción de textos estáticos
-        const elements = {
-            'langBtn': lang === 'en' ? 'ES' : 'EN',
-            't-home': i18n.get('nav.home'),
-            't-about': i18n.get('nav.about'),
-            't-work': i18n.get('nav.work'),
-            't-contact': i18n.get('nav.contact'),
-            't-hero-tag': i18n.get('hero.tag'),
-            't-hero-sub': i18n.get('hero.sub'),
-            't-work-label': i18n.get('work.label'),
-            't-work-title': i18n.get('work.title'),
-            't-view-all': (i18n.get('work.viewAll') || 'View All') + ' →'
-        };
-        for (const [id, val] of Object.entries(elements)) {
-            const el = document.getElementById(id);
-            if (el) el.textContent = val;
-        }
-
-        // Renderizado de Proyectos
-        const grid = document.getElementById('workGrid');
-        try {
-            const { data: projects, error } = await supabase.from('portfolio_projects').select('*').order('created_at', { ascending: false }).limit(2);
-            if (error) throw error;
-            grid.innerHTML = '';
-            projects.forEach(cs => {
-                const title = cs.title?.[lang] || cs.title?.['es'] || 'Untitled';
-                const desc = cs.description?.[lang] || cs.description?.['es'] || '';
-                const img = cs.image_url || cs.meta?.cover || '';
-                const category = (cs.category?.[lang] || cs.category?.['es'] || 'UX/UI').toUpperCase();
-
-                const card = document.createElement('a');
-                card.href = `case.html?id=${cs.slug}`;
-                card.className = 'case-card';
-                card.innerHTML = `
-                    <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;background-position:center;` : 'background:var(--surface2)'}">
-                        ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
-                    </div>
-                    <div class="case-body">
-                        <div class="case-tag-label">${category}</div>
-                        <div class="case-title">${title}</div>
-                        <div class="case-desc">${desc}</div>
-                    </div>`;
-                grid.appendChild(card);
-            });
-        } catch (e) { console.error(e); }
+  async function renderHome() {
+    // 1. Esperar a que Lang esté disponible de forma simple
+    if (!window.Lang) {
+      setTimeout(renderHome, 100);
+      return;
     }
-    document.addEventListener('DOMContentLoaded', init);
-  </script>
+
+    const lang = window.Lang.current;
+    const grid = document.getElementById('workGrid');
+    if (!grid) return;
+
+    try {
+      const { data: projects, error } = await supabase
+        .from('portfolio_projects')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(2);
+
+      if (error) throw error;
+      
+      grid.innerHTML = '';
+      projects.forEach(cs => {
+        // Variables seguras
+        const title = cs.title[lang] || cs.title['es'];
+        const description = cs.description[lang] || cs.description['es'];
+        const category = (cs.category[lang] || cs.category['es']).toUpperCase();
+        const image = cs.image_url || '';
+
+        const card = document.createElement('a');
+        card.href = `case.html?id=${cs.slug}`;
+        card.className = 'case-card';
+        card.innerHTML = `
+          <div class="case-img" style="background-image: url('${image}'); background-size: cover; background-position: center;">
+            ${!image ? `<div class="case-emoji">${cs.emoji}</div>` : ''}
+          </div>
+          <div class="case-body">
+            <div class="case-tag-label">${category}</div>
+            <div class="case-title">${title}</div>
+            <div class="case-desc">${description}</div>
+          </div>`;
+        grid.appendChild(card);
+      });
+    } catch (err) {
+      console.error("Error cargando proyectos:", err);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', renderHome);
+</script>
 </body>
 </html>

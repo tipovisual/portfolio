@@ -21,43 +21,58 @@
     <div class="cases-grid" id="workGrid" style="margin-top:4rem"></div>
   </main>
 
-  <script src="js/i18n.js"></script>
   <script type="module">
-    import { supabase } from './js/supabase-config.js';
+  import { supabase } from './js/supabase-config.js';
 
-    async function render() {
-        const i18n = window.Lang;
-        if (!i18n) { setTimeout(render, 100); return; }
-        const lang = i18n.current;
-        const grid = document.getElementById('workGrid');
-
-        try {
-            const { data: projects, error } = await supabase.from('portfolio_projects').select('*').order('created_at', { ascending: false });
-            if (error) throw error;
-            grid.innerHTML = '';
-            projects.forEach(cs => {
-                const title = cs.title?.[lang] || cs.title?.['es'] || 'Untitled';
-                const desc = cs.description?.[lang] || cs.description?.['es'] || '';
-                const img = cs.image_url || cs.meta?.cover || '';
-                const category = (cs.category?.[lang] || cs.category?.['es'] || 'CASE STUDY').toUpperCase();
-
-                const card = document.createElement('a');
-                card.href = `case.html?id=${cs.slug}`;
-                card.className = 'case-card';
-                card.innerHTML = `
-                    <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;background-position:center;` : 'background:var(--surface2)'}">
-                        ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
-                    </div>
-                    <div class="case-body">
-                        <div class="case-tag-label">${category}</div>
-                        <div class="case-title">${title}</div>
-                        <div class="case-desc">${desc}</div>
-                    </div>`;
-                grid.appendChild(card);
-            });
-        } catch (e) { console.error(e); }
+  async function renderWork() {
+    if (!window.Lang) {
+      setTimeout(renderWork, 100);
+      return;
     }
-    document.addEventListener('DOMContentLoaded', render);
-  </script>
+
+    const lang = window.Lang.current;
+    const grid = document.getElementById('workGrid');
+    
+    try {
+      const { data: projects, error } = await supabase
+        .from('portfolio_projects')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      grid.innerHTML = '';
+      projects.forEach(cs => {
+        const title = cs.title[lang] || cs.title['es'];
+        const description = cs.description[lang] || cs.description['es'];
+        const category = (cs.category[lang] || cs.category['es']).toUpperCase();
+        const image = cs.image_url || '';
+
+        const card = document.createElement('a');
+        card.href = `case.html?id=${cs.slug}`;
+        card.className = 'case-card';
+        card.innerHTML = `
+          <div class="case-img" style="background-image: url('${image}'); background-size: cover; background-position: center;">
+            ${!image ? `<div class="case-emoji">${cs.emoji}</div>` : ''}
+          </div>
+          <div class="case-body">
+            <div class="case-tag-label">${category}</div>
+            <div class="case-title">${title}</div>
+            <div class="case-desc">${description}</div>
+            <div class="case-footer">
+               <div class="case-arrow">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+               </div>
+            </div>
+          </div>`;
+        grid.appendChild(card);
+      });
+    } catch (err) {
+      console.error("Error en galería:", err);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', renderWork);
+</script>
 </body>
 </html>
