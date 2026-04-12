@@ -1,82 +1,85 @@
-<script type="module">
-  import { supabase } from './js/supabase-config.js';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work — Freddy Gonzalez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" id="t-home">Home</a></li>
+      <li><a href="about.html" id="t-about">About</a></li>
+      <li><a href="work.html" class="active" id="t-work">Work</a></li>
+      <li><a href="contact.html" id="t-contact">Contact</a></li>
+      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
+    </ul>
+  </nav>
 
-  // 1. Traducciones y UI Inicial (Se mantiene igual)
-  function initUI() {
-      document.getElementById('langBtn').textContent = Lang.current === 'en' ? 'ES' : 'EN';
-      document.getElementById('t-home').textContent = Lang.get('nav.home');
-      document.getElementById('t-about').textContent = Lang.get('nav.about');
-      document.getElementById('t-work').textContent = Lang.get('nav.work');
-      document.getElementById('t-contact').textContent = Lang.get('nav.contact');
-      document.getElementById('t-label').textContent = Lang.get('work.label');
-      document.getElementById('t-title').textContent = Lang.get('work.title');
-      document.getElementById('t-sub').textContent = Lang.get('work.sub');
-      document.getElementById('t-copy').textContent = Lang.get('footer.copy');
-  }
+  <main class="container section-pad">
+    <div class="section-label" id="t-label">Work</div>
+    <h1 class="section-title" id="t-title">Portfolio</h1>
+    <p class="section-sub" id="t-sub">A collection of projects focused on solving complex problems.</p>
+    <div class="cases-grid" id="workGrid" style="margin-top:4rem"></div>
+  </main>
 
-  // 2. Motor Dinámico con Supabase (Formato Original Preservado)
-  async function renderWorkGrid() {
-      const grid = document.getElementById('workGrid');
-      const lang = Lang.current;
-      
-      try {
-          // Consultamos todos los proyectos en Supabase
-          const { data: projects, error } = await supabase
-            .from('portfolio_projects')
-            .select('*')
-            .order('created_at', { ascending: false });
+  <script src="js/i18n.js"></script>
+  <script type="module">
+    import { supabase } from './js/supabase-config.js';
 
-          if (error) throw error;
-          grid.innerHTML = ''; 
+    async function renderWorkGrid() {
+        const grid = document.getElementById('workGrid');
+        if (!grid) return;
+        const lang = Lang.current;
+        
+        try {
+            const { data: projects, error } = await supabase
+                .from('portfolio_projects')
+                .select('*')
+                .order('created_at', { ascending: false });
 
-          projects.forEach(cs => {
-              // Mantenemos tu estructura HTML exacta de work.html
-              const card = document.createElement('a');
-              card.href = `case.html?id=${cs.slug}`;
-              card.className = 'case-card';
-              
-              // Los tags los sacamos del campo 'meta' o 'tags' si los tienes
-              const tags = cs.meta?.tools || []; 
+            if (error) throw error;
+            grid.innerHTML = '';
 
-              card.innerHTML = `
-                  <div class="case-img">
-                      <div>
-                          <div class="case-emoji">${cs.emoji}</div>
-                          <div class="case-cat-small">${cs.category[lang].toUpperCase()}</div>
-                      </div>
-                  </div>
-                  <div class="case-body">
-                      <div class="case-tag-label">${cs.category[lang]}</div>
-                      <div class="case-title">${cs.title[lang]}</div>
-                      <div class="case-desc">${cs.description[lang]}</div>
-                      <div class="case-footer">
-                          <div class="case-tags">
-                              ${tags.slice(0,2).map(t => `<span class="tag-pill">${t}</span>`).join('')}
-                          </div>
-                          <div class="case-arrow">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                              </svg>
-                          </div>
-                      </div>
-                  </div>`;
-              grid.appendChild(card);
-          });
-      } catch (error) {
-          console.error("Error en Work Supabase:", error);
-          grid.innerHTML = `<p style="color:var(--muted)">No se pudieron cargar los proyectos.</p>`;
-      }
-  }
+            projects.forEach(cs => {
+                const card = document.createElement('a');
+                card.href = `case.html?id=${cs.slug}`;
+                card.className = 'case-card';
+                const tools = cs.meta?.tools || [];
 
-  // Ejecutar
-  initUI();
-  renderWorkGrid();
+                card.innerHTML = `
+                    <div class="case-img">
+                        <div>
+                            <div class="case-emoji">${cs.emoji}</div>
+                            <div class="case-cat-small">${(cs.category[lang] || cs.category['es']).toUpperCase()}</div>
+                        </div>
+                    </div>
+                    <div class="case-body">
+                        <div class="case-tag-label">${cs.category[lang] || cs.category['es']}</div>
+                        <div class="case-title">${cs.title[lang] || cs.title['es']}</div>
+                        <div class="case-desc">${cs.description[lang] || cs.description['es']}</div>
+                        <div class="case-footer">
+                            <div class="case-tags">
+                                ${tools.slice(0,2).map(t => `<span class="tag-pill">${t}</span>`).join('')}
+                            </div>
+                            <div class="case-arrow">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
+                    </div>`;
+                grid.appendChild(card);
+            });
+        } catch (err) {
+            console.error("Error Work:", err);
+        }
+    }
 
-  // Navegación y Menú (Se mantienen igual)
-  window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
-  });
-  function toggleMenu() {
-      document.getElementById('navLinks').classList.toggle('open');
-  }
-</script>
+    document.addEventListener('DOMContentLoaded', renderWorkGrid);
+    window.toggleMenu = () => document.getElementById('navLinks').classList.toggle('open');
+  </script>
+</body>
+</html>
