@@ -4,12 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Freddy Gonzalez — UX/UI Designer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
     <ul class="nav-links" id="navLinks">
@@ -17,24 +15,19 @@
       <li><a href="about.html" id="t-about">About</a></li>
       <li><a href="work.html" id="t-work">Work</a></li>
       <li><a href="contact.html" id="t-contact">Contact</a></li>
-      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
+      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();" id="langBtn">ES</button></li>
     </ul>
-    <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Menu">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
   </nav>
 
   <main>
     <section class="hero">
       <div class="hero-bg"></div>
-      <div class="hero-grid"></div>
       <div class="hero-content">
         <div class="hero-tag fade-up" id="t-hero-tag">Available for new projects</div>
         <h1 class="fade-up d1">Designing<br><em>experiences</em><br>that matter</h1>
-        <p class="hero-sub fade-up d2" id="t-hero-sub">Crafting intuitive and accessible products that prioritize usability, functionality, and visual harmony.</p>
+        <p class="hero-sub fade-up d2" id="t-hero-sub">Crafting intuitive and accessible products.</p>
         <div class="hero-actions fade-up d3">
           <a href="work.html" class="btn btn-primary" id="t-hero-cta">View My Work</a>
-          <a href="contact.html" class="btn btn-ghost" id="t-hero-contact">Get in Touch</a>
         </div>
       </div>
     </section>
@@ -42,10 +35,7 @@
     <div class="bg-surface">
       <div class="container section-pad">
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;flex-wrap:wrap;gap:1rem">
-          <div>
-            <div class="section-label" id="t-work-label">Selected Work</div>
-            <h2 class="section-title" id="t-work-title">Case Studies</h2>
-          </div>
+          <div><div class="section-label" id="t-work-label">Selected Work</div><h2 class="section-title" id="t-work-title">Case Studies</h2></div>
           <a href="work.html" class="btn btn-ghost" id="t-view-all">View All Work →</a>
         </div>
         <div class="cases-grid" id="workGrid"></div>
@@ -53,73 +43,62 @@
     </div>
   </main>
 
-  <footer>
-    <div class="footer-logo">Freddy Gonzalez</div>
-    <span class="footer-copy" id="t-copy">© 2024 Freddy Gonzalez. All rights reserved.</span>
-  </footer>
-
   <script src="js/i18n.js"></script>
   <script type="module">
     import { supabase } from './js/supabase-config.js';
 
-    async function renderFeaturedWork() {
-        const grid = document.getElementById('workGrid');
-        if (!grid) return;
-
-        // Validar que Lang esté cargado
+    async function init() {
         const i18n = window.Lang;
-        if (!i18n) { setTimeout(renderFeaturedWork, 50); return; }
-        const lang = i18n.current;
+        if (!i18n) { setTimeout(init, 100); return; }
         
+        const lang = i18n.current;
+        // Traducción de textos estáticos
+        const elements = {
+            'langBtn': lang === 'en' ? 'ES' : 'EN',
+            't-home': i18n.get('nav.home'),
+            't-about': i18n.get('nav.about'),
+            't-work': i18n.get('nav.work'),
+            't-contact': i18n.get('nav.contact'),
+            't-hero-tag': i18n.get('hero.tag'),
+            't-hero-sub': i18n.get('hero.sub'),
+            't-work-label': i18n.get('work.label'),
+            't-work-title': i18n.get('work.title'),
+            't-view-all': (i18n.get('work.viewAll') || 'View All') + ' →'
+        };
+        for (const [id, val] of Object.entries(elements)) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        }
+
+        // Renderizado de Proyectos
+        const grid = document.getElementById('workGrid');
         try {
-            const { data: projects, error } = await supabase
-                .from('portfolio_projects')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(2);
-
+            const { data: projects, error } = await supabase.from('portfolio_projects').select('*').order('created_at', { ascending: false }).limit(2);
             if (error) throw error;
-            grid.innerHTML = ''; 
-
+            grid.innerHTML = '';
             projects.forEach(cs => {
-                const title = cs.title[lang] || cs.title['es'] || 'Untitled';
-                const desc = cs.description[lang] || cs.description['es'] || '';
-                const cat = (cs.category?.[lang] || cs.category?.['es'] || 'Case Study').toUpperCase();
-                const imgUrl = cs.image_url || cs.meta?.cover || "";
+                const title = cs.title?.[lang] || cs.title?.['es'] || 'Untitled';
+                const desc = cs.description?.[lang] || cs.description?.['es'] || '';
+                const img = cs.image_url || cs.meta?.cover || '';
+                const category = (cs.category?.[lang] || cs.category?.['es'] || 'UX/UI').toUpperCase();
 
                 const card = document.createElement('a');
                 card.href = `case.html?id=${cs.slug}`;
                 card.className = 'case-card';
                 card.innerHTML = `
-                    <div class="case-img" style="${imgUrl ? `background-image: url('${imgUrl}'); background-size: cover; background-position: center;` : ''}">
-                        ${!imgUrl ? `<div style="text-align:center"><div class="case-emoji">${cs.emoji || '🎨'}</div><div class="case-cat-small">${cat}</div></div>` : ''}
+                    <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;background-position:center;` : 'background:var(--surface2)'}">
+                        ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
                     </div>
                     <div class="case-body">
-                        <div class="case-tag-label">${cat}</div>
+                        <div class="case-tag-label">${category}</div>
                         <div class="case-title">${title}</div>
                         <div class="case-desc">${desc}</div>
                     </div>`;
                 grid.appendChild(card);
             });
-        } catch (error) {
-            console.error("Error Home:", error);
-        }
+        } catch (e) { console.error(e); }
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        renderFeaturedWork();
-        // Lógica de acceso secreto
-        let clicks = 0, timer;
-        const copyBtn = document.getElementById('t-copy');
-        if (copyBtn) {
-            copyBtn.addEventListener('click', () => {
-                clicks++;
-                clearTimeout(timer);
-                timer = setTimeout(() => clicks = 0, 1500);
-                if (clicks >= 3) { window.location.href = 'admin.html'; clicks = 0; }
-            });
-        }
-    });
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
