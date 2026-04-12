@@ -9,7 +9,7 @@
 <body>
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
-    <ul class="nav-links" id="navLinks">
+    <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="work.html" class="active">Work</a></li>
       <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();">ES</button></li>
@@ -21,63 +21,45 @@
     <div class="cases-grid" id="workGrid" style="margin-top:4rem"></div>
   </main>
 
+  <script src="js/i18n.js"></script>
   <script type="module">
-  import { supabase } from './js/supabase-config.js';
+    import { supabase } from './js/supabase-config.js';
 
-async function startRendering() {
-    console.log("1. Iniciando renderizado...");
-    const grid = document.getElementById('workGrid');
-    if (!grid) return console.error("No se encontró el elemento #workGrid");
+    async function renderAll() {
+      const grid = document.getElementById('workGrid');
+      const lang = (window.Lang && window.Lang.current) ? window.Lang.current : 'es';
 
-    try {
-        // Pedir datos a Supabase
-        console.log("2. Llamando a Supabase...");
-        const { data: projects, error } = await supabase
-            .from('portfolio_projects')
-            .select('*')
-            .order('created_at', { ascending: false });
+      try {
+        const { data, error } = await supabase
+          .from('portfolio_projects')
+          .select('*')
+          .order('created_at', { ascending: false });
 
         if (error) throw error;
-        console.log("3. Datos recibidos:", projects.length, "proyectos encontrados.");
 
-        // Detectar idioma (si Lang no existe, usamos 'es' por defecto)
-        const lang = (window.Lang && window.Lang.current) ? window.Lang.current : 'es';
-        console.log("4. Idioma detectado:", lang);
+        grid.innerHTML = data.map(cs => {
+          const t = cs.title?.[lang] || cs.title?.['es'] || 'Untitled';
+          const d = cs.description?.[lang] || cs.description?.['es'] || '';
+          const img = cs.image_url || cs.meta?.cover || '';
+          const cat = (cs.category?.[lang] || cs.category?.['es'] || 'CASE STUDY').toUpperCase();
 
-        grid.innerHTML = ''; // Limpiar grid
-
-        projects.forEach(cs => {
-            // Extraer datos con seguridad total
-            const title = cs.title?.[lang] || cs.title?.['es'] || 'Untitled';
-            const desc = cs.description?.[lang] || cs.description?.['es'] || '';
-            const cat = (cs.category?.[lang] || cs.category?.['es'] || 'UX/UI').toUpperCase();
-            const img = cs.image_url || cs.meta?.cover || '';
-
-            const card = document.createElement('a');
-            card.href = `case.html?id=${cs.slug}`;
-            card.className = 'case-card';
-            card.innerHTML = `
-                <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;background-position:center;` : 'background:var(--surface2)'}">
-                    ${!img ? `<div class="case-emoji" style="display:flex;align-items:center;justify-center;height:100%;font-size:3rem;">${cs.emoji || '🎨'}</div>` : ''}
-                </div>
-                <div class="case-body">
-                    <div class="case-tag-label" style="color:var(--accent); font-family:'Space Mono'; font-size:0.7rem; margin-bottom:0.5rem;">${cat}</div>
-                    <div class="case-title" style="font-family:'DM Serif Display'; font-size:1.4rem; color:var(--white); margin-bottom:0.5rem;">${title}</div>
-                    <div class="case-desc" style="color:var(--muted); font-size:0.9rem;">${desc}</div>
-                </div>`;
-            grid.appendChild(card);
-        });
-        console.log("5. Renderizado completado con éxito.");
-
-    } catch (err) {
-        console.error("ERROR CRÍTICO:", err.message);
-        grid.innerHTML = `<p style="color:red">Error: ${err.message}</p>`;
+          return `
+            <a href="case.html?id=${cs.slug}" class="case-card">
+              <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;` : 'background:var(--surface2)'}">
+                ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
+              </div>
+              <div class="case-body">
+                <div class="case-tag-label">${cat}</div>
+                <div class="case-title">${t}</div>
+                <div class="case-desc">${d}</div>
+              </div>
+            </a>`;
+        }).join('');
+      } catch (e) {
+        console.error("Error en galería:", e);
+      }
     }
-}
-
-// Ejecutar inmediatamente y también al cargar el DOM
-startRendering();
-document.addEventListener('DOMContentLoaded', startRendering);
-</script>
+    renderAll();
+  </script>
 </body>
 </html>

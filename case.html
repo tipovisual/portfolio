@@ -17,66 +17,49 @@
 
   <main id="caseContent">
     <div class="container section-pad" style="padding-top:10rem; text-align:center;">
-      <p class="mono">Loading project narrative...</p>
+      <p>Loading project...</p>
     </div>
   </main>
 
+  <script src="js/i18n.js"></script>
   <script type="module">
-  import { supabase } from './js/supabase-config.js';
+    import { supabase } from './js/supabase-config.js';
 
-async function loadCase() {
-    const container = document.getElementById('caseContent');
-    const params = new URLSearchParams(window.location.search);
-    const slug = params.get('id');
-    
-    if (!slug) return console.error("No se encontró el slug en la URL");
-
-    try {
-        const { data: cs, error } = await supabase
-            .from('portfolio_projects')
-            .select('*')
-            .eq('slug', slug)
-            .single();
-
-        if (error || !cs) throw new Error("Proyecto no encontrado en la base de datos");
-
+    async function load() {
+        const container = document.getElementById('caseContent');
         const lang = (window.Lang && window.Lang.current) ? window.Lang.current : 'es';
-        
-        // Capa de compatibilidad (Puente entre datos viejos y nuevos)
-        const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || "";
-        const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || "";
-        const role = cs.meta?.role || "UX/UI Designer";
-        const tools = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : (cs.meta?.tools || "");
-        const img = cs.image_url || cs.meta?.cover || "";
+        const slug = new URLSearchParams(window.location.search).get('id');
 
-        container.innerHTML = `
-            <div class="container fade-up" style="padding-top: 8rem;">
-                <a href="work.html" class="btn btn-ghost" style="margin-bottom:2rem;">← Volver</a>
-                <h1 class="serif" style="font-size:3.5rem; margin-bottom:1rem;">${cs.title[lang]}</h1>
-                <p style="color:var(--muted); font-size:1.2rem; margin-bottom:3rem;">${cs.description[lang]}</p>
-                
-                <div class="cs-hero" style="background:url('${img}') center/cover; height:60vh; border-radius:24px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; margin-bottom:4rem;">
-                    ${!img ? `<span style="font-size:6rem">${cs.emoji}</span>` : ''}
-                </div>
+        if (!slug) { window.location.href = 'work.html'; return; }
 
-                <div class="cs-meta" style="display:flex; gap:3rem; margin-bottom:4rem;">
-                    <div><label style="display:block; color:var(--accent); font-family:'Space Mono'; font-size:0.7rem;">ROLE</label><strong>${role}</strong></div>
-                    <div><label style="display:block; color:var(--accent); font-family:'Space Mono'; font-size:0.7rem;">TOOLS</label><strong>${tools}</strong></div>
-                </div>
+        try {
+            const { data: cs, error } = await supabase.from('portfolio_projects').select('*').eq('slug', slug).single();
+            if (error || !cs) throw new Error("No encontrado");
 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem;">
-                    <div><h2 class="serif">The Challenge</h2><p style="color:var(--muted); line-height:1.7;">${challenge}</p></div>
-                    <div><h2 class="serif">The Solution</h2><p style="color:var(--muted); line-height:1.7;">${solution}</p></div>
-                </div>
-            </div>`;
-            
-    } catch (err) {
-        console.error("Error cargando detalle:", err.message);
-        if(container) container.innerHTML = `<h2>Error: ${err.message}</h2>`;
+            const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || "";
+            const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || "";
+            const img = cs.image_url || cs.meta?.cover || "";
+
+            container.innerHTML = `
+                <article class="container fade-up" style="padding-top: 8rem; padding-bottom: 8rem;">
+                    <div class="section-label">${cs.category[lang] || 'Case Study'}</div>
+                    <h1 class="serif" style="font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; margin-bottom: 2rem;">${cs.title[lang]}</h1>
+                    <p class="section-sub" style="font-size: 1.25rem; max-width: 800px; margin-bottom: 4rem;">${cs.description[lang]}</p>
+
+                    <div class="cs-hero" style="background: url('${img}') center/cover; height: 65vh; border-radius: 32px; border: 1px solid var(--border); margin-bottom: 5rem; display: flex; align-items: center; justify-content: center;">
+                        ${!img ? `<span style="font-size: 6rem;">${cs.emoji}</span>` : ''}
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem;">
+                        ${challenge ? `<div><h2 class="serif">Challenge</h2><p>${challenge}</p></div>` : ''}
+                        ${solution ? `<div><h2 class="serif">Solution</h2><p>${solution}</p></div>` : ''}
+                    </div>
+                </article>`;
+        } catch (e) {
+            container.innerHTML = `<h2>Project not found</h2>`;
+        }
     }
-}
-
-loadCase();
-</script>
+    load();
+  </script>
 </body>
 </html>
