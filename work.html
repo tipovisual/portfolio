@@ -1,65 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Work — Freddy Gonzalez</title>
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="work.html" class="active">Work</a></li>
-      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();">ES</button></li>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+      <li><a href="about.html" data-i18n="nav.about">About</a></li>
+      <li><a href="work.html" class="active" data-i18n="nav.work">Work</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
     </ul>
   </nav>
 
-  <main class="container section-pad">
-    <h1 class="section-title">Portfolio</h1>
-    <div class="cases-grid" id="workGrid" style="margin-top:4rem"></div>
+  <main>
+    <div class="container section-pad" style="padding-top:8rem">
+      <div class="section-label" data-i18n="work.label">Trabajo Selecto</div>
+      <h1 class="section-title" data-i18n="work.title">Casos de Estudio</h1>
+      <p class="section-sub" style="margin-bottom:3rem;max-width:600px" data-i18n="work.sub">Proyectos seleccionados.</p>
+      <div class="cases-grid" id="workGrid">
+        <p class="mono" style="font-size:0.8rem;color:var(--muted)">Loading...</p>
+      </div>
+    </div>
+
+    <!-- INTERNAL INSIGHTS -->
+    <section class="container section-pad" style="border-top:1px solid var(--border)">
+      <div class="section-label" data-i18n="work.insightsLabel">Liderazgo & Procesos</div>
+      <h2 class="section-title" data-i18n="work.insightsTitle">Internal Insights</h2>
+      <p class="section-sub" data-i18n="work.insightsSub">Mi evolución de UI Designer a Product Owner.</p>
+
+      <div style="display:grid;gap:1.5rem;margin-top:3rem">
+        <div class="insight-item">
+          <div class="insight-header">
+            <span class="tag-pill" data-i18n="work.i1_tag">Product Leadership</span>
+            <span class="mono" style="font-size:0.7rem;color:var(--muted)">SQUAD MANAGEMENT</span>
+          </div>
+          <h3 class="serif" style="font-size:1.8rem;margin-bottom:1rem" data-i18n="work.i1_title">Optimizando el Hand-off: De Diseño a Desarrollo</h3>
+          <p data-i18n="work.i1_desc">Como Product Owner de un squad...</p>
+        </div>
+        <div class="insight-item">
+          <div class="insight-header">
+            <span class="tag-pill" data-i18n="work.i2_tag">AI Strategy</span>
+            <span class="mono" style="font-size:0.7rem;color:var(--muted)">INTERNAL TOOLS</span>
+          </div>
+          <h3 class="serif" style="font-size:1.8rem;margin-bottom:1rem" data-i18n="work.i2_title">Humanizando la Automatización Interna</h3>
+          <p data-i18n="work.i2_desc">Desarrollé procesos transversales...</p>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <div class="footer-logo">Freddy Gonzalez</div>
+    <span class="footer-copy" data-i18n="footer.copy">© 2024 Freddy Gonzalez.</span>
+    <div class="footer-social">
+      <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="mailto:tipovisual@gmail.com" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
+  </footer>
 
   <script src="js/i18n.js"></script>
   <script type="module">
     import { supabase } from './js/supabase-config.js';
-
-    async function renderAll() {
-      const grid = document.getElementById('workGrid');
-      const lang = (window.Lang && window.Lang.current) ? window.Lang.current : 'es';
-
-      try {
-        const { data, error } = await supabase
-          .from('portfolio_projects')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        grid.innerHTML = data.map(cs => {
-          const t = cs.title?.[lang] || cs.title?.['es'] || 'Untitled';
-          const d = cs.description?.[lang] || cs.description?.['es'] || '';
-          const img = cs.image_url || cs.meta?.cover || '';
-          const cat = (cs.category?.[lang] || cs.category?.['es'] || 'CASE STUDY').toUpperCase();
-
-          return `
-            <a href="case.html?id=${cs.slug}" class="case-card">
-              <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;` : 'background:var(--surface2)'}">
-                ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
-              </div>
-              <div class="case-body">
-                <div class="case-tag-label">${cat}</div>
-                <div class="case-title">${t}</div>
-                <div class="case-desc">${d}</div>
-              </div>
-            </a>`;
-        }).join('');
-      } catch (e) {
-        console.error("Error en galería:", e);
-      }
-    }
-    renderAll();
+    const grid = document.getElementById('workGrid');
+    const lang = Lang.current;
+    try {
+      const { data, error } = await supabase.from('portfolio_projects').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      if (!data || data.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">No projects yet.</p>'; return; }
+      grid.innerHTML = data.map(cs => {
+        const title = cs.title?.[lang] || cs.title?.es || '';
+        const desc  = cs.description?.[lang] || cs.description?.es || '';
+        const cat   = (cs.category?.[lang] || 'Case Study').toUpperCase();
+        const img   = cs.image_url || '';
+        return `<a href="case.html?id=${cs.slug}" class="case-card">
+          <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;background-position:center` : ''}">
+            ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
+          </div>
+          <div class="case-body">
+            <div class="case-tag-label">${cat}</div>
+            <div class="case-title">${title}</div>
+            <div class="case-desc">${desc}</div>
+          </div>
+        </a>`;
+      }).join('');
+    } catch(e) { console.error(e); grid.innerHTML = '<p style="color:var(--muted)">Error loading.</p>'; }
+    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10));
   </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,13 +13,13 @@
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="index.html" id="t-home">Home</a></li>
-      <li><a href="about.html" id="t-about">About</a></li>
-      <li><a href="work.html" id="t-work">Work</a></li>
-      <li><a href="contact.html" class="active" id="t-contact">Contact</a></li>
+      <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+      <li><a href="about.html" data-i18n="nav.about">About</a></li>
+      <li><a href="work.html" data-i18n="nav.work">Work</a></li>
+      <li><a href="contact.html" class="active" data-i18n="nav.contact">Contact</a></li>
       <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
     </ul>
-    <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Menu">
+    <button class="nav-mobile-btn" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </nav>
@@ -27,56 +27,54 @@
   <main>
     <div class="container section-pad" style="padding-top:8rem">
 
-      <div class="section-label" id="t-label">Contact</div>
-      <h1 class="section-title" id="t-title">Get In Touch</h1>
-      <p class="section-sub" style="max-width:600px;margin-bottom:3rem" id="t-sub">Interested in working together? I'm always open to discussing new projects, creative ideas, or opportunities.</p>
+      <div class="section-label" data-i18n="contact.label">Contacto</div>
+      <h1 class="section-title" data-i18n="contact.title">Contáctame</h1>
+      <p class="section-sub" style="max-width:600px;margin-bottom:3rem" data-i18n="contact.sub">¿Interesado en trabajar juntos?</p>
 
-      <!-- INFO CARDS -->
       <div class="contact-cards">
         <div class="contact-card">
           <div class="contact-card-icon" style="background:rgba(124,106,247,0.1);border:1px solid rgba(124,106,247,0.2)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </div>
-          <h3 id="t-email-label">Email</h3>
+          <h3 data-i18n="contact.email">Correo</h3>
           <p>contact@tipovisual.com</p>
         </div>
         <div class="contact-card">
           <div class="contact-card-icon" style="background:rgba(247,124,106,0.1);border:1px solid rgba(247,124,106,0.2)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.1 2.18 2 2 0 012.07 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
           </div>
-          <h3 id="t-phone-label">Phone</h3>
+          <h3 data-i18n="contact.phone">Teléfono</h3>
           <p>+507 XXX XXXX</p>
         </div>
         <div class="contact-card">
           <div class="contact-card-icon" style="background:rgba(106,247,200,0.1);border:1px solid rgba(106,247,200,0.2)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent3)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </div>
-          <h3 id="t-loc-label">Location</h3>
+          <h3 data-i18n="contact.location">Ubicación</h3>
           <p>Panamá, Ciudad de Panamá</p>
         </div>
       </div>
 
-      <!-- FORM -->
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:2.5rem;max-width:700px">
-        <h2 style="font-size:1.5rem;margin-bottom:2rem" id="t-form-title">Send Me a Message</h2>
+        <h2 style="font-size:1.5rem;margin-bottom:2rem" data-i18n="contact.formTitle">Envíame un Mensaje</h2>
         <div class="form-success" id="formSuccess"></div>
         <form id="contactForm" onsubmit="handleSubmit(event)">
           <div class="form-grid">
             <div class="form-group">
-              <label id="t-name">Name</label>
-              <input type="text" placeholder="Your name" required>
+              <label data-i18n="contact.name">Nombre</label>
+              <input type="text" data-i18n="contact.name" placeholder="Nombre" required>
             </div>
             <div class="form-group">
-              <label id="t-email">Email</label>
+              <label data-i18n="contact.emailField">Correo</label>
               <input type="email" placeholder="your@email.com" required>
             </div>
           </div>
           <div class="form-group">
-            <label id="t-msg">Message</label>
-            <textarea placeholder="Tell me about your project..." required></textarea>
+            <label data-i18n="contact.message">Mensaje</label>
+            <textarea placeholder="..." required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" id="t-send">
-            Send Message
+          <button type="submit" class="btn btn-primary">
+            <span data-i18n="contact.send">Enviar Mensaje</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           </button>
         </form>
@@ -87,7 +85,7 @@
 
   <footer>
     <div class="footer-logo">Freddy Gonzalez</div>
-    <span class="footer-copy" id="t-copy">© 2024 Freddy Gonzalez. All rights reserved.</span>
+    <span class="footer-copy" data-i18n="footer.copy">© 2024 Freddy Gonzalez.</span>
     <div class="footer-social">
       <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="social-btn">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -98,27 +96,8 @@
     </div>
   </footer>
 
-  <script src="js/data.js"></script>
   <script src="js/i18n.js"></script>
   <script>
-    document.getElementById('langBtn').textContent = Lang.current === 'en' ? 'ES' : 'EN';
-    document.getElementById('t-home').textContent = Lang.get('nav.home');
-    document.getElementById('t-about').textContent = Lang.get('nav.about');
-    document.getElementById('t-work').textContent = Lang.get('nav.work');
-    document.getElementById('t-contact').textContent = Lang.get('nav.contact');
-    document.getElementById('t-label').textContent = Lang.get('contact.label');
-    document.getElementById('t-title').textContent = Lang.get('contact.title');
-    document.getElementById('t-sub').textContent = Lang.get('contact.sub');
-    document.getElementById('t-email-label').textContent = Lang.get('contact.email');
-    document.getElementById('t-phone-label').textContent = Lang.get('contact.phone');
-    document.getElementById('t-loc-label').textContent = Lang.get('contact.location');
-    document.getElementById('t-form-title').textContent = Lang.get('contact.formTitle');
-    document.getElementById('t-name').textContent = Lang.get('contact.name');
-    document.getElementById('t-email').textContent = Lang.get('contact.emailField');
-    document.getElementById('t-msg').textContent = Lang.get('contact.message');
-    document.getElementById('t-send').innerHTML = `${Lang.get('contact.send')} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>`;
-    document.getElementById('t-copy').textContent = Lang.get('footer.copy');
-
     function handleSubmit(e) {
       e.preventDefault();
       const s = document.getElementById('formSuccess');
@@ -127,13 +106,7 @@
       e.target.reset();
       setTimeout(() => s.classList.remove('show'), 5000);
     }
-
-    window.addEventListener('scroll', () => {
-      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
-    });
-    function toggleMenu() {
-      document.getElementById('navLinks').classList.toggle('open');
-    }
+    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10));
   </script>
 </body>
 </html>

@@ -1,65 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Project — Freddy Gonzalez</title>
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
     <ul class="nav-links">
-      <li><a href="work.html">← Back to Work</a></li>
-      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();">ES</button></li>
+      <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+      <li><a href="work.html" class="active" data-i18n="nav.work">Work</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
     </ul>
   </nav>
 
   <main id="caseContent">
-    <div class="container section-pad" style="padding-top:10rem; text-align:center;">
-      <p>Loading project...</p>
+    <div class="container section-pad" style="padding-top:10rem;text-align:center">
+      <p style="color:var(--muted)">Loading project...</p>
     </div>
   </main>
+
+  <footer>
+    <div class="footer-logo">Freddy Gonzalez</div>
+    <span class="footer-copy" data-i18n="footer.copy">© 2024 Freddy Gonzalez.</span>
+    <div class="footer-social">
+      <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="mailto:tipovisual@gmail.com" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
+  </footer>
 
   <script src="js/i18n.js"></script>
   <script type="module">
     import { supabase } from './js/supabase-config.js';
 
-    async function load() {
-        const container = document.getElementById('caseContent');
-        const lang = (window.Lang && window.Lang.current) ? window.Lang.current : 'es';
-        const slug = new URLSearchParams(window.location.search).get('id');
+    const lang  = Lang.current;
+    const slug  = new URLSearchParams(window.location.search).get('id');
+    const container = document.getElementById('caseContent');
 
-        if (!slug) { window.location.href = 'work.html'; return; }
+    if (!slug) { window.location.href = 'work.html'; }
 
-        try {
-            const { data: cs, error } = await supabase.from('portfolio_projects').select('*').eq('slug', slug).single();
-            if (error || !cs) throw new Error("No encontrado");
+    try {
+      const { data: cs, error } = await supabase
+        .from('portfolio_projects')
+        .select('*')
+        .eq('slug', slug)
+        .single();
 
-            const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || "";
-            const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || "";
-            const img = cs.image_url || cs.meta?.cover || "";
+      if (error || !cs) throw new Error('Not found');
 
-            container.innerHTML = `
-                <article class="container fade-up" style="padding-top: 8rem; padding-bottom: 8rem;">
-                    <div class="section-label">${cs.category[lang] || 'Case Study'}</div>
-                    <h1 class="serif" style="font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1; margin-bottom: 2rem;">${cs.title[lang]}</h1>
-                    <p class="section-sub" style="font-size: 1.25rem; max-width: 800px; margin-bottom: 4rem;">${cs.description[lang]}</p>
+      const title     = cs.title?.[lang]       || cs.title?.es       || '';
+      const desc      = cs.description?.[lang]  || cs.description?.es  || '';
+      const cat       = cs.category?.[lang]     || cs.category?.es     || 'Case Study';
+      const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || '';
+      const solution  = cs.content?.[lang]?.solution  || cs.story?.solution?.[lang]  || '';
+      const img       = cs.image_url || cs.meta?.cover || '';
+      const role      = cs.meta?.role  || '';
+      const tools     = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : (cs.meta?.tools || '');
 
-                    <div class="cs-hero" style="background: url('${img}') center/cover; height: 65vh; border-radius: 32px; border: 1px solid var(--border); margin-bottom: 5rem; display: flex; align-items: center; justify-content: center;">
-                        ${!img ? `<span style="font-size: 6rem;">${cs.emoji}</span>` : ''}
-                    </div>
+      document.title = `${title} — Freddy Gonzalez`;
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem;">
-                        ${challenge ? `<div><h2 class="serif">Challenge</h2><p>${challenge}</p></div>` : ''}
-                        ${solution ? `<div><h2 class="serif">Solution</h2><p>${solution}</p></div>` : ''}
-                    </div>
-                </article>`;
-        } catch (e) {
-            container.innerHTML = `<h2>Project not found</h2>`;
-        }
+      container.innerHTML = `
+        <article class="container" style="padding-top:8rem;padding-bottom:8rem">
+          <a href="work.html" class="btn btn-ghost btn-sm" style="margin-bottom:2rem;display:inline-flex">
+            ← ${Lang.get('case.back').replace('← ','')}
+          </a>
+
+          <div class="section-label">${cat}</div>
+          <h1 class="serif" style="font-size:clamp(2.5rem,8vw,5rem);line-height:1.05;margin-bottom:1.5rem">${title}</h1>
+          <p class="section-sub" style="max-width:750px;margin-bottom:4rem">${desc}</p>
+
+          <div class="cs-hero" style="${img ? `background:url('${img}') center/cover;` : ''}">
+            ${!img ? `<span style="font-size:6rem">${cs.emoji || '🎨'}</span>` : ''}
+          </div>
+
+          <div class="cs-meta">
+            ${role ? `<div class="cs-meta-item"><div class="cs-meta-label">${Lang.get('case.role')}</div><div class="cs-meta-value">${role}</div></div>` : ''}
+            ${tools ? `<div class="cs-meta-item"><div class="cs-meta-label">${Lang.get('case.tools')}</div><div class="cs-meta-value">${tools}</div></div>` : ''}
+          </div>
+
+          ${challenge ? `
+          <div class="cs-section">
+            <h2>${Lang.get('case.challenge')}</h2>
+            <p>${challenge}</p>
+          </div>` : ''}
+
+          ${solution ? `
+          <div class="cs-section">
+            <h2>${Lang.get('case.solution')}</h2>
+            <p>${solution}</p>
+          </div>` : ''}
+
+        </article>`;
+
+    } catch(e) {
+      console.error(e);
+      container.innerHTML = `
+        <div class="container" style="padding-top:10rem;text-align:center">
+          <h2 style="margin-bottom:1rem">Project not found</h2>
+          <a href="work.html" class="btn btn-ghost">← Back to Work</a>
+        </div>`;
     }
-    load();
+
+    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10));
   </script>
 </body>
 </html>

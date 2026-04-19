@@ -1,93 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Freddy Gonzalez — UX/UI Designer</title>
+  <title>Freddy Gonzalez — Lead Designer & Product Owner</title>
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
+ 
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="index.html" class="active" id="t-home">Home</a></li>
-      <li><a href="about.html" id="t-about">About</a></li>
-      <li><a href="work.html" id="t-work">Work</a></li>
-      <li><a href="contact.html" id="t-contact">Contact</a></li>
-      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();" id="langBtn">ES</button></li>
+      <li><a href="index.html" class="active" data-i18n="nav.home">Home</a></li>
+      <li><a href="about.html" data-i18n="nav.about">About</a></li>
+      <li><a href="work.html" data-i18n="nav.work">Work</a></li>
+      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
     </ul>
   </nav>
-
+ 
   <main>
     <section class="hero">
       <div class="hero-bg"></div>
       <div class="hero-content">
-        <div class="hero-tag fade-up" id="t-hero-tag">Available for new projects</div>
-        <h1 class="fade-up d1">Designing<br><em>experiences</em><br>that matter</h1>
-        <p class="hero-sub fade-up d2" id="t-hero-sub">Crafting intuitive and accessible products.</p>
+        <div class="hero-tag fade-up" data-i18n="hero.tag">Lead Product Designer & Product Owner</div>
+        <h1 class="fade-up d1" data-i18n="hero.title">Humanizing tech through<br><em>disruptive</em> strategy</h1>
+        <p class="hero-sub fade-up d2" data-i18n="hero.sub">From visual execution to product leadership.</p>
         <div class="hero-actions fade-up d3">
-          <a href="work.html" class="btn btn-primary" id="t-hero-cta">View My Work</a>
+          <a href="work.html" class="btn btn-primary" data-i18n="hero.cta">Ver Casos de Estudio</a>
         </div>
       </div>
     </section>
-
+ 
+    <section id="philosophy" class="container section-pad">
+      <div class="section-label" data-i18n="mindset.label">Mindset</div>
+      <h2 class="section-title" data-i18n="mindset.title">Estrategia de Liderazgo</h2>
+      <div class="mindset-grid">
+        <div class="mindset-card">
+          <div style="font-size:2.5rem">🤖</div>
+          <h3 data-i18n="mindset.m1_title">IA en el Proceso</h3>
+          <p data-i18n="mindset.m1_desc">IA integrada para optimizar análisis.</p>
+        </div>
+        <div class="mindset-card">
+          <div style="font-size:2.5rem">⚖️</div>
+          <h3 data-i18n="mindset.m2_title">Negocio x Usuario</h3>
+          <p data-i18n="mindset.m2_desc">Traduciendo objetivos de negocio.</p>
+        </div>
+        <div class="mindset-card">
+          <div style="font-size:2.5rem">⏳</div>
+          <h3 data-i18n="mindset.m3_title">Resiliencia Digital</h3>
+          <p data-i18n="mindset.m3_desc">Años liderando la evolución digital.</p>
+        </div>
+      </div>
+    </section>
+ 
     <div class="bg-surface">
       <div class="container section-pad">
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;flex-wrap:wrap;gap:1rem">
           <div>
-            <div class="section-label" id="t-work-label">Selected Work</div>
-            <h2 class="section-title" id="t-work-title">Case Studies</h2>
+            <div class="section-label" data-i18n="work.label">Trabajo Selecto</div>
+            <h2 class="section-title" data-i18n="work.title">Casos de Estudio</h2>
           </div>
-          <a href="work.html" class="btn btn-ghost" id="t-view-all">View All Work →</a>
+          <a href="work.html" class="btn btn-ghost" data-i18n="work.viewAll">Ver Todo</a>
         </div>
-        <div class="cases-grid" id="workGrid"></div>
+        <div class="cases-grid" id="workGrid">
+          <p class="mono" style="font-size:0.8rem;color:var(--muted)">Loading projects...</p>
+        </div>
       </div>
     </div>
   </main>
-
+ 
+  <footer>
+    <div class="footer-logo">Freddy Gonzalez</div>
+    <span class="footer-copy" data-i18n="footer.copy">© 2024 Freddy Gonzalez.</span>
+    <div class="footer-social">
+      <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="mailto:tipovisual@gmail.com" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
+  </footer>
+ 
   <script src="js/i18n.js"></script>
   <script type="module">
     import { supabase } from './js/supabase-config.js';
-
-    async function render() {
-      console.log("Iniciando carga de Supabase...");
-      const grid = document.getElementById('workGrid');
-      const lang = (window.Lang && window.Lang.current) ? window.Lang.current : 'es';
-
-      try {
-        const { data, error } = await supabase
-          .from('portfolio_projects')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(2);
-
-        if (error) throw error;
-
-        grid.innerHTML = data.map(cs => {
-          const t = cs.title?.[lang] || cs.title?.['es'] || 'Untitled';
-          const d = cs.description?.[lang] || cs.description?.['es'] || '';
-          const img = cs.image_url || cs.meta?.cover || '';
-          const cat = (cs.category?.[lang] || cs.category?.['es'] || 'UX/UI').toUpperCase();
-
-          return `
-            <a href="case.html?id=${cs.slug}" class="case-card">
-              <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;` : 'background:var(--surface2)'}">
-                ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
-              </div>
-              <div class="case-body">
-                <div class="case-tag-label">${cat}</div>
-                <div class="case-title">${t}</div>
-                <div class="case-desc">${d}</div>
-              </div>
-            </a>`;
-        }).join('');
-      } catch (e) {
-        console.error("Error detallado:", e);
-        grid.innerHTML = `<p>Error al cargar proyectos.</p>`;
-      }
-    }
-    render();
+    const grid = document.getElementById('workGrid');
+    const lang = Lang.current;
+    try {
+      const { data, error } = await supabase.from('portfolio_projects').select('*').order('created_at', { ascending: false }).limit(2);
+      if (error) throw error;
+      if (!data || data.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">No projects yet.</p>'; return; }
+      grid.innerHTML = data.map(cs => {
+        const title = cs.title?.[lang] || cs.title?.es || '';
+        const desc  = cs.description?.[lang] || cs.description?.es || '';
+        const cat   = (cs.category?.[lang] || 'Case Study').toUpperCase();
+        const img   = cs.image_url || '';
+        return `<a href="case.html?id=${cs.slug}" class="case-card">
+          <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;background-position:center` : ''}">
+            ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
+          </div>
+          <div class="case-body">
+            <div class="case-tag-label">${cat}</div>
+            <div class="case-title">${title}</div>
+            <div class="case-desc">${desc}</div>
+          </div>
+        </a>`;
+      }).join('');
+    } catch(e) { console.error(e); grid.innerHTML = '<p style="color:var(--muted)">Error loading projects.</p>'; }
+    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10));
   </script>
 </body>
 </html>
