@@ -14,33 +14,35 @@
     .admin-wrap { display: none; padding-top: 100px; padding-bottom: 100px; background: var(--admin-bg); min-height: 100vh; }
     .admin-container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
     .admin-panel { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; margin-bottom: 2.5rem; }
-    .panel-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 2rem; color: var(--white); display: flex; align-items: center; gap: 1rem; }
+    .panel-title { font-family: 'DM Serif Display', serif; font-size: 1.8rem; margin-bottom: 2rem; color: var(--white); }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
     .full-width { grid-column: span 2; }
     .form-section-label { grid-column: span 2; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent3); text-transform: uppercase; letter-spacing: 0.1em; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); margin: 1.5rem 0 0.5rem; }
     label { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--muted); margin-bottom: 0.5rem; display: block; text-transform: uppercase; }
-    input, textarea, select { width: 100%; background: var(--bg); border: 1px solid var(--border); color: white; padding: 0.9rem; border-radius: 10px; font-family: 'DM Sans', sans-serif; transition: border-color 0.2s; }
+    input, textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); color: white; padding: 0.9rem; border-radius: 10px; font-family: 'DM Sans', sans-serif; }
     .project-item { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.75rem; }
-    .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; font-family: 'Space Mono', monospace; }
+    .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; font-family: 'Space Mono', monospace; color: var(--accent3); }
+    
+    /* Gallery Previews */
+    .gallery-previews { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px; }
+    .gallery-previews img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
   </style>
 </head>
 <body>
 
-  <div id="loading" class="loading-overlay">SYNCING WITH SUPABASE...</div>
+  <div id="loading" class="loading-overlay">UPLOADING ASSETS & SYNCING DATABASE...</div>
 
-  <!-- LOGIN SECTION (Mantenida) -->
   <div class="login-wrap" id="loginWrap">
     <div class="login-card">
-      <div class="footer-logo" style="margin-bottom: 0.5rem;">Freddy Gonzalez</div>
+      <div class="footer-logo">Freddy Gonzalez</div>
       <p style="color:var(--muted); font-size:0.7rem; font-family:'Space Mono'; margin-bottom:2rem;">ADMINISTRATOR ACCESS</p>
       <form id="loginForm">
-        <input type="password" id="passInput" placeholder="Enter Password" required style="margin-bottom:1rem; text-align:center;">
-        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center">Unlock Dashboard</button>
+        <input type="password" id="passInput" placeholder="Password" required style="text-align:center; margin-bottom:1rem;">
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center">Unlock</button>
       </form>
     </div>
   </div>
 
-  <!-- MAIN ADMIN DASHBOARD -->
   <div class="admin-wrap" id="adminWrap">
     <nav id="navbar">
         <a href="index.html" class="nav-logo">Admin Panel</a>
@@ -48,60 +50,50 @@
     </nav>
 
     <div class="admin-container">
-      
-      <!-- LISTADO DE PROYECTOS (Mantenido) -->
       <div class="admin-panel">
         <h3 class="panel-title">Active Projects</h3>
-        <div id="projectsList">
-          <p class="mono" style="font-size:0.8rem; color:var(--muted)">Fetching database...</p>
-        </div>
+        <div id="projectsList"></div>
       </div>
 
-      <!-- FORMULARIO EVOLUCIONADO -->
       <div class="admin-panel">
-        <h3 class="panel-title">Add Case Study</h3>
+        <h3 class="panel-title">Create New Case Study</h3>
         <form id="projectForm">
           <div class="form-grid">
-            <div class="form-section-label">Basic Information</div>
+            <div class="form-section-label">Basic Info</div>
             <div><label>Title (ES)</label><input type="text" id="t_es" required></div>
             <div><label>Title (EN)</label><input type="text" id="t_en" required></div>
-            <div><label>Slug (URL key)</label><input type="text" id="slug" required></div>
+            <div><label>Slug</label><input type="text" id="slug" placeholder="url-name" required></div>
             <div><label>Emoji</label><input type="text" id="emoji" placeholder="🎨"></div>
+            <div class="full-width"><label>Summary (ES)</label><textarea id="d_es" rows="2"></textarea></div>
+            <div class="full-width"><label>Summary (EN)</label><textarea id="d_en" rows="2"></textarea></div>
 
-            <div class="full-width"><label>Short Description (ES)</label><textarea id="d_es" rows="2"></textarea></div>
-            <div class="full-width"><label>Short Description (EN)</label><textarea id="d_en" rows="2"></textarea></div>
-
-            <div class="form-section-label">Metadata & Impact Metrics</div>
-            <div><label>Role</label><input type="text" id="meta_role" placeholder="e.g. Product Owner"></div>
-            <div><label>Tools</label><input type="text" id="meta_tools" placeholder="Figma, Supabase..."></div>
-            
-            <!-- Bloque de Métricas Dinámicas -->
+            <div class="form-section-label">Metrics & Meta</div>
+            <div><label>Role</label><input type="text" id="meta_role" placeholder="Product Owner"></div>
+            <div><label>Tools</label><input type="text" id="meta_tools" placeholder="Figma, Notion"></div>
             <div class="full-width" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
-                <div><label>Metric 1 Value</label><input type="text" class="m-val" placeholder="+40%"></div>
-                <div><label>Metric 1 Label (ES)</label><input type="text" class="m-lab-es" placeholder="Eficiencia"></div>
-                <div><label>Metric 1 Label (EN)</label><input type="text" class="m-lab-en" placeholder="Efficiency"></div>
+                <div><label>Metric Value</label><input type="text" id="m_val" placeholder="+40%"></div>
+                <div><label>Label (ES)</label><input type="text" id="m_es" placeholder="Eficiencia"></div>
+                <div><label>Label (EN)</label><input type="text" id="m_en" placeholder="Efficiency"></div>
             </div>
 
-            <div class="form-section-label">Story & Narratives</div>
-            <div class="full-width"><label>Challenge (ES)</label><textarea id="story_challenge_es" rows="3"></textarea></div>
-            <div class="full-width"><label>Challenge (EN)</label><textarea id="story_challenge_en" rows="3"></textarea></div>
-            <div class="full-width"><label>Solution (ES)</label><textarea id="story_solution_es" rows="3"></textarea></div>
-            <div class="full-width"><label>Solution (EN)</label><textarea id="story_solution_en" rows="3"></textarea></div>
+            <div class="form-section-label">Narrative</div>
+            <div class="full-width"><label>Challenge (ES)</label><textarea id="c_es" rows="3"></textarea></div>
+            <div class="full-width"><label>Challenge (EN)</label><textarea id="c_en" rows="3"></textarea></div>
+            <div class="full-width"><label>Solution (ES)</label><textarea id="s_es" rows="3"></textarea></div>
+            <div class="full-width"><label>Solution (EN)</label><textarea id="s_en" rows="3"></textarea></div>
 
-            <div class="form-section-label">Visual Media Assets</div>
+            <div class="form-section-label">Visual Gallery (Internal Assets)</div>
             <div class="full-width">
-              <label>Main Cover (Hero)</label>
-              <input type="file" id="fileInput" accept="image/*">
+                <label>Main Cover Image</label>
+                <input type="file" id="coverInput" accept="image/*">
             </div>
             <div class="full-width">
-              <label>Project Gallery (Multiple Uploads)</label>
-              <input type="file" id="galleryInput" accept="image/*" multiple>
+                <label>Gallery Images (Select Multiple)</label>
+                <input type="file" id="galleryInput" accept="image/*" multiple>
+                <div id="galleryPreview" class="gallery-previews"></div>
             </div>
           </div>
-          
-          <button type="submit" class="btn btn-primary" id="saveBtn" style="margin-top:3rem; width:100%; justify-content:center;">
-            Deploy to Portfolio Database
-          </button>
+          <button type="submit" class="btn btn-primary" id="saveBtn" style="margin-top:3rem; width:100%; justify-content:center;">Deploy to Database</button>
         </form>
       </div>
     </div>
@@ -112,8 +104,8 @@
   <script>
     const ADMIN_PASS = 'freddy2024';
     const loginForm = document.getElementById('loginForm');
-    const projectForm = document.getElementById('projectForm');
-    const loading = document.getElementById('loading');
+    const galleryInput = document.getElementById('galleryInput');
+    const galleryPreview = document.getElementById('galleryPreview');
 
     loginForm.onsubmit = (e) => {
         e.preventDefault();
@@ -121,82 +113,76 @@
             document.getElementById('loginWrap').style.display = 'none';
             document.getElementById('adminWrap').style.display = 'block';
             fetchProjects();
-        } else { alert("Error"); }
+        }
+    };
+
+    galleryInput.onchange = () => {
+        galleryPreview.innerHTML = '';
+        Array.from(galleryInput.files).forEach(file => {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            galleryPreview.appendChild(img);
+        });
     };
 
     async function fetchProjects() {
-        const { data, error } = await db.from('portfolio_projects').select('*').order('created_at', { ascending: false });
-        if (!error) {
-            document.getElementById('projectsList').innerHTML = data.map(p => `
-                <div class="project-item">
-                    <div style="display:flex; align-items:center; gap:1rem">
-                        <span>${p.emoji}</span>
-                        <div><strong>${p.title.es}</strong><div class="mono" style="font-size:0.6rem">${p.slug}</div></div>
-                    </div>
-                    <button class="btn-icon" onclick="deleteProject('${p.id}')">✕</button>
-                </div>`).join('');
-        }
+        const { data } = await db.from('portfolio_projects').select('*').order('created_at', { ascending: false });
+        document.getElementById('projectsList').innerHTML = data.map(p => `
+            <div class="project-item">
+                <strong>${p.title.es}</strong>
+                <button class="btn-icon" onclick="deleteProject('${p.id}')">✕</button>
+            </div>`).join('');
     }
 
-    projectForm.onsubmit = async (e) => {
+    document.getElementById('projectForm').onsubmit = async (e) => {
         e.preventDefault();
-        loading.style.display = 'flex';
+        document.getElementById('loading').style.display = 'flex';
         
         try {
-            // 1. Subida de Imagen Principal
-            let imageUrl = '';
-            const mainFile = document.getElementById('fileInput').files[0];
-            if (mainFile) {
-                const name = `${Date.now()}-${mainFile.name}`;
-                await db.storage.from('projects').upload(`covers/${name}`, mainFile);
-                imageUrl = db.storage.from('projects').getPublicUrl(`covers/${name}`).data.publicUrl;
+            // 1. Cover
+            let coverUrl = '';
+            const cFile = document.getElementById('coverInput').files[0];
+            if (cFile) {
+                const cName = `${Date.now()}-${cFile.name}`;
+                await db.storage.from('projects').upload(`covers/${cName}`, cFile);
+                coverUrl = db.storage.from('projects').getPublicUrl(`covers/${cName}`).data.publicUrl;
             }
 
-            // 2. Subida de Galería
+            // 2. Gallery
             let galleryUrls = [];
-            const galleryFiles = document.getElementById('galleryInput').files;
-            for (let f of galleryFiles) {
-                const gName = `${Date.now()}-gal-${f.name}`;
+            for (let f of galleryInput.files) {
+                const gName = `${Date.now()}-${f.name}`;
                 await db.storage.from('projects').upload(`gallery/${gName}`, f);
                 galleryUrls.push(db.storage.from('projects').getPublicUrl(`gallery/${gName}`).data.publicUrl);
             }
 
-            // 3. Empaquetar Datos
-            const metrics = [{
-                value: document.querySelector('.m-val').value,
-                label: { es: document.querySelector('.m-lab-es').value, en: document.querySelector('.m-lab-en').value }
-            }].filter(m => m.value);
-
             const projectData = {
                 slug: document.getElementById('slug').value,
                 emoji: document.getElementById('emoji').value || '🚀',
-                image_url: imageUrl,
+                image_url: coverUrl,
                 title: { es: document.getElementById('t_es').value, en: document.getElementById('t_en').value },
                 description: { es: document.getElementById('d_es').value, en: document.getElementById('d_en').value },
                 category: { es: "Case Study", en: "Case Study" },
-                meta: {
-                    role: document.getElementById('meta_role').value,
+                meta: { 
+                    role: document.getElementById('meta_role').value, 
                     tools: document.getElementById('meta_tools').value.split(','),
+                    duration: "2024"
                 },
                 content: {
-                    es: { challenge: document.getElementById('story_challenge_es').value, solution: document.getElementById('story_solution_es').value },
-                    en: { challenge: document.getElementById('story_challenge_en').value, solution: document.getElementById('story_solution_en').value },
-                    metrics: metrics,
+                    es: { challenge: document.getElementById('c_es').value, solution: document.getElementById('s_es').value },
+                    en: { challenge: document.getElementById('c_en').value, solution: document.getElementById('s_en').value },
+                    metrics: [{ value: document.getElementById('m_val').value, label: { es: document.getElementById('m_es').value, en: document.getElementById('m_en').value } }],
                     gallery: galleryUrls
                 }
             };
 
-            const { error } = await db.from('portfolio_projects').insert([projectData]);
-            if (error) throw error;
+            await db.from('portfolio_projects').insert([projectData]);
             alert("Success!");
             location.reload();
         } catch(err) { alert(err.message); }
-        finally { loading.style.display = 'none'; }
     };
 
-    window.deleteProject = async (id) => {
-        if (confirm("Delete?")) { await db.from('portfolio_projects').delete().eq('id', id); fetchProjects(); }
-    };
+    window.deleteProject = async (id) => { if(confirm("Delete?")) { await db.from('portfolio_projects').delete().eq('id', id); fetchProjects(); } };
   </script>
 </body>
 </html>

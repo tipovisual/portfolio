@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project — Freddy Gonzalez</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
@@ -11,104 +12,90 @@
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="work.html" class="active">Work</a></li>
+      <li><a href="work.html">Work</a></li>
       <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();" id="langBtn">ES</button></li>
     </ul>
   </nav>
 
   <main id="caseContent">
-    <div class="container section-pad" style="padding-top:10rem;text-align:center">
-      <p style="color:var(--muted)" class="mono">Loading narrative...</p>
+    <div class="container section-pad" style="padding-top:15rem; text-align:center">
+      <p class="mono">Syncing Case Study...</p>
     </div>
   </main>
-
-  <footer>
-    <div class="footer-logo">Freddy Gonzalez</div>
-    <span class="footer-copy">© 2024 Freddy Gonzalez. All rights reserved.</span>
-  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/db.js"></script>
   <script src="js/i18n.js"></script>
   <script type="module">
     async function loadCase() {
-      const container = document.getElementById('caseContent');
-      if (!window.Lang) { setTimeout(loadCase, 50); return; }
-      
-      const lang = Lang.current;
-      const slug = new URLSearchParams(window.location.search).get('id');
-      if (!slug) { window.location.href = 'work.html'; return; }
+        const container = document.getElementById('caseContent');
+        if (!window.Lang) { setTimeout(loadCase, 50); return; }
+        const lang = Lang.current;
+        const slug = new URLSearchParams(window.location.search).get('id');
 
-      try {
-        const { data: cs, error } = await db.from('portfolio_projects').select('*').eq('slug', slug).single();
-        if (error || !cs) throw new Error('Not found');
+        try {
+            const { data: cs, error } = await db.from('portfolio_projects').select('*').eq('slug', slug).single();
+            if (error || !cs) throw new Error('Not found');
 
-        // Datos Normalizados
-        const title = cs.title?.[lang] || cs.title?.es || '';
-        const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || '';
-        const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || '';
-        const metrics = cs.content?.metrics || [];
-        const gallery = cs.content?.gallery || [];
-        const img = cs.image_url || cs.meta?.cover || '';
+            const metrics = cs.content?.metrics || [];
+            const gallery = cs.content?.gallery || [];
+            const img = cs.image_url || cs.meta?.cover || '';
 
-        document.title = `${title} — Freddy Gonzalez`;
+            container.innerHTML = `
+                <article class="container fade-up" style="padding-top:10rem; padding-bottom:10rem;">
+                    <header style="margin-bottom: 5rem;">
+                        <a href="work.html" class="btn btn-ghost" style="margin-bottom:2rem;">← Back</a>
+                        <div class="section-label">${cs.category?.[lang] || 'CASE STUDY'}</div>
+                        <h1 class="serif" style="font-size:clamp(3.5rem, 10vw, 5.5rem); line-height:1; margin-bottom:2rem;">${cs.title[lang]}</h1>
+                        <p style="font-size:1.4rem; max-width:800px; color:var(--text-body)">${cs.description[lang]}</p>
+                    </header>
 
-        container.innerHTML = `
-          <article class="container fade-up" style="padding-top:8rem; padding-bottom:8rem">
-            
-            <header style="margin-bottom: 5rem;">
-                <a href="work.html" class="btn btn-ghost" style="margin-bottom:2rem;">← Back</a>
-                <div class="section-label">${cs.category?.[lang] || 'Case Study'}</div>
-                <h1 class="serif" style="font-size:clamp(3.5rem, 8vw, 5.5rem); line-height:1; margin-bottom:2rem;">${title}</h1>
-                <p class="section-sub" style="font-size:1.3rem; max-width:800px; color:var(--text-body)">${cs.description?.[lang] || ''}</p>
-            </header>
-
-            <div class="cs-hero" style="width:100%; height:65vh; border-radius:32px; overflow:hidden; border:1px solid var(--border); margin-bottom:5rem; background:var(--surface2); display:flex; align-items:center; justify-content:center;">
-                ${img ? `<img src="${img}" style="width:100%; height:100%; object-fit:cover;">` : `<span style="font-size:6rem">${cs.emoji}</span>`}
-            </div>
-
-            <!-- METADATA -->
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:2rem; margin-bottom:6rem; padding:2rem; background:var(--surface2); border-radius:24px;">
-                <div><label class="section-label" style="font-size:0.6rem">Role</label><div class="serif">${cs.meta?.role || 'Lead Designer'}</div></div>
-                <div><label class="section-label" style="font-size:0.6rem">Tools</label><div class="serif">${Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : cs.meta?.tools}</div></div>
-            </div>
-
-            <!-- CHALLENGE -->
-            <section style="margin-bottom:8rem">
-                <div class="section-label">01. The Challenge</div>
-                <h2 class="serif" style="font-size:2.5rem; margin-bottom:2rem;">The Problem</h2>
-                <p style="font-size:1.15rem; color:var(--text-body); max-width:850px;">${challenge}</p>
-            </section>
-
-            <!-- IMPACT METRICS -->
-            ${metrics.length > 0 ? `
-            <section style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:2rem; margin-bottom:8rem;">
-                ${metrics.map(m => `
-                    <div style="padding:2.5rem; background:var(--surface); border-radius:24px; border-top:4px solid var(--accent3)">
-                        <div class="serif" style="font-size:3.5rem; color:white;">${m.value}</div>
-                        <div class="mono" style="font-size:0.7rem; color:var(--accent3); text-transform:uppercase;">${m.label[lang]}</div>
+                    <div class="cs-hero" style="width:100%; height:65vh; border-radius:32px; overflow:hidden; border:1px solid var(--border); margin-bottom:5rem; background:var(--surface2); display:flex; align-items:center; justify-content:center;">
+                        ${img ? `<img src="${img}" style="width:100%; height:100%; object-fit:cover;">` : `<span style="font-size:6rem">${cs.emoji}</span>`}
                     </div>
-                `).join('')}
-            </section>` : ''}
 
-            <!-- GALLERY -->
-            ${gallery.length > 0 ? `
-            <section style="margin-bottom:8rem">
-                <div class="section-label">02. Design Process</div>
-                <div style="display:grid; gap:4rem; margin-top:3rem">
-                    ${gallery.map(url => `<div style="border-radius:24px; overflow:hidden; border:1px solid var(--border)"><img src="${url}" style="width:100%; display:block"></div>`).join('')}
-                </div>
-            </section>` : ''}
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:2rem; margin-bottom:8rem; padding:2rem; background:var(--surface2); border-radius:24px;">
+                        <div><label class="section-label" style="font-size:0.6rem">Role</label><div class="serif">${cs.meta?.role || 'PO'}</div></div>
+                        <div><label class="section-label" style="font-size:0.6rem">Tools</label><div class="serif">${cs.meta?.tools?.join(', ') || 'Figma'}</div></div>
+                    </div>
 
-            <!-- SOLUTION -->
-            <section style="margin-bottom:8rem">
-                <div class="section-label">03. The Result</div>
-                <h2 class="serif" style="font-size:2.5rem; margin-bottom:2rem;">The Solution</h2>
-                <p style="font-size:1.15rem; color:var(--text-body); max-width:850px;">${solution}</p>
-            </section>
+                    <section style="margin-bottom:8rem">
+                        <div class="section-label">01. Challenge</div>
+                        <h2 class="serif" style="font-size:3rem; margin-bottom:2rem;">The Problem</h2>
+                        <p style="font-size:1.2rem; color:var(--text-body); max-width:850px;">${cs.content[lang].challenge}</p>
+                    </section>
 
-          </article>`;
-      } catch(e) { console.error(e); }
+                    <!-- MÉTRICAS -->
+                    ${metrics[0]?.value ? `
+                    <section style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:2rem; margin-bottom:8rem;">
+                        ${metrics.map(m => `
+                            <div style="padding:2.5rem; background:var(--surface); border-radius:24px; border-top:4px solid var(--accent3)">
+                                <div class="serif" style="font-size:3.5rem; color:white;">${m.value}</div>
+                                <div class="mono" style="font-size:0.7rem; color:var(--accent3); text-transform:uppercase;">${m.label[lang]}</div>
+                            </div>
+                        `).join('')}
+                    </section>` : ''}
+
+                    <!-- GALERÍA DE PROCESO -->
+                    ${gallery.length > 0 ? `
+                    <section style="margin-bottom:8rem">
+                        <div class="section-label">02. Visual Process & Artifacts</div>
+                        <div style="display:grid; gap:4rem; margin-top:3rem">
+                            ${gallery.map(url => `
+                                <div class="insight-item" style="padding:0; overflow:hidden; border-radius:24px; border:1px solid var(--border)">
+                                    <img src="${url}" style="width:100%; display:block" loading="lazy">
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>` : ''}
+
+                    <section style="margin-bottom:8rem">
+                        <div class="section-label">03. Solution</div>
+                        <h2 class="serif" style="font-size:3rem; margin-bottom:2rem;">Final Outcome</h2>
+                        <p style="font-size:1.2rem; color:var(--text-body); max-width:850px;">${cs.content[lang].solution}</p>
+                    </section>
+                </article>`;
+        } catch(e) { console.error(e); }
     }
     loadCase();
   </script>
