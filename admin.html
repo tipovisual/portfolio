@@ -157,144 +157,124 @@
     </div>
   </div>
 
-  <script type="module">
-    import { supabase } from './js/supabase-config.js';
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/db.js"></script>
+  <script>
     const ADMIN_PASS = 'freddy2024';
-    const loginForm = document.getElementById('loginForm');
+    const loginForm  = document.getElementById('loginForm');
     const projectForm = document.getElementById('projectForm');
-    const fileInput = document.getElementById('fileInput');
+    const fileInput  = document.getElementById('fileInput');
     const imgPreview = document.getElementById('imgPreview');
-    const loading = document.getElementById('loading');
+    const loading    = document.getElementById('loading');
 
     // 1. LOGIN
     loginForm.onsubmit = (e) => {
-        e.preventDefault();
-        if (document.getElementById('passInput').value === ADMIN_PASS) {
-            document.getElementById('loginWrap').style.display = 'none';
-            document.getElementById('adminWrap').style.display = 'block';
-            fetchProjects();
-        } else {
-            alert("Unauthorized Access.");
-        }
+      e.preventDefault();
+      if (document.getElementById('passInput').value === ADMIN_PASS) {
+        document.getElementById('loginWrap').style.display = 'none';
+        document.getElementById('adminWrap').style.display = 'block';
+        fetchProjects();
+      } else {
+        alert('Unauthorized Access.');
+      }
     };
 
     // 2. IMAGE PREVIEW
     fileInput.onchange = () => {
-        const [file] = fileInput.files;
-        if (file) {
-            imgPreview.src = URL.createObjectURL(file);
-            imgPreview.style.display = 'block';
-            document.getElementById('previewPlaceholder').style.display = 'none';
-        }
+      const [file] = fileInput.files;
+      if (file) {
+        imgPreview.src = URL.createObjectURL(file);
+        imgPreview.style.display = 'block';
+        document.getElementById('previewPlaceholder').style.display = 'none';
+      }
     };
 
     // 3. FETCH PROJECTS
     async function fetchProjects() {
-        const listDiv = document.getElementById('projectsList');
-        const { data, error } = await supabase
-            .from('portfolio_projects')
-            .select('*')
-            .order('created_at', { ascending: false });
-
-        if (error) return listDiv.innerHTML = "Error fetching projects.";
-
-        listDiv.innerHTML = data.map(p => `
-            <div class="project-item">
-                <div class="project-info">
-                    <span class="project-emoji">${p.emoji || '💼'}</span>
-                    <div>
-                        <div class="project-name">${p.title.es}</div>
-                        <div class="mono" style="font-size:0.6rem; color:var(--muted)">${p.slug}</div>
-                    </div>
-                </div>
-                <button class="btn-icon" onclick="deleteProject('${p.id}')" style="color:var(--accent2)">✕</button>
+      const listDiv = document.getElementById('projectsList');
+      const { data, error } = await db
+        .from('portfolio_projects')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) { listDiv.innerHTML = 'Error fetching projects.'; return; }
+      listDiv.innerHTML = data.map(p => `
+        <div class="project-item">
+          <div class="project-info">
+            <span class="project-emoji">${p.emoji || '💼'}</span>
+            <div>
+              <div class="project-name">${p.title?.es || p.title?.en || ''}</div>
+              <div class="mono" style="font-size:0.6rem;color:var(--muted)">${p.slug}</div>
             </div>
-        `).join('');
+          </div>
+          <button class="btn-icon" onclick="deleteProject('${p.id}')" style="color:var(--accent2)">✕</button>
+        </div>`).join('');
     }
 
     // 4. SAVE PROJECT
     projectForm.onsubmit = async (e) => {
-        e.preventDefault();
-        loading.style.display = 'flex';
-        const btn = document.getElementById('saveBtn');
-        btn.disabled = true;
+      e.preventDefault();
+      loading.style.display = 'flex';
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      try {
+        let imageUrl = '';
+        const file = fileInput.files[0];
 
-        try {
-            let imageUrl = '';
-            const file = fileInput.files[0];
-
-            // Upload image if selected
-            if (file) {
-                const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
-                const { error: uploadError } = await supabase.storage
-                    .from('projects')
-                    .upload(`covers/${fileName}`, file);
-                
-                if (uploadError) throw uploadError;
-                
-                const { data: publicUrlData } = supabase.storage
-                    .from('projects')
-                    .getPublicUrl(`covers/${fileName}`);
-                
-                imageUrl = publicUrlData.publicUrl;
-            }
-
-            // Build Project Object
-            const projectData = {
-                slug: document.getElementById('slug').value,
-                emoji: document.getElementById('emoji').value || '🎨',
-                image_url: imageUrl,
-                title: { 
-                    es: document.getElementById('t_es').value, 
-                    en: document.getElementById('t_en').value 
-                },
-                description: { 
-                    es: document.getElementById('d_es').value, 
-                    en: document.getElementById('d_en').value 
-                },
-                category: { es: "Case Study", en: "Case Study" },
-                meta: {
-                    role: document.getElementById('meta_role').value,
-                    tools: document.getElementById('meta_tools').value.split(',').map(t => t.trim()),
-                },
-                content: {
-                    es: {
-                        challenge: document.getElementById('story_challenge_es').value,
-                        solution: document.getElementById('story_solution_es').value
-                    },
-                    en: {
-                        challenge: document.getElementById('story_challenge_en').value,
-                        solution: document.getElementById('story_solution_en').value
-                    }
-                }
-            };
-
-            const { error } = await supabase.from('portfolio_projects').insert([projectData]);
-            if (error) throw error;
-
-            alert("Project Successfully Deployed!");
-            projectForm.reset();
-            imgPreview.style.display = 'none';
-            document.getElementById('previewPlaceholder').style.display = 'block';
-            fetchProjects();
-
-        } catch (err) {
-            alert("Deployment Error: " + err.message);
-        } finally {
-            loading.style.display = 'none';
-            btn.disabled = false;
+        // Upload image if selected
+        if (file) {
+          const fileName = `${Date.now()}-${file.name.replace(/\s/g, '_')}`;
+          const { error: uploadError } = await db.storage
+            .from('projects')
+            .upload(`covers/${fileName}`, file);
+          if (uploadError) throw uploadError;
+          const { data: publicUrlData } = db.storage
+            .from('projects')
+            .getPublicUrl(`covers/${fileName}`);
+          imageUrl = publicUrlData.publicUrl;
         }
+
+        const projectData = {
+          slug:  document.getElementById('slug').value,
+          emoji: document.getElementById('emoji').value || '🎨',
+          image_url: imageUrl,
+          title:       { es: document.getElementById('t_es').value, en: document.getElementById('t_en').value },
+          description: { es: document.getElementById('d_es').value, en: document.getElementById('d_en').value },
+          category:    { es: 'Case Study', en: 'Case Study' },
+          meta: {
+            role:  document.getElementById('meta_role').value,
+            tools: document.getElementById('meta_tools').value.split(',').map(t => t.trim()),
+          },
+          content: {
+            es: { challenge: document.getElementById('story_challenge_es').value, solution: document.getElementById('story_solution_es').value },
+            en: { challenge: document.getElementById('story_challenge_en').value, solution: document.getElementById('story_solution_en').value }
+          }
+        };
+
+        const { error } = await db.from('portfolio_projects').insert([projectData]);
+        if (error) throw error;
+
+        alert('Project Successfully Deployed!');
+        projectForm.reset();
+        imgPreview.style.display = 'none';
+        document.getElementById('previewPlaceholder').style.display = 'block';
+        fetchProjects();
+
+      } catch(err) {
+        alert('Deployment Error: ' + err.message);
+      } finally {
+        loading.style.display = 'none';
+        btn.disabled = false;
+      }
     };
 
-    // DELETE PROJECT
+    // 5. DELETE PROJECT
     window.deleteProject = async (id) => {
-        if (!confirm("Are you sure? This action is permanent.")) return;
-        const { error } = await supabase.from('portfolio_projects').delete().eq('id', id);
-        if (error) alert("Error deleting");
-        else fetchProjects();
+      if (!confirm('Are you sure? This action is permanent.')) return;
+      const { error } = await db.from('portfolio_projects').delete().eq('id', id);
+      if (error) alert('Error deleting');
+      else fetchProjects();
     };
-
   </script>
 </body>
 </html>

@@ -28,19 +28,17 @@
       </div>
     </div>
 
-    <!-- INTERNAL INSIGHTS -->
     <section class="container section-pad" style="border-top:1px solid var(--border)">
       <div class="section-label" data-i18n="work.insightsLabel">Liderazgo & Procesos</div>
       <h2 class="section-title" data-i18n="work.insightsTitle">Internal Insights</h2>
       <p class="section-sub" data-i18n="work.insightsSub">Mi evolución de UI Designer a Product Owner.</p>
-
       <div style="display:grid;gap:1.5rem;margin-top:3rem">
         <div class="insight-item">
           <div class="insight-header">
             <span class="tag-pill" data-i18n="work.i1_tag">Product Leadership</span>
             <span class="mono" style="font-size:0.7rem;color:var(--muted)">SQUAD MANAGEMENT</span>
           </div>
-          <h3 class="serif" style="font-size:1.8rem;margin-bottom:1rem" data-i18n="work.i1_title">Optimizando el Hand-off: De Diseño a Desarrollo</h3>
+          <h3 class="serif" style="font-size:1.8rem;margin-bottom:1rem" data-i18n="work.i1_title">Optimizando el Hand-off</h3>
           <p data-i18n="work.i1_desc">Como Product Owner de un squad...</p>
         </div>
         <div class="insight-item">
@@ -68,33 +66,51 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/db.js"></script>
   <script src="js/i18n.js"></script>
-  <script type="module">
-    import { supabase } from './js/supabase-config.js';
-    const grid = document.getElementById('workGrid');
-    const lang = Lang.current;
-    try {
-      const { data, error } = await supabase.from('portfolio_projects').select('*').order('created_at', { ascending: false });
-      if (error) throw error;
-      if (!data || data.length === 0) { grid.innerHTML = '<p style="color:var(--muted)">No projects yet.</p>'; return; }
-      grid.innerHTML = data.map(cs => {
-        const title = cs.title?.[lang] || cs.title?.es || '';
-        const desc  = cs.description?.[lang] || cs.description?.es || '';
-        const cat   = (cs.category?.[lang] || 'Case Study').toUpperCase();
-        const img   = cs.image_url || '';
-        return `<a href="case.html?id=${cs.slug}" class="case-card">
-          <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;background-position:center` : ''}">
-            ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
-          </div>
-          <div class="case-body">
-            <div class="case-tag-label">${cat}</div>
-            <div class="case-title">${title}</div>
-            <div class="case-desc">${desc}</div>
-          </div>
-        </a>`;
-      }).join('');
-    } catch(e) { console.error(e); grid.innerHTML = '<p style="color:var(--muted)">Error loading.</p>'; }
-    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10));
+  <script>
+    async function loadProjects() {
+      const grid = document.getElementById('workGrid');
+      const lang = Lang.current;
+      try {
+        const { data, error } = await db
+          .from('portfolio_projects')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          grid.innerHTML = '<p style="color:var(--muted)">No projects yet.</p>';
+          return;
+        }
+        grid.innerHTML = data.map(cs => {
+          const title = cs.title?.[lang] || cs.title?.es || '';
+          const desc  = cs.description?.[lang] || cs.description?.es || '';
+          const cat   = (cs.category?.[lang] || 'Case Study').toUpperCase();
+          const img   = cs.image_url || '';
+          return `
+            <a href="case.html?id=${cs.slug}" class="case-card">
+              <div class="case-img" style="${img ? `background-image:url('${img}');background-size:cover;background-position:center` : ''}">
+                ${!img ? `<div class="case-emoji">${cs.emoji || '🎨'}</div>` : ''}
+              </div>
+              <div class="case-body">
+                <div class="case-tag-label">${cat}</div>
+                <div class="case-title">${title}</div>
+                <div class="case-desc">${desc}</div>
+              </div>
+            </a>`;
+        }).join('');
+      } catch(e) {
+        console.error('Supabase error:', e);
+        grid.innerHTML = '<p style="color:var(--muted)">Error loading projects.</p>';
+      }
+    }
+
+    loadProjects();
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    });
   </script>
+
 </body>
 </html>

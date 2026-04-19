@@ -36,79 +36,70 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/db.js"></script>
   <script src="js/i18n.js"></script>
-  <script type="module">
-    import { supabase } from './js/supabase-config.js';
+  <script>
+    async function loadCase() {
+      const container = document.getElementById('caseContent');
+      const lang = Lang.current;
+      const slug = new URLSearchParams(window.location.search).get('id');
 
-    const lang  = Lang.current;
-    const slug  = new URLSearchParams(window.location.search).get('id');
-    const container = document.getElementById('caseContent');
+      if (!slug) { window.location.href = 'work.html'; return; }
 
-    if (!slug) { window.location.href = 'work.html'; }
+      try {
+        const { data: cs, error } = await db
+          .from('portfolio_projects')
+          .select('*')
+          .eq('slug', slug)
+          .single();
 
-    try {
-      const { data: cs, error } = await supabase
-        .from('portfolio_projects')
-        .select('*')
-        .eq('slug', slug)
-        .single();
+        if (error || !cs) throw new Error('Not found');
 
-      if (error || !cs) throw new Error('Not found');
+        const title     = cs.title?.[lang]       || cs.title?.es       || '';
+        const desc      = cs.description?.[lang]  || cs.description?.es  || '';
+        const cat       = cs.category?.[lang]     || cs.category?.es     || 'Case Study';
+        const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || '';
+        const solution  = cs.content?.[lang]?.solution  || cs.story?.solution?.[lang]  || '';
+        const img       = cs.image_url || cs.meta?.cover || '';
+        const role      = cs.meta?.role || '';
+        const tools     = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : (cs.meta?.tools || '');
 
-      const title     = cs.title?.[lang]       || cs.title?.es       || '';
-      const desc      = cs.description?.[lang]  || cs.description?.es  || '';
-      const cat       = cs.category?.[lang]     || cs.category?.es     || 'Case Study';
-      const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || '';
-      const solution  = cs.content?.[lang]?.solution  || cs.story?.solution?.[lang]  || '';
-      const img       = cs.image_url || cs.meta?.cover || '';
-      const role      = cs.meta?.role  || '';
-      const tools     = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : (cs.meta?.tools || '');
+        document.title = `${title} — Freddy Gonzalez`;
 
-      document.title = `${title} — Freddy Gonzalez`;
+        container.innerHTML = `
+          <article class="container" style="padding-top:8rem;padding-bottom:8rem">
+            <a href="work.html" class="btn btn-ghost btn-sm" style="margin-bottom:2rem;display:inline-flex">
+              ${Lang.get('case.back')}
+            </a>
+            <div class="section-label">${cat}</div>
+            <h1 class="serif" style="font-size:clamp(2.5rem,8vw,5rem);line-height:1.05;margin-bottom:1.5rem">${title}</h1>
+            <p class="section-sub" style="max-width:750px;margin-bottom:4rem">${desc}</p>
+            <div class="cs-hero" style="${img ? `background:url('${img}') center/cover;` : ''}">
+              ${!img ? `<span style="font-size:6rem">${cs.emoji || '🎨'}</span>` : ''}
+            </div>
+            <div class="cs-meta">
+              ${role  ? `<div class="cs-meta-item"><div class="cs-meta-label">${Lang.get('case.role')}</div><div class="cs-meta-value">${role}</div></div>` : ''}
+              ${tools ? `<div class="cs-meta-item"><div class="cs-meta-label">${Lang.get('case.tools')}</div><div class="cs-meta-value">${tools}</div></div>` : ''}
+            </div>
+            ${challenge ? `<div class="cs-section"><h2>${Lang.get('case.challenge')}</h2><p>${challenge}</p></div>` : ''}
+            ${solution  ? `<div class="cs-section"><h2>${Lang.get('case.solution')}</h2><p>${solution}</p></div>`  : ''}
+          </article>`;
 
-      container.innerHTML = `
-        <article class="container" style="padding-top:8rem;padding-bottom:8rem">
-          <a href="work.html" class="btn btn-ghost btn-sm" style="margin-bottom:2rem;display:inline-flex">
-            ← ${Lang.get('case.back').replace('← ','')}
-          </a>
-
-          <div class="section-label">${cat}</div>
-          <h1 class="serif" style="font-size:clamp(2.5rem,8vw,5rem);line-height:1.05;margin-bottom:1.5rem">${title}</h1>
-          <p class="section-sub" style="max-width:750px;margin-bottom:4rem">${desc}</p>
-
-          <div class="cs-hero" style="${img ? `background:url('${img}') center/cover;` : ''}">
-            ${!img ? `<span style="font-size:6rem">${cs.emoji || '🎨'}</span>` : ''}
-          </div>
-
-          <div class="cs-meta">
-            ${role ? `<div class="cs-meta-item"><div class="cs-meta-label">${Lang.get('case.role')}</div><div class="cs-meta-value">${role}</div></div>` : ''}
-            ${tools ? `<div class="cs-meta-item"><div class="cs-meta-label">${Lang.get('case.tools')}</div><div class="cs-meta-value">${tools}</div></div>` : ''}
-          </div>
-
-          ${challenge ? `
-          <div class="cs-section">
-            <h2>${Lang.get('case.challenge')}</h2>
-            <p>${challenge}</p>
-          </div>` : ''}
-
-          ${solution ? `
-          <div class="cs-section">
-            <h2>${Lang.get('case.solution')}</h2>
-            <p>${solution}</p>
-          </div>` : ''}
-
-        </article>`;
-
-    } catch(e) {
-      console.error(e);
-      container.innerHTML = `
-        <div class="container" style="padding-top:10rem;text-align:center">
-          <h2 style="margin-bottom:1rem">Project not found</h2>
-          <a href="work.html" class="btn btn-ghost">← Back to Work</a>
-        </div>`;
+      } catch(e) {
+        console.error(e);
+        container.innerHTML = `
+          <div class="container" style="padding-top:10rem;text-align:center">
+            <h2 style="margin-bottom:1rem">Project not found</h2>
+            <a href="work.html" class="btn btn-ghost">← Back to Work</a>
+          </div>`;
+      }
     }
 
-    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10));
+    loadCase();
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    });
   </script>
 </body>
 </html>
