@@ -3,24 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project — Freddy Gonzalez</title>
+  <title>Project Detail — Freddy Gonzalez</title>
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    .cs-header { padding-top: 10rem; margin-bottom: 5rem; }
+    .cs-hero-img { width: 100%; height: 70vh; border-radius: 32px; object-fit: cover; border: 1px solid var(--border); margin-bottom: 4rem; }
+    .block-text { margin-bottom: 6rem; max-width: 800px; }
+    .block-text h2 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--white); }
+    .block-text p { font-size: 1.15rem; color: var(--text-body); line-height: 1.8; }
+    
+    .block-image { margin: 6rem 0; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); background: var(--surface2); }
+    .block-image img { width: 100%; display: block; }
+    .block-image span { display: block; padding: 1rem; font-size: 0.8rem; color: var(--muted); font-family: 'Space Mono'; text-align: center; }
+
+    .block-stat { display: inline-block; padding: 2.5rem; background: var(--surface); border-radius: 20px; border-top: 4px solid var(--accent3); margin-right: 2rem; margin-bottom: 2rem; min-width: 200px; }
+    .stat-val { font-family: 'DM Serif Display'; font-size: 3.5rem; color: white; line-height: 1; }
+    .stat-lab { font-family: 'Space Mono'; font-size: 0.7rem; color: var(--accent3); text-transform: uppercase; margin-top: 0.5rem; }
+  </style>
 </head>
 <body>
+
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
       <li><a href="work.html">Work</a></li>
-      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();" id="langBtn">ES</button></li>
+      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();">ES</button></li>
     </ul>
   </nav>
 
-  <main id="caseContent">
-    <div class="container section-pad" style="padding-top:15rem; text-align:center">
-      <p class="mono">Syncing Case Study...</p>
-    </div>
+  <main id="caseContent" class="container">
+      <!-- Contenido dinámico inyectado aquí -->
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -35,66 +47,48 @@
 
         try {
             const { data: cs, error } = await db.from('portfolio_projects').select('*').eq('slug', slug).single();
-            if (error || !cs) throw new Error('Not found');
+            if (error) throw error;
 
-            const metrics = cs.content?.metrics || [];
-            const gallery = cs.content?.gallery || [];
-            const img = cs.image_url || cs.meta?.cover || '';
+            const blocks = cs.content?.blocks || [];
+            
+            let html = `
+                <div class="cs-header fade-up">
+                    <div class="section-label">${(cs.category?.[lang] || 'Case Study').toUpperCase()}</div>
+                    <h1 class="serif" style="font-size:clamp(3.5rem, 8vw, 6rem); line-height:1; margin-bottom:2rem;">${cs.title[lang]}</h1>
+                    <p style="font-size:1.3rem; color:var(--text-body); max-width:700px;">${cs.description[lang]}</p>
+                </div>
+                <img src="${cs.image_url}" class="cs-hero-img">
+                <div style="display:flex; gap:4rem; margin-bottom:8rem; border-bottom:1px solid var(--border); padding-bottom:4rem;">
+                    <div><label class="section-label" style="font-size:0.6rem;">Role</label><div class="serif">${cs.meta.role}</div></div>
+                    <div><label class="section-label" style="font-size:0.6rem;">Tools</label><div class="serif">${cs.meta.tools.join(', ')}</div></div>
+                </div>
+            `;
 
-            container.innerHTML = `
-                <article class="container fade-up" style="padding-top:10rem; padding-bottom:10rem;">
-                    <header style="margin-bottom: 5rem;">
-                        <a href="work.html" class="btn btn-ghost" style="margin-bottom:2rem;">← Back</a>
-                        <div class="section-label">${cs.category?.[lang] || 'CASE STUDY'}</div>
-                        <h1 class="serif" style="font-size:clamp(3.5rem, 10vw, 5.5rem); line-height:1; margin-bottom:2rem;">${cs.title[lang]}</h1>
-                        <p style="font-size:1.4rem; max-width:800px; color:var(--text-body)">${cs.description[lang]}</p>
-                    </header>
+            // RENDERIZADO DINÁMICO DE BLOQUES
+            blocks.forEach(block => {
+                if(block.type === 'text') {
+                    html += `
+                        <section class="block-text fade-up">
+                            <h2>${block.title}</h2>
+                            <p>${block[lang]}</p>
+                        </section>`;
+                } else if(block.type === 'image') {
+                    html += `
+                        <div class="block-image fade-up">
+                            <img src="${block.url}" loading="lazy">
+                            ${block.caption ? `<span>${block.caption}</span>` : ''}
+                        </div>`;
+                } else if(block.type === 'stat') {
+                    html += `
+                        <div class="block-stat fade-up">
+                            <div class="stat-val">${block.value}</div>
+                            <div class="stat-lab">${lang === 'es' ? block.label_es : block.label_en}</div>
+                        </div>`;
+                }
+            });
 
-                    <div class="cs-hero" style="width:100%; height:65vh; border-radius:32px; overflow:hidden; border:1px solid var(--border); margin-bottom:5rem; background:var(--surface2); display:flex; align-items:center; justify-content:center;">
-                        ${img ? `<img src="${img}" style="width:100%; height:100%; object-fit:cover;">` : `<span style="font-size:6rem">${cs.emoji}</span>`}
-                    </div>
+            container.innerHTML = html + `<div style="padding:10rem 0; text-align:center;"><a href="work.html" class="btn btn-primary">Back to Work</a></div>`;
 
-                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:2rem; margin-bottom:8rem; padding:2rem; background:var(--surface2); border-radius:24px;">
-                        <div><label class="section-label" style="font-size:0.6rem">Role</label><div class="serif">${cs.meta?.role || 'PO'}</div></div>
-                        <div><label class="section-label" style="font-size:0.6rem">Tools</label><div class="serif">${cs.meta?.tools?.join(', ') || 'Figma'}</div></div>
-                    </div>
-
-                    <section style="margin-bottom:8rem">
-                        <div class="section-label">01. Challenge</div>
-                        <h2 class="serif" style="font-size:3rem; margin-bottom:2rem;">The Problem</h2>
-                        <p style="font-size:1.2rem; color:var(--text-body); max-width:850px;">${cs.content[lang].challenge}</p>
-                    </section>
-
-                    <!-- MÉTRICAS -->
-                    ${metrics[0]?.value ? `
-                    <section style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:2rem; margin-bottom:8rem;">
-                        ${metrics.map(m => `
-                            <div style="padding:2.5rem; background:var(--surface); border-radius:24px; border-top:4px solid var(--accent3)">
-                                <div class="serif" style="font-size:3.5rem; color:white;">${m.value}</div>
-                                <div class="mono" style="font-size:0.7rem; color:var(--accent3); text-transform:uppercase;">${m.label[lang]}</div>
-                            </div>
-                        `).join('')}
-                    </section>` : ''}
-
-                    <!-- GALERÍA DE PROCESO -->
-                    ${gallery.length > 0 ? `
-                    <section style="margin-bottom:8rem">
-                        <div class="section-label">02. Visual Process & Artifacts</div>
-                        <div style="display:grid; gap:4rem; margin-top:3rem">
-                            ${gallery.map(url => `
-                                <div class="insight-item" style="padding:0; overflow:hidden; border-radius:24px; border:1px solid var(--border)">
-                                    <img src="${url}" style="width:100%; display:block" loading="lazy">
-                                </div>
-                            `).join('')}
-                        </div>
-                    </section>` : ''}
-
-                    <section style="margin-bottom:8rem">
-                        <div class="section-label">03. Solution</div>
-                        <h2 class="serif" style="font-size:3rem; margin-bottom:2rem;">Final Outcome</h2>
-                        <p style="font-size:1.2rem; color:var(--text-body); max-width:850px;">${cs.content[lang].solution}</p>
-                    </section>
-                </article>`;
         } catch(e) { console.error(e); }
     }
     loadCase();
