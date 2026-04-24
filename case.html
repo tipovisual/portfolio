@@ -5,17 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Detail — Freddy Gonzalez</title>
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     .cs-header { padding-top: 10rem; margin-bottom: 5rem; }
-    .cs-hero-img { width: 100%; height: 70vh; border-radius: 32px; object-fit: cover; border: 1px solid var(--border); margin-bottom: 4rem; }
+    .cs-hero-img { width: 100%; height: 70vh; border-radius: 32px; object-fit: cover; border: 1px solid var(--border); margin-bottom: 4rem; background: var(--surface2); }
     .block-text { margin-bottom: 6rem; max-width: 800px; }
-    .block-text h2 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--white); }
+    .block-text h2 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--white); font-family: 'DM Serif Display'; }
     .block-text p { font-size: 1.15rem; color: var(--text-body); line-height: 1.8; }
-    
     .block-image { margin: 6rem 0; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); background: var(--surface2); }
     .block-image img { width: 100%; display: block; }
-    .block-image span { display: block; padding: 1rem; font-size: 0.8rem; color: var(--muted); font-family: 'Space Mono'; text-align: center; }
-
     .block-stat { display: inline-block; padding: 2.5rem; background: var(--surface); border-radius: 20px; border-top: 4px solid var(--accent3); margin-right: 2rem; margin-bottom: 2rem; min-width: 200px; }
     .stat-val { font-family: 'DM Serif Display'; font-size: 3.5rem; color: white; line-height: 1; }
     .stat-lab { font-family: 'Space Mono'; font-size: 0.7rem; color: var(--accent3); text-transform: uppercase; margin-top: 0.5rem; }
@@ -27,12 +25,14 @@
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
     <ul class="nav-links">
       <li><a href="work.html">Work</a></li>
-      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();">ES</button></li>
+      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();" id="langBtn">ES</button></li>
     </ul>
   </nav>
 
   <main id="caseContent" class="container">
-      <!-- Contenido dinámico inyectado aquí -->
+      <div style="padding: 15rem 0; text-align: center;">
+          <p class="mono" id="statusMessage">Syncing Case Study...</p>
+      </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -41,56 +41,95 @@
   <script type="module">
     async function loadCase() {
         const container = document.getElementById('caseContent');
+        const status = document.getElementById('statusMessage');
+        
+        // 1. Verificar i18n
         if (!window.Lang) { setTimeout(loadCase, 50); return; }
-        const lang = Lang.current;
+        const lang = window.Lang.current;
+
+        // 2. Verificar DB (usamos 'db' que es como está en tu js/db.js)
+        if (!window.db) {
+            status.innerText = "Database connection error (js/db.js missing)";
+            return;
+        }
+
         const slug = new URLSearchParams(window.location.search).get('id');
+        if (!slug) { window.location.href = 'work.html'; return; }
 
         try {
             const { data: cs, error } = await db.from('portfolio_projects').select('*').eq('slug', slug).single();
-            if (error) throw error;
-
-            const blocks = cs.content?.blocks || [];
             
+            if (error || !cs) {
+                container.innerHTML = `<div style="padding:15rem 0; text-align:center;"><h2 class="serif">Project not found</h2><a href="work.html" class="btn btn-primary">Back to Work</a></div>`;
+                return;
+            }
+
+            // --- PROCESAMIENTO SEGURO DE DATOS ---
+            const title = cs.title?.[lang] || cs.title?.es || 'Untitled';
+            const description = cs.description?.[lang] || cs.description?.es || '';
+            const role = cs.meta?.role || 'Designer';
+            const tools = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : (cs.meta?.tools || '');
+            const mainImg = cs.image_url || '';
+
+            // 3. CONSTRUCCIÓN DEL HEADER
             let html = `
                 <div class="cs-header fade-up">
                     <div class="section-label">${(cs.category?.[lang] || 'Case Study').toUpperCase()}</div>
-                    <h1 class="serif" style="font-size:clamp(3.5rem, 8vw, 6rem); line-height:1; margin-bottom:2rem;">${cs.title[lang]}</h1>
-                    <p style="font-size:1.3rem; color:var(--text-body); max-width:700px;">${cs.description[lang]}</p>
+                    <h1 class="serif" style="font-size:clamp(3.5rem, 8vw, 6rem); line-height:1; margin-bottom:2rem;">${title}</h1>
+                    <p style="font-size:1.3rem; color:var(--text-body); max-width:700px;">${description}</p>
                 </div>
-                <img src="${cs.image_url}" class="cs-hero-img">
-                <div style="display:flex; gap:4rem; margin-bottom:8rem; border-bottom:1px solid var(--border); padding-bottom:4rem;">
-                    <div><label class="section-label" style="font-size:0.6rem;">Role</label><div class="serif">${cs.meta.role}</div></div>
-                    <div><label class="section-label" style="font-size:0.6rem;">Tools</label><div class="serif">${cs.meta.tools.join(', ')}</div></div>
+                
+                ${mainImg ? `<img src="${mainImg}" class="cs-hero-img">` : ''}
+
+                <div style="display:flex; flex-wrap:wrap; gap:4rem; margin-bottom:8rem; border-bottom:1px solid var(--border); padding-bottom:4rem;">
+                    <div><label class="section-label" style="font-size:0.6rem;">Role</label><div class="serif" style="font-size:1.2rem;">${role}</div></div>
+                    <div><label class="section-label" style="font-size:0.6rem;">Tools</label><div class="serif" style="font-size:1.2rem;">${tools}</div></div>
                 </div>
             `;
 
-            // RENDERIZADO DINÁMICO DE BLOQUES
-            blocks.forEach(block => {
-                if(block.type === 'text') {
-                    html += `
-                        <section class="block-text fade-up">
-                            <h2>${block.title}</h2>
-                            <p>${block[lang]}</p>
-                        </section>`;
-                } else if(block.type === 'image') {
-                    html += `
-                        <div class="block-image fade-up">
-                            <img src="${block.url}" loading="lazy">
-                            ${block.caption ? `<span>${block.caption}</span>` : ''}
-                        </div>`;
-                } else if(block.type === 'stat') {
-                    html += `
-                        <div class="block-stat fade-up">
-                            <div class="stat-val">${block.value}</div>
-                            <div class="stat-lab">${lang === 'es' ? block.label_es : block.label_en}</div>
-                        </div>`;
-                }
-            });
+            // 4. RENDERIZADO DE BLOQUES (NUEVO FORMATO) O HISTORIA (VIEJO FORMATO)
+            const blocks = cs.content?.blocks || [];
+            
+            if (blocks.length > 0) {
+                // Formato Nuevo (Constructor de Bloques)
+                blocks.forEach(block => {
+                    if (block.type === 'text') {
+                        html += `
+                            <section class="block-text fade-up">
+                                <h2>${block.title || ''}</h2>
+                                <p>${block[lang] || block['es'] || ''}</p>
+                            </section>`;
+                    } else if (block.type === 'image' && block.url) {
+                        html += `
+                            <div class="block-image fade-up">
+                                <img src="${block.url}" loading="lazy">
+                                ${block.caption ? `<span style="display:block; padding:1rem; font-size:0.8rem; color:var(--muted); text-align:center;">${block.caption}</span>` : ''}
+                            </div>`;
+                    } else if (block.type === 'stat') {
+                        html += `
+                            <div class="block-stat fade-up">
+                                <div class="stat-val">${block.value}</div>
+                                <div class="stat-lab">${lang === 'es' ? block.label_es : block.label_en}</div>
+                            </div>`;
+                    }
+                });
+            } else {
+                // Retrocompatibilidad: Si no hay bloques, mostrar Challenge/Solution tradicional
+                const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || '';
+                const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || '';
+                
+                if (challenge) html += `<section class="block-text"><h2>The Challenge</h2><p>${challenge}</p></section>`;
+                if (solution) html += `<section class="block-text"><h2>The Solution</h2><p>${solution}</p></section>`;
+            }
 
             container.innerHTML = html + `<div style="padding:10rem 0; text-align:center;"><a href="work.html" class="btn btn-primary">Back to Work</a></div>`;
 
-        } catch(e) { console.error(e); }
+        } catch (e) {
+            console.error("Error crítico:", e);
+            status.innerText = "Error loading project. Check console (F12).";
+        }
     }
+
     loadCase();
   </script>
 </body>
