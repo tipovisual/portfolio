@@ -2,195 +2,113 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Detail — Freddy Gonzalez</title>
+  <title>Admin Builder — Freddy Gonzalez</title>
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
-  
   <style>
-    /* ═══ ESTILOS DE ALTO IMPACTO PARA CASE STUDIES (Encapsulados aquí) ═══ */
-    .case-container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
-    
-    .cs-header { padding-top: 12rem; margin-bottom: 5rem; text-align: left; }
-    
-    .cs-hero-img { 
-        width: 100%; height: auto; aspect-ratio: 16/9; 
-        border-radius: 32px; object-fit: cover; 
-        border: 1px solid var(--border); margin-bottom: 4rem; 
-        background: var(--surface2); box-shadow: 0 30px 60px rgba(0,0,0,0.4); 
-    }
-    
-    /* Bloques de Texto */
-    .block-text { margin-bottom: 6rem; max-width: 800px; }
-    .block-text h2 { font-size: 2.6rem; margin-bottom: 1.5rem; color: var(--text); font-family: 'DM Serif Display', serif; }
-    .block-text p { font-size: 1.2rem; color: var(--text-body); line-height: 1.8; }
-    
-    /* Bloques de Imágenes (Wireframes, Diagramas, UI) */
-    .block-image { margin: 6rem 0; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); background: var(--surface2); }
-    .block-image img { width: 100%; height: auto; display: block; }
-    .block-image span { display: block; padding: 1.5rem; font-size: 0.85rem; color: var(--muted); font-family: 'Space Mono', monospace; text-align: center; background: var(--surface); border-top: 1px solid var(--border); }
-
-    /* Bloques de Estadísticas / Impacto */
-    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin: 5rem 0; }
-    .block-stat { padding: 2.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; border-top: 4px solid var(--accent3); transition: transform 0.3s ease; }
-    .block-stat:hover { transform: translateY(-5px); }
-    .stat-val { font-family: 'DM Serif Display', serif; font-size: 3.5rem; color: var(--text); line-height: 1; margin-bottom: 0.5rem; }
-    .stat-lab { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent3); text-transform: uppercase; letter-spacing: 0.1em; }
-
-    .loading-state { padding: 15rem 2rem; text-align: center; }
+    .admin-container { max-width: 800px; margin: 0 auto; padding: 100px 2rem; }
+    .block-editor { background: var(--surface2); padding: 2rem; border-radius: 20px; margin-bottom: 2rem; border: 1px solid var(--border); }
+    .btn-add { background: var(--accent); color: white; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer; border: none; margin-right: 1rem; }
+    input, textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); color: white; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem; }
+    .loading { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
   </style>
 </head>
 <body>
-
-  <nav id="navbar">
-    <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="work.html" class="active">Work</a></li>
-      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();" id="langBtn">ES</button></li>
-    </ul>
-  </nav>
-
-  <main id="caseContent" class="case-container">
-      <div class="loading-state">
-          <p class="mono" id="status-text" style="color:var(--muted)">Fetching project data...</p>
+  <div id="loader" class="loading">SYNCING DATA...</div>
+  <div class="admin-container">
+    <h2 class="serif" style="margin-bottom: 2rem;">New Case Study Builder</h2>
+    <form id="mainForm">
+      <div class="block-editor">
+        <label class="section-label">General Info</label>
+        <input type="text" id="title_es" placeholder="Título (ES)" required>
+        <input type="text" id="title_en" placeholder="Title (EN)" required>
+        <input type="text" id="slug" placeholder="slug-del-proyecto" required>
+        <input type="file" id="cover" accept="image/*">
       </div>
-  </main>
 
-  <footer>
-    <div class="footer-logo">Freddy Gonzalez</div>
-    <span class="footer-copy">© 2024 Freddy Gonzalez.</span>
-    <div class="footer-social">
-      <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="social-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-      </a>
-      <a href="mailto:tipovisual@gmail.com" class="social-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-      </a>
-    </div>
-  </footer>
+      <div id="blocks"></div>
 
-  <!-- ═══ SCRIPTS GLOBALES IGUAL QUE EN INDEX.HTML ═══ -->
+      <div style="margin-bottom: 4rem;">
+        <button type="button" class="btn-add" onclick="addText()">+ Add Text Block</button>
+        <button type="button" class="btn-add" onclick="addImage()" style="background:var(--accent3); color:black;">+ Add Image/Wireframe</button>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%; padding: 1.5rem;">DEPLOY PROJECT</button>
+    </form>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/db.js"></script>
-  <script src="js/i18n.js"></script>
-
   <script>
-    async function loadCase() {
-        const container = document.getElementById('caseContent');
-        
-        // Polling de seguridad para esperar a que carguen las dependencias globales
-        if (!window.Lang || !window.db) {
-            setTimeout(loadCase, 50);
-            return;
-        }
+    let blockCount = 0;
 
-        const lang = Lang.current;
-        const slug = new URLSearchParams(window.location.search).get('id');
-
-        if (!slug) { window.location.href = 'work.html'; return; }
-
-        try {
-            // Usamos 'db' directamente porque ya es global
-            const { data: cs, error } = await db
-                .from('portfolio_projects')
-                .select('*')
-                .eq('slug', slug)
-                .single();
-            
-            if (error || !cs) throw new Error("Proyecto no encontrado");
-
-            // Procesamiento de datos principales
-            const title = cs.title?.[lang] || cs.title?.es || 'Untitled Project';
-            const desc = cs.description?.[lang] || cs.description?.es || '';
-            const role = cs.meta?.role || 'Lead Designer';
-            const tools = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : (cs.meta?.tools || 'Figma');
-            const mainImg = cs.image_url || '';
-
-            document.title = `${title} — Freddy Gonzalez`;
-
-            // Construcción del Header y Hero
-            let html = `
-                <div class="cs-header fade-up">
-                    <a href="work.html" class="btn btn-ghost" style="margin-bottom:3rem; padding: 0.5rem 1.2rem; font-size: 0.8rem;">← Back to Work</a>
-                    <div class="section-label">${(cs.category?.[lang] || 'Case Study').toUpperCase()}</div>
-                    <h1 class="serif" style="font-size:clamp(3.5rem, 8vw, 5.5rem); line-height:1; margin-bottom:2rem;">${title}</h1>
-                    <p style="font-size:1.4rem; color:var(--text-body); max-width:800px; line-height:1.6;">${desc}</p>
-                </div>
-                
-                ${mainImg ? `<img src="${mainImg}" class="cs-hero-img fade-up" alt="${title}">` : ''}
-
-                <div class="fade-up" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:4rem; margin-bottom:10rem; border-bottom:1px solid var(--border); padding-bottom:5rem;">
-                    <div><label class="section-label" style="font-size:0.6rem; color:var(--accent);">Role</label><div class="serif" style="font-size:1.4rem;">${role}</div></div>
-                    <div><label class="section-label" style="font-size:0.6rem; color:var(--accent);">Tools</label><div class="serif" style="font-size:1.4rem;">${tools}</div></div>
-                </div>
-            `;
-
-            // Renderizado de Bloques del Case Builder
-            const blocks = cs.content?.blocks || [];
-            
-            if (blocks.length > 0) {
-                // Creamos un contenedor para agrupar estadísticas consecutivas
-                let inStatGroup = false;
-
-                blocks.forEach(block => {
-                    // Si el bloque no es de tipo estadística y estábamos en un grupo, lo cerramos
-                    if (block.type !== 'stat' && inStatGroup) {
-                        html += `</div>`; // cerramos el div .metrics-grid
-                        inStatGroup = false;
-                    }
-
-                    if (block.type === 'text') {
-                        html += `
-                            <section class="block-text fade-up">
-                                <h2>${block.title || ''}</h2>
-                                <p>${block[lang] || block['es'] || ''}</p>
-                            </section>`;
-                    } else if (block.type === 'image' && block.url) {
-                        html += `
-                            <div class="block-image fade-up">
-                                <img src="${block.url}" loading="lazy" alt="Visual Asset">
-                                ${block.caption ? `<span>${block.caption}</span>` : ''}
-                            </div>`;
-                    } else if (block.type === 'stat') {
-                        // Si es la primera estadística, abrimos el contenedor grid
-                        if (!inStatGroup) {
-                            html += `<div class="metrics-grid fade-up">`;
-                            inStatGroup = true;
-                        }
-                        html += `
-                            <div class="block-stat">
-                                <div class="stat-val">${block.value}</div>
-                                <div class="stat-lab">${lang === 'es' ? block.label_es : block.label_en}</div>
-                            </div>`;
-                    }
-                });
-
-                // Si terminó el loop y el último elemento fue una estadística, cerramos el grid
-                if (inStatGroup) {
-                    html += `</div>`;
-                }
-            } else {
-                // Retrocompatibilidad para proyectos anteriores
-                const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || '';
-                const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || '';
-                if (challenge) html += `<section class="block-text fade-up"><h2>The Challenge</h2><p>${challenge}</p></section>`;
-                if (solution) html += `<section class="block-text fade-up"><h2>The Solution</h2><p>${solution}</p></section>`;
-            }
-
-            container.innerHTML = html + `<div style="padding:10rem 0; text-align:center;"><a href="work.html" class="btn btn-primary">Browse more work</a></div>`;
-
-        } catch (e) {
-            console.error("Error cargando detalle:", e);
-            container.innerHTML = `
-                <div style="padding:15rem 0; text-align:center;">
-                    <h2 class="serif">Project not found</h2>
-                    <a href="work.html" class="btn btn-primary" style="margin-top:2rem;">Back to Work</a>
-                </div>`;
-        }
+    function addText() {
+        const id = blockCount++;
+        const html = `
+            <div class="block-editor" id="b-${id}" data-type="text">
+                <label class="section-label">Text Block</label>
+                <input type="text" class="b-title" placeholder="Sub-título (ej: El Reto)">
+                <textarea class="b-es" placeholder="Contenido ES" rows="4"></textarea>
+                <textarea class="b-en" placeholder="Content EN" rows="4"></textarea>
+                <button type="button" onclick="this.parentElement.remove()">Remove</button>
+            </div>`;
+        document.getElementById('blocks').insertAdjacentHTML('beforeend', html);
     }
 
-    loadCase();
+    function addImage() {
+        const id = blockCount++;
+        const html = `
+            <div class="block-editor" id="b-${id}" data-type="image">
+                <label class="section-label">Visual Block (Wireframe/Flow)</label>
+                <input type="file" class="b-file" accept="image/*">
+                <input type="text" class="b-caption" placeholder="Pie de foto">
+                <button type="button" onclick="this.parentElement.remove()">Remove</button>
+            </div>`;
+        document.getElementById('blocks').insertAdjacentHTML('beforeend', html);
+    }
+
+    document.getElementById('mainForm').onsubmit = async (e) => {
+        e.preventDefault();
+        document.getElementById('loader').style.display = 'flex';
+
+        try {
+            // 1. Cover
+            let coverUrl = '';
+            const cFile = document.getElementById('cover').files[0];
+            if(cFile) {
+                const name = `covers/${Date.now()}-${cFile.name}`;
+                await db.storage.from('projects').upload(name, cFile);
+                coverUrl = db.storage.from('projects').getPublicUrl(name).data.publicUrl;
+            }
+
+            // 2. Bloques
+            const blocks = [];
+            const blockElems = document.querySelectorAll('.block-editor[data-type]');
+            for(let el of blockElems) {
+                const type = el.dataset.type;
+                if(type === 'text') {
+                    blocks.push({ type, title: el.querySelector('.b-title').value, es: el.querySelector('.b-es').value, en: el.querySelector('.b-en').value });
+                } else {
+                    const f = el.querySelector('.b-file').files[0];
+                    if(f) {
+                        const n = `gallery/${Date.now()}-${f.name}`;
+                        await db.storage.from('projects').upload(n, f);
+                        const url = db.storage.from('projects').getPublicUrl(n).data.publicUrl;
+                        blocks.push({ type, url, caption: el.querySelector('.b-caption').value });
+                    }
+                }
+            }
+
+            await db.from('portfolio_projects').insert([{
+                slug: document.getElementById('slug').value,
+                image_url: coverUrl,
+                title: { es: document.getElementById('title_es').value, en: document.getElementById('title_en').value },
+                content: { blocks }
+            }]);
+
+            alert("Done!");
+            location.reload();
+        } catch(e) { alert(e.message); }
+    }
   </script>
 </body>
 </html>
