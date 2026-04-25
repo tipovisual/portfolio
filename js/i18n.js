@@ -82,7 +82,14 @@ const i18n = {
       challenge: 'The Challenge', solution: 'The Solution',
       next: 'Next Project'
     },
-    footer: { copy: '© 2024 Freddy Gonzalez. All rights reserved.' }
+      // Añade esto dentro de 'en:' y 'es:' en tu archivo js/i18n.js
+footer: {
+  label: 'Social & Mail', // 'Contacto' en ES
+  title: 'Let’s build something<br>meaningful together.', // Traducir en ES
+  sub: 'Available to lead disruptive projects and help products scale through strategic design.', // Traducir en ES
+  status: 'Available for new projects', // 'Disponible para nuevos retos' en ES
+  copy: '© 2024 Freddy González. Handcrafted in Panamá.'
+}
   },
  
   es: {
@@ -168,7 +175,14 @@ const i18n = {
       challenge: 'El Desafío', solution: 'La Solución',
       next: 'Siguiente Proyecto'
     },
-    footer: { copy: '© 2024 Freddy Gonzalez. Todos los derechos reservados.' }
+    // Añade esto dentro de 'en:' y 'es:' en tu archivo js/i18n.js
+footer: {
+  label: 'Contacto', // 'Contacto' en ES
+  title: 'Constuyamos productos<br>relevantes juntos.', // Traducir en ES
+  sub: 'Disponible para dirigir retos distuptivos y ayudar a productos a escalar a través del diseño estratégico.', // Traducir en ES
+  status: 'Disponible para nuevos retos', // 'Disponible para nuevos retos' en ES
+  copy: '© 2024 Freddy González. Hecho en Panamá.'
+}
   }
 };
  
