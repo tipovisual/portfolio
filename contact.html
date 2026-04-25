@@ -3,10 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact — Freddy Gonzalez</title>
+  <title>Contact — Freddy González</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Estilos específicos para la sección de contacto Premium */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .contact-info h1 {
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      line-height: 0.9;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-method {
+      margin-top: 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .method-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .method-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .method-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .method-value:hover {
+      color: var(--accent3);
+    }
+
+    /* Formulario Estilizado */
+    .contact-form-container {
+      background: var(--surface2);
+      padding: 4rem;
+      border-radius: 32px;
+      border: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 1.2rem;
+      border-radius: 12px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+
+    textarea.form-input {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    #form-status {
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    #form-status.success {
+      display: block;
+      background: rgba(106, 247, 200, 0.1);
+      color: var(--accent3);
+      border: 1px solid rgba(106, 247, 200, 0.2);
+    }
+
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 4rem; }
+      .contact-form-container { padding: 2rem; }
+    }
+  </style>
 </head>
 <body>
 
@@ -19,63 +129,54 @@
       <li><a href="contact.html" class="active" data-i18n="nav.contact">Contact</a></li>
       <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
     </ul>
-    <button class="nav-mobile-btn" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
   </nav>
 
-  <main>
-    <div class="container section-pad" style="padding-top:8rem">
-
-      <div class="section-label" data-i18n="contact.label">Contacto</div>
-      <h1 class="section-title" data-i18n="contact.title">Contáctame</h1>
-      <p class="section-sub" style="max-width:600px;margin-bottom:3rem" data-i18n="contact.sub">¿Interesado en trabajar juntos?</p>
-
-      <div class="contact-cards">
-        <div class="contact-card">
-          <div class="contact-card-icon" style="background:rgba(124,106,247,0.1);border:1px solid rgba(124,106,247,0.2)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+  <main class="container section-pad" style="padding-top:12rem">
+    <div class="contact-grid">
+      
+      <!-- LADO IZQUIERDO: TEXTO Y LINKS -->
+      <div class="contact-info">
+        <div class="section-label" data-i18n="contact.label">Contacto</div>
+        <h1 class="serif" data-i18n="contact.title">Let’s start a conversation.</h1>
+        <p class="section-sub" data-i18n="contact.sub">¿Tienes un reto complejo o una idea disruptiva? Estoy listo para ayudar a tu equipo a escalar.</p>
+        
+        <div class="contact-method">
+          <div class="method-item">
+            <span class="method-label">LinkedIn</span>
+            <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="method-value">Freddy González</a>
           </div>
-          <h3 data-i18n="contact.email">Correo</h3>
-          <p>contact@tipovisual.com</p>
-        </div>
-        <div class="contact-card">
-          <div class="contact-card-icon" style="background:rgba(247,124,106,0.1);border:1px solid rgba(247,124,106,0.2)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.1 2.18 2 2 0 012.07 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <div class="method-item">
+            <span class="method-label" data-i18n="contact.location">Location</span>
+            <span class="method-value">Panamá, Ciudad de Panamá</span>
           </div>
-          <h3 data-i18n="contact.phone">Teléfono</h3>
-          <p>+507 XXX XXXX</p>
-        </div>
-        <div class="contact-card">
-          <div class="contact-card-icon" style="background:rgba(106,247,200,0.1);border:1px solid rgba(106,247,200,0.2)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent3)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-          <h3 data-i18n="contact.location">Ubicación</h3>
-          <p>Panamá, Ciudad de Panamá</p>
         </div>
       </div>
 
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:2.5rem;max-width:700px">
-        <h2 style="font-size:1.5rem;margin-bottom:2rem" data-i18n="contact.formTitle">Envíame un Mensaje</h2>
-        <div class="form-success" id="formSuccess"></div>
-        <form id="contactForm" onsubmit="handleSubmit(event)">
-          <div class="form-grid">
-            <div class="form-group">
-              <label data-i18n="contact.name">Nombre</label>
-              <input type="text" data-i18n="contact.name" placeholder="Nombre" required>
-            </div>
-            <div class="form-group">
-              <label data-i18n="contact.emailField">Correo</label>
-              <input type="email" placeholder="your@email.com" required>
-            </div>
+      <!-- LADO DERECHO: FORMULARIO -->
+      <div class="contact-form-container">
+        <div id="form-status"></div>
+        
+        <form id="contactForm">
+          <!-- Honeypot para evitar spam (invisible para el usuario) -->
+          <input type="text" name="_honey" style="display:none">
+          
+          <div class="form-group">
+            <label data-i18n="contact.name">Nombre</label>
+            <input type="text" name="name" class="form-input" placeholder="Your Name" required>
           </div>
+
+          <div class="form-group">
+            <label data-i18n="contact.emailField">Email</label>
+            <input type="email" name="email" class="form-input" placeholder="email@example.com" required>
+          </div>
+
           <div class="form-group">
             <label data-i18n="contact.message">Mensaje</label>
-            <textarea placeholder="..." required></textarea>
+            <textarea name="message" class="form-input" placeholder="Tell me about your project..." required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">
+
+          <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; justify-content:center; padding:1.2rem">
             <span data-i18n="contact.send">Enviar Mensaje</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
           </button>
         </form>
       </div>
@@ -83,50 +184,67 @@
     </div>
   </main>
 
+  <!-- REPETIMOS FOOTER PRO PARA CONSISTENCIA -->
   <footer class="main-footer">
     <div class="container">
-        <div class="footer-grid">
-            <div class="footer-cta">
-                <div class="section-label" data-i18n="contact.label">Contact</div>
-                <h2 class="serif" data-i18n="footer.title">Let’s build something<br>meaningful together.</h2>
-                <p data-i18n="footer.sub">Available to lead disruptive projects and help products scale through strategic design.</p>
-                <div class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span data-i18n="footer.status">Available for new projects</span>
-                </div>
-            </div>
-
-            <div class="footer-contact-links">
-                <div class="section-label" data-i18n="footer.label">Social & Mail</div>
-                <a href="mailto:tipovisual@gmail.com" class="footer-link">tipovisual@gmail.com</a>
-                <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="footer-link">LinkedIn</a>
-            </div>
-        </div>
-
         <div class="footer-bottom">
             <div class="footer-info">
                 <span class="nav-logo">Freddy Gonzalez</span>
                 <span class="mono" style="font-size: 0.7rem; color: var(--muted);" data-i18n="footer.copy">© 2024 — HANDCRAFTED IN PANAMA</span>
             </div>
             <div class="footer-social">
-                <a href="index.html" class="mono" style="font-size: 0.7rem; margin-left: 2rem;" data-i18n="nav.home">HOME</a>
-                <a href="work.html" class="mono" style="font-size: 0.7rem; margin-left: 2rem;" data-i18n="nav.work">WORK</a>
-                <a href="about.html" class="mono" style="font-size: 0.7rem; margin-left: 2rem;" data-i18n="nav.about">ABOUT</a>
+                <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="mono" style="font-size: 0.7rem; margin-left: 2rem;">LINKEDIN</a>
+                <a href="mailto:tipovisual@gmail.com" class="mono" style="font-size: 0.7rem; margin-left: 2rem;">EMAIL</a>
             </div>
         </div>
     </div>
-</footer>
+  </footer>
 
   <script src="js/i18n.js"></script>
   <script>
-    function handleSubmit(e) {
+    const contactForm = document.getElementById('contactForm');
+    const statusDiv = document.getElementById('form-status');
+    const submitBtn = document.getElementById('submitBtn');
+
+    contactForm.onsubmit = async (e) => {
       e.preventDefault();
-      const s = document.getElementById('formSuccess');
-      s.textContent = Lang.get('contact.success');
-      s.classList.add('show');
-      e.target.reset();
-      setTimeout(() => s.classList.remove('show'), 5000);
-    }
+      
+      // Feedback visual
+      submitBtn.disabled = true;
+      submitBtn.innerText = Lang.current === 'es' ? 'Enviando...' : 'Sending...';
+
+      // Datos del formulario
+      const formData = new FormData(contactForm);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        // El email fredevelper@gmail.com solo vive aquí en el script, no en el HTML visible
+        const response = await fetch("https://formsubmit.co/ajax/fredevelper@gmail.com", {
+          method: "POST",
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          statusDiv.innerText = Lang.get('contact.success');
+          statusDiv.className = 'success';
+          statusDiv.style.display = 'block';
+          contactForm.reset();
+        } else {
+          throw new Error();
+        }
+      } catch (err) {
+        statusDiv.innerText = "Error: Please try again later.";
+        statusDiv.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = Lang.get('contact.send');
+      }
+    };
+
     window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10));
   </script>
 </body>
