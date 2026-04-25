@@ -3,161 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Detail — Freddy Gonzalez</title>
+  <title>Case Study — Freddy Gonzalez</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
-    /* ═══ ESTILOS PREMIUM PARA LA NARRATIVA DEL PROYECTO ═══ */
+    /* Estilos de alto impacto para la narrativa */
     .case-container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
     .cs-header { padding-top: 12rem; margin-bottom: 4rem; }
-    
-    .cs-hero-img { 
-        width: 100%; height: auto; aspect-ratio: 16/9; border-radius: 32px; 
-        object-fit: cover; border: 1px solid var(--border); margin-bottom: 4rem; 
-        background: var(--surface2); box-shadow: 0 30px 60px rgba(0,0,0,0.4); 
-    }
-
-    /* Grid de Metadatos */
-    .cs-meta-bar { 
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-        gap: 3rem; padding: 3rem 0; border-bottom: 1px solid var(--border); 
-        margin-bottom: 6rem;
-    }
-
-    /* Secciones de Contenido */
-    .content-section { margin-bottom: 8rem; }
-    .content-section h2 { font-size: 2.8rem; margin-bottom: 2rem; color: var(--text); font-family: 'DM Serif Display', serif; }
-    .content-section p { font-size: 1.2rem; color: var(--text-body); line-height: 1.8; margin-bottom: 1.5rem; }
-
-    /* Bloques Visuales (Wireframes / Mockups) */
-    .visual-block { margin: 6rem 0; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); background: var(--surface2); }
-    .visual-block img { width: 100%; display: block; height: auto; }
-    .visual-block .caption { padding: 1.5rem; font-size: 0.85rem; color: var(--muted); text-align: center; font-family: 'Space Mono', monospace; background: var(--surface); }
-
-    /* Métricas de Impacto */
+    .cs-hero-img { width: 100%; height: auto; aspect-ratio: 16/9; border-radius: 32px; object-fit: cover; border: 1px solid var(--border); margin-bottom: 5rem; background: var(--surface2); box-shadow: 0 40px 80px rgba(0,0,0,0.4); }
+    .block-text { margin-bottom: 6rem; }
+    .block-text h2 { font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--text); font-family: 'DM Serif Display', serif; }
+    .block-text p { font-size: 1.25rem; color: var(--text-body); line-height: 1.8; }
+    .visual-block { margin: 6rem 0; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); }
+    .visual-block img { width: 100%; display: block; }
     .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 4rem 0; }
     .metric-card { padding: 2.5rem; background: var(--surface); border-radius: 20px; border-top: 4px solid var(--accent3); }
     .metric-val { font-family: 'DM Serif Display', serif; font-size: 3.5rem; color: var(--text); line-height: 1; }
     .metric-lab { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent3); text-transform: uppercase; margin-top: 0.5rem; }
-
-    #loading-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; }
   </style>
 </head>
 <body>
-
-  <div id="loading-overlay"><p class="mono">Loading project narrative...</p></div>
 
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
     <ul class="nav-links">
       <li><a href="work.html">Work</a></li>
-      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();" id="langBtn">ES</button></li>
+      <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();">ES</button></li>
     </ul>
   </nav>
 
-  <main id="caseContent" class="case-container" style="opacity: 0; transition: opacity 0.5s ease;">
-      <!-- El contenido se inyecta aquí -->
+  <main id="caseContent" class="case-container">
+      <div id="loader" style="padding: 20rem 0; text-align: center;">
+          <p class="mono">Conectando con Supabase...</p>
+      </div>
   </main>
 
-  <!-- SCRIPTS GLOBALES -->
+  <!-- CARGA DE SCRIPTS: ORDEN CRÍTICO -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/db.js"></script>
   <script src="js/i18n.js"></script>
 
   <script>
-    async function renderProject() {
-        const main = document.getElementById('caseContent');
-        const loader = document.getElementById('loading-overlay');
+    /**
+     * Solución de Raíz: El script se dispara solo cuando 
+     * todos los recursos (db.js e i18n.js) han sido procesados por el navegador.
+     */
+    async function startApp() {
+        const container = document.getElementById('caseContent');
+        const loader = document.getElementById('loader');
 
-        // 1. Esperar a que las dependencias estén listas
-        if (!window.db || !window.Lang) {
-            setTimeout(renderProject, 100);
+        // Validamos la existencia de las herramientas globales
+        if (typeof db === 'undefined' || typeof Lang === 'undefined') {
+            console.log("Reintentando inicialización...");
+            setTimeout(startApp, 100);
             return;
         }
 
         const lang = Lang.current;
         const slug = new URLSearchParams(window.location.search).get('id');
+
         if (!slug) { window.location.href = 'work.html'; return; }
 
         try {
-            // 2. FETCH DIRECTO A SUPABASE
+            // Consulta directa
             const { data: cs, error } = await db.from('portfolio_projects').select('*').eq('slug', slug).single();
-            if (error || !cs) throw new Error("Not found");
+            
+            if (error || !cs) throw new Error("No se encontró el proyecto.");
 
-            // 3. PROCESAMIENTO DE DATOS
+            // Procesamos variables básicas
             const title = cs.title?.[lang] || cs.title?.es || '';
-            const description = cs.description?.[lang] || cs.description?.es || '';
+            const desc = cs.description?.[lang] || cs.description?.es || '';
             const img = cs.image_url || '';
             const role = cs.meta?.role || 'Product Owner';
-            const tools = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : (cs.meta?.tools || 'Figma');
+            const tools = Array.isArray(cs.meta?.tools) ? cs.meta.tools.join(', ') : 'Figma';
 
-            document.title = `${title} — Freddy Gonzalez`;
+            document.title = `${title} — Case Study`;
 
-            // 4. CONSTRUCCIÓN DEL LAYOUT SENIOR
+            // Construimos el HTML
             let html = `
                 <header class="cs-header">
-                    <a href="work.html" class="btn btn-ghost" style="margin-bottom:3rem; font-size:0.8rem;">← Back to Work</a>
+                    <a href="work.html" class="btn btn-ghost" style="margin-bottom:3rem; font-size:0.8rem;">← Back</a>
                     <div class="section-label">${(cs.category?.[lang] || 'Case Study').toUpperCase()}</div>
-                    <h1 class="serif" style="font-size:clamp(3.5rem, 9vw, 6rem); line-height:1; margin-bottom:2.5rem;">${title}</h1>
-                    <p style="font-size:1.4rem; color:var(--text-body); max-width:850px; line-height:1.6;">${description}</p>
+                    <h1 class="serif" style="font-size:clamp(3rem, 9vw, 6rem); line-height:1; margin-bottom:2rem;">${title}</h1>
+                    <p style="font-size:1.4rem; color:var(--text-body); max-width:850px;">${desc}</p>
                 </header>
 
                 ${img ? `<img src="${img}" class="cs-hero-img" alt="${title}">` : ''}
 
-                <div class="cs-meta-bar">
-                    <div><span class="section-label" style="font-size:0.6rem">My Role</span><div class="serif" style="font-size:1.5rem">${role}</div></div>
-                    <div><span class="section-label" style="font-size:0.6rem">Key Tools</span><div class="serif" style="font-size:1.5rem">${tools}</div></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; margin-bottom:8rem; border-bottom:1px solid var(--border); padding-bottom:4rem;">
+                    <div><span class="section-label" style="font-size:0.6rem">Role</span><div class="serif" style="font-size:1.5rem">${role}</div></div>
+                    <div><span class="section-label" style="font-size:0.6rem">Tools</span><div class="serif" style="font-size:1.5rem">${tools}</div></div>
                 </div>
             `;
 
-            // 5. RENDERIZADO DINÁMICO DE BLOQUES DE CONTENIDO
-            // Buscamos si existe un array de bloques, si no, usamos el texto plano para retrocompatibilidad
+            // Renderizado de bloques (Case Builder) o Fallback tradicional
             const blocks = cs.content?.blocks || [];
 
             if (blocks.length > 0) {
                 blocks.forEach(block => {
                     if (block.type === 'text') {
-                        html += `
-                            <section class="content-section fade-up">
-                                <h2>${block.title || ''}</h2>
-                                <p>${block[lang] || block['es'] || ''}</p>
-                            </section>`;
+                        html += `<section class="block-text"><h2>${block.title || ''}</h2><p>${block[lang] || block['es'] || ''}</p></section>`;
                     } else if (block.type === 'image' && block.url) {
-                        html += `
-                            <div class="visual-block fade-up">
-                                <img src="${block.url}" alt="Project visualization" loading="lazy">
-                                ${block.caption ? `<div class="caption">${block.caption}</div>` : ''}
-                            </div>`;
+                        html += `<div class="visual-block"><img src="${block.url}">${block.caption ? `<div style="padding:1rem; font-size:0.8rem; color:var(--muted); text-align:center;">${block.caption}</div>` : ''}</div>`;
                     } else if (block.type === 'stat') {
-                        html += `
-                            <div class="metric-card fade-up">
-                                <div class="metric-val">${block.value}</div>
-                                <div class="metric-lab">${lang === 'es' ? block.label_es : block.label_en}</div>
-                            </div>`;
+                        html += `<div class="metrics-grid"><div class="metric-card"><div class="metric-val">${block.value}</div><div class="metric-lab">${lang === 'es' ? block.label_es : block.label_en}</div></div></div>`;
                     }
                 });
             } else {
-                // Fallback para proyectos viejos que solo tienen texto plano
+                // Fallback para proyectos que no usan el sistema de bloques
                 const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || '';
                 const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || '';
-                
-                if (challenge) html += `<section class="content-section"><h2>The Challenge</h2><p>${challenge}</p></section>`;
-                if (solution) html += `<section class="content-section"><h2>The Solution</h2><p>${solution}</p></section>`;
+                if (challenge) html += `<section class="block-text"><h2>The Challenge</h2><p>${challenge}</p></section>`;
+                if (solution) html += `<section class="block-text"><h2>The Solution</h2><p>${solution}</p></section>`;
             }
 
-            // Inyección final y visualización
-            main.innerHTML = html + `<div style="padding:10rem 0; text-align:center;"><a href="work.html" class="btn btn-primary">Browse more work</a></div>`;
-            
-            // Ocultar loader y mostrar contenido
-            loader.style.display = 'none';
-            main.style.opacity = '1';
+            container.innerHTML = html + `<div style="padding:10rem 0; text-align:center;"><a href="work.html" class="btn btn-primary">Ver más proyectos</a></div>`;
 
         } catch (e) {
-            loader.innerHTML = `<div style="text-align:center;"><h2 class="serif">Project not found</h2><a href="work.html" class="btn btn-primary" style="margin-top:2rem">Return to Portfolio</a></div>`;
+            console.error(e);
+            container.innerHTML = `<div style="text-align:center; padding:10rem 0;"><h2 class="serif">Proyecto no encontrado</h2><a href="work.html" class="btn btn-primary">Volver al Portafolio</a></div>`;
         }
     }
 
-    renderProject();
+    // Arrancamos la aplicación
+    startApp();
   </script>
 </body>
 </html>
