@@ -12,7 +12,7 @@
     .cs-header { padding-top: 12rem; margin-bottom: 5rem; text-align: left; }
     .cs-hero-img { width: 100%; height: auto; aspect-ratio: 16/9; border-radius: 32px; object-fit: cover; border: 1px solid var(--border); margin-bottom: 4rem; background: var(--surface2); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
     
-    /* Bloques de Contenido */
+    /* Bloques de Contenido Dinámicos */
     .block-text { margin-bottom: 8rem; max-width: 850px; }
     .block-text h2 { font-size: 2.8rem; margin-bottom: 2rem; color: var(--white); font-family: 'DM Serif Display'; line-height: 1.1; }
     .block-text p { font-size: 1.2rem; color: var(--text-body); line-height: 1.8; margin-bottom: 1.5rem; }
@@ -21,9 +21,7 @@
     .block-image img { width: 100%; height: auto; display: block; }
     .block-image span { display: block; padding: 1.5rem; font-size: 0.9rem; color: var(--muted); font-family: 'Space Mono'; text-align: center; background: var(--surface); }
 
-    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin: 6rem 0; }
-    .block-stat { padding: 3rem; background: var(--surface); border-radius: 24px; border: 1px solid var(--border); border-top: 4px solid var(--accent); transition: transform 0.3s ease; }
-    .block-stat:hover { transform: translateY(-5px); border-color: var(--accent); }
+    .block-stat { display: inline-block; padding: 3rem; background: var(--surface); border-radius: 24px; border: 1px solid var(--border); border-top: 4px solid var(--accent); transition: transform 0.3s ease; margin-right: 2rem; margin-bottom: 2rem; min-width: 250px; }
     .stat-val { font-family: 'DM Serif Display'; font-size: 4rem; color: white; line-height: 1; margin-bottom: 0.5rem; }
     .stat-lab { font-family: 'Space Mono'; font-size: 0.8rem; color: var(--accent3); text-transform: uppercase; letter-spacing: 0.1em; }
 
@@ -42,14 +40,14 @@
   </nav>
 
   <div id="error-display">
-    <h2 class="serif">Connection issue</h2>
+    <h2 class="serif">Case not found</h2>
     <p id="error-message"></p>
     <a href="work.html" class="btn btn-primary" style="margin-top: 2rem;">Return to Portfolio</a>
   </div>
 
   <main id="caseContent" class="case-container">
       <div class="loading-state">
-          <p class="mono" id="status-text">Connecting to systems...</p>
+          <p class="mono" id="status-text">Fetching project data...</p>
       </div>
   </main>
 
@@ -58,22 +56,21 @@
       <p class="mono" style="font-size: 0.8rem; color: var(--muted); margin-top: 1rem;">© 2024 — Product Owner & Lead Designer</p>
   </footer>
 
-  <!-- SCRIPTS ORDENADOS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="js/db.js"></script>
+  <!-- Cargamos i18n primero porque no es un módulo -->
   <script src="js/i18n.js"></script>
 
   <script type="module">
+    // IMPORTAMOS LA BASE DE DATOS DIRECTAMENTE
+    import { db } from './js/db.js';
+
     async function loadCase() {
         const container = document.getElementById('caseContent');
         const errorDisplay = document.getElementById('error-display');
         const errorMsg = document.getElementById('error-message');
-        const statusText = document.getElementById('status-text');
 
-        // --- SISTEMA DE RESILIENCIA (WAIT FOR SYSTEMS) ---
-        if (!window.Lang || !window.db) {
-            console.log("Sistemas no listos, reintentando en 100ms...");
-            setTimeout(loadCase, 100);
+        // Esperar a que Lang esté listo (polling ligero)
+        if (!window.Lang) {
+            setTimeout(loadCase, 50);
             return;
         }
 
@@ -84,13 +81,11 @@
 
             if (!slug) { window.location.href = 'work.html'; return; }
 
-            statusText.innerText = "Fetching project data...";
-
-            // Fetch de datos desde js/db.js
+            // Fetch de datos
             const { data: cs, error } = await db.from('portfolio_projects').select('*').eq('slug', slug).single();
             
             if (error) throw new Error(`Database: ${error.message}`);
-            if (!cs) throw new Error("Project not found in our records.");
+            if (!cs) throw new Error("The project slug was not found.");
 
             // Procesamiento de Metadatos
             const title = cs.title?.[lang] || cs.title?.es || 'Untitled Project';
@@ -101,7 +96,7 @@
 
             document.title = `${title} — Freddy Gonzalez`;
 
-            // Construcción del Layout
+            // Construcción del Layout Inicial
             let html = `
                 <div class="cs-header fade-up">
                     <a href="work.html" class="btn btn-ghost" style="margin-bottom:3rem; padding: 0.5rem 1.2rem; font-size: 0.8rem;">← Back to Work</a>
@@ -118,7 +113,7 @@
                 </div>
             `;
 
-            // Renderizado de Bloques (NUEVO CASE BUILDER)
+            // Renderizado de Bloques (SISTEMA CMS DINÁMICO)
             const blocks = cs.content?.blocks || [];
             
             if (blocks.length > 0) {
@@ -132,7 +127,7 @@
                     } else if (block.type === 'image' && block.url) {
                         html += `
                             <div class="block-image fade-up">
-                                <img src="${block.url}" loading="lazy" alt="Wireframe / Visual">
+                                <img src="${block.url}" loading="lazy" alt="Wireframe/Mockup">
                                 ${block.caption ? `<span>${block.caption}</span>` : ''}
                             </div>`;
                     } else if (block.type === 'stat') {
@@ -144,7 +139,7 @@
                     }
                 });
             } else {
-                // Fallback para proyectos anteriores
+                // Fallback para proyectos sin bloques
                 const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || '';
                 const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || '';
                 if (challenge) html += `<section class="block-text fade-up"><h2>The Challenge</h2><p>${challenge}</p></section>`;
@@ -161,8 +156,8 @@
         }
     }
 
-    // Usamos el evento 'load' para dar tiempo a que los .js se procesen
-    window.addEventListener('load', loadCase);
+    // Ejecución inicial
+    loadCase();
   </script>
 </body>
 </html>
