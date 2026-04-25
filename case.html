@@ -6,27 +6,38 @@
   <title>Project Detail — Freddy Gonzalez</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+  
   <style>
-    /* Estilos Premium para Case Studies */
+    /* ═══ ESTILOS DE ALTO IMPACTO PARA CASE STUDIES (Encapsulados aquí) ═══ */
     .case-container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+    
     .cs-header { padding-top: 12rem; margin-bottom: 5rem; text-align: left; }
-    .cs-hero-img { width: 100%; height: auto; aspect-ratio: 16/9; border-radius: 32px; object-fit: cover; border: 1px solid var(--border); margin-bottom: 4rem; background: var(--surface2); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
     
-    /* Bloques de Contenido Dinámicos */
-    .block-text { margin-bottom: 8rem; max-width: 850px; }
-    .block-text h2 { font-size: 2.8rem; margin-bottom: 2rem; color: var(--white); font-family: 'DM Serif Display'; line-height: 1.1; }
-    .block-text p { font-size: 1.2rem; color: var(--text-body); line-height: 1.8; margin-bottom: 1.5rem; }
+    .cs-hero-img { 
+        width: 100%; height: auto; aspect-ratio: 16/9; 
+        border-radius: 32px; object-fit: cover; 
+        border: 1px solid var(--border); margin-bottom: 4rem; 
+        background: var(--surface2); box-shadow: 0 30px 60px rgba(0,0,0,0.4); 
+    }
     
-    .block-image { margin: 8rem 0; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); background: var(--surface2); }
+    /* Bloques de Texto */
+    .block-text { margin-bottom: 6rem; max-width: 800px; }
+    .block-text h2 { font-size: 2.6rem; margin-bottom: 1.5rem; color: var(--text); font-family: 'DM Serif Display', serif; }
+    .block-text p { font-size: 1.2rem; color: var(--text-body); line-height: 1.8; }
+    
+    /* Bloques de Imágenes (Wireframes, Diagramas, UI) */
+    .block-image { margin: 6rem 0; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); background: var(--surface2); }
     .block-image img { width: 100%; height: auto; display: block; }
-    .block-image span { display: block; padding: 1.5rem; font-size: 0.9rem; color: var(--muted); font-family: 'Space Mono'; text-align: center; background: var(--surface); }
+    .block-image span { display: block; padding: 1.5rem; font-size: 0.85rem; color: var(--muted); font-family: 'Space Mono', monospace; text-align: center; background: var(--surface); border-top: 1px solid var(--border); }
 
-    .block-stat { display: inline-block; padding: 3rem; background: var(--surface); border-radius: 24px; border: 1px solid var(--border); border-top: 4px solid var(--accent); transition: transform 0.3s ease; margin-right: 2rem; margin-bottom: 2rem; min-width: 250px; }
-    .stat-val { font-family: 'DM Serif Display'; font-size: 4rem; color: white; line-height: 1; margin-bottom: 0.5rem; }
-    .stat-lab { font-family: 'Space Mono'; font-size: 0.8rem; color: var(--accent3); text-transform: uppercase; letter-spacing: 0.1em; }
+    /* Bloques de Estadísticas / Impacto */
+    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin: 5rem 0; }
+    .block-stat { padding: 2.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; border-top: 4px solid var(--accent3); transition: transform 0.3s ease; }
+    .block-stat:hover { transform: translateY(-5px); }
+    .stat-val { font-family: 'DM Serif Display', serif; font-size: 3.5rem; color: var(--text); line-height: 1; margin-bottom: 0.5rem; }
+    .stat-lab { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent3); text-transform: uppercase; letter-spacing: 0.1em; }
 
-    #error-display { display: none; padding: 20rem 2rem; text-align: center; color: var(--accent2); font-family: 'Space Mono'; }
-    .loading-state { padding: 20rem 2rem; text-align: center; }
+    .loading-state { padding: 15rem 2rem; text-align: center; }
   </style>
 </head>
 <body>
@@ -34,60 +45,62 @@
   <nav id="navbar">
     <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
     <ul class="nav-links">
-      <li><a href="work.html">Work</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="work.html" class="active">Work</a></li>
       <li><button class="lang-btn" onclick="Lang.toggle(); location.reload();" id="langBtn">ES</button></li>
     </ul>
   </nav>
 
-  <div id="error-display">
-    <h2 class="serif">Case not found</h2>
-    <p id="error-message"></p>
-    <a href="work.html" class="btn btn-primary" style="margin-top: 2rem;">Return to Portfolio</a>
-  </div>
-
   <main id="caseContent" class="case-container">
       <div class="loading-state">
-          <p class="mono" id="status-text">Fetching project data...</p>
+          <p class="mono" id="status-text" style="color:var(--muted)">Fetching project data...</p>
       </div>
   </main>
 
-  <footer style="padding: 10rem 0 5rem; text-align: center; border-top: 1px solid var(--border); margin-top: 10rem;">
-      <div class="footer-logo">Freddy Gonzalez</div>
-      <p class="mono" style="font-size: 0.8rem; color: var(--muted); margin-top: 1rem;">© 2024 — Product Owner & Lead Designer</p>
+  <footer>
+    <div class="footer-logo">Freddy Gonzalez</div>
+    <span class="footer-copy">© 2024 Freddy Gonzalez.</span>
+    <div class="footer-social">
+      <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="mailto:tipovisual@gmail.com" class="social-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
   </footer>
 
-  <!-- Cargamos i18n primero porque no es un módulo -->
+  <!-- ═══ SCRIPTS GLOBALES IGUAL QUE EN INDEX.HTML ═══ -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/db.js"></script>
   <script src="js/i18n.js"></script>
 
-  <script type="module">
-    // IMPORTAMOS LA BASE DE DATOS DIRECTAMENTE
-    import { db } from './js/db.js';
-
+  <script>
     async function loadCase() {
         const container = document.getElementById('caseContent');
-        const errorDisplay = document.getElementById('error-display');
-        const errorMsg = document.getElementById('error-message');
-
-        // Esperar a que Lang esté listo (polling ligero)
-        if (!window.Lang) {
+        
+        // Polling de seguridad para esperar a que carguen las dependencias globales
+        if (!window.Lang || !window.db) {
             setTimeout(loadCase, 50);
             return;
         }
 
+        const lang = Lang.current;
+        const slug = new URLSearchParams(window.location.search).get('id');
+
+        if (!slug) { window.location.href = 'work.html'; return; }
+
         try {
-            const lang = window.Lang.current;
-            const params = new URLSearchParams(window.location.search);
-            const slug = params.get('id');
-
-            if (!slug) { window.location.href = 'work.html'; return; }
-
-            // Fetch de datos
-            const { data: cs, error } = await db.from('portfolio_projects').select('*').eq('slug', slug).single();
+            // Usamos 'db' directamente porque ya es global
+            const { data: cs, error } = await db
+                .from('portfolio_projects')
+                .select('*')
+                .eq('slug', slug)
+                .single();
             
-            if (error) throw new Error(`Database: ${error.message}`);
-            if (!cs) throw new Error("The project slug was not found.");
+            if (error || !cs) throw new Error("Proyecto no encontrado");
 
-            // Procesamiento de Metadatos
+            // Procesamiento de datos principales
             const title = cs.title?.[lang] || cs.title?.es || 'Untitled Project';
             const desc = cs.description?.[lang] || cs.description?.es || '';
             const role = cs.meta?.role || 'Lead Designer';
@@ -96,7 +109,7 @@
 
             document.title = `${title} — Freddy Gonzalez`;
 
-            // Construcción del Layout Inicial
+            // Construcción del Header y Hero
             let html = `
                 <div class="cs-header fade-up">
                     <a href="work.html" class="btn btn-ghost" style="margin-bottom:3rem; padding: 0.5rem 1.2rem; font-size: 0.8rem;">← Back to Work</a>
@@ -113,11 +126,20 @@
                 </div>
             `;
 
-            // Renderizado de Bloques (SISTEMA CMS DINÁMICO)
+            // Renderizado de Bloques del Case Builder
             const blocks = cs.content?.blocks || [];
             
             if (blocks.length > 0) {
+                // Creamos un contenedor para agrupar estadísticas consecutivas
+                let inStatGroup = false;
+
                 blocks.forEach(block => {
+                    // Si el bloque no es de tipo estadística y estábamos en un grupo, lo cerramos
+                    if (block.type !== 'stat' && inStatGroup) {
+                        html += `</div>`; // cerramos el div .metrics-grid
+                        inStatGroup = false;
+                    }
+
                     if (block.type === 'text') {
                         html += `
                             <section class="block-text fade-up">
@@ -127,19 +149,29 @@
                     } else if (block.type === 'image' && block.url) {
                         html += `
                             <div class="block-image fade-up">
-                                <img src="${block.url}" loading="lazy" alt="Wireframe/Mockup">
+                                <img src="${block.url}" loading="lazy" alt="Visual Asset">
                                 ${block.caption ? `<span>${block.caption}</span>` : ''}
                             </div>`;
                     } else if (block.type === 'stat') {
+                        // Si es la primera estadística, abrimos el contenedor grid
+                        if (!inStatGroup) {
+                            html += `<div class="metrics-grid fade-up">`;
+                            inStatGroup = true;
+                        }
                         html += `
-                            <div class="block-stat fade-up">
+                            <div class="block-stat">
                                 <div class="stat-val">${block.value}</div>
                                 <div class="stat-lab">${lang === 'es' ? block.label_es : block.label_en}</div>
                             </div>`;
                     }
                 });
+
+                // Si terminó el loop y el último elemento fue una estadística, cerramos el grid
+                if (inStatGroup) {
+                    html += `</div>`;
+                }
             } else {
-                // Fallback para proyectos sin bloques
+                // Retrocompatibilidad para proyectos anteriores
                 const challenge = cs.content?.[lang]?.challenge || cs.story?.challenge?.[lang] || '';
                 const solution = cs.content?.[lang]?.solution || cs.story?.solution?.[lang] || '';
                 if (challenge) html += `<section class="block-text fade-up"><h2>The Challenge</h2><p>${challenge}</p></section>`;
@@ -149,14 +181,15 @@
             container.innerHTML = html + `<div style="padding:10rem 0; text-align:center;"><a href="work.html" class="btn btn-primary">Browse more work</a></div>`;
 
         } catch (e) {
-            console.error("Critical Error:", e);
-            container.style.display = 'none';
-            errorDisplay.style.display = 'block';
-            errorMsg.innerText = e.message;
+            console.error("Error cargando detalle:", e);
+            container.innerHTML = `
+                <div style="padding:15rem 0; text-align:center;">
+                    <h2 class="serif">Project not found</h2>
+                    <a href="work.html" class="btn btn-primary" style="margin-top:2rem;">Back to Work</a>
+                </div>`;
         }
     }
 
-    // Ejecución inicial
     loadCase();
   </script>
 </body>
