@@ -4,217 +4,229 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About — Freddy Gonzalez</title>
+
+  <!-- ═══ MANTENIDO: SEO & PIXEL TRACKING (INTEGRIDAD TOTAL) ═══ -->
+  <meta name="description" content="Freddy Gonzalez — Senior UX/UI Designer & Product Owner especializado en humanizar la tecnología mediante estrategia disruptiva.">
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '263055378239429');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=263055378239429&ev=PageView&noscript=1"/></noscript>
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7WND12NQQQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-7WND12NQQQ');
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <nav id="navbar">
-    <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-      <li><a href="about.html" class="active" data-i18n="nav.about">About</a></li>
-      <li><a href="work.html" data-i18n="nav.work">Work</a></li>
-      <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
-      <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
-    </ul>
-    <button class="nav-mobile-btn" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
+  <nav>
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
+      <a href="index.html" class="nav-logo">Freddy Gonzalez</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="about.html" class="active" data-i18n="nav.about">About</a></li>
+        <li><a href="work.html" data-i18n="nav.work">Work</a></li>
+        <li><button class="lang-btn" onclick="Lang.toggle()" id="langBtn">ES</button></li>
+      </ul>
+      <button class="nav-mobile-btn" onclick="toggleMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
   </nav>
 
-  <main>
-    <div class="container section-pad" style="padding-top:8rem">
-
-      <div class="section-label" data-i18n="about.label">Sobre Mí</div>
-
-      <!-- BIO -->
-      <div style="display:grid;grid-template-columns:1fr 2fr;gap:4rem;align-items:start;margin-bottom:5rem">
-        <div style="position:sticky;top:100px">
-          <div style="aspect-ratio:1;border-radius:24px;overflow:hidden;border:1px solid var(--border);box-shadow:0 20px 40px rgba(0,0,0,0.3)">
-            <img src="img/freddy-profile.jpg" alt="Freddy Gonzalez" style="width:100%;height:100%;object-fit:cover"
-              onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:5rem;background:var(--surface2)\'>👨‍💻</div>'">
-          </div>
-          <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.75rem">
-            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.9rem;color:var(--text-body)">
-              <span style="color:var(--accent)">📍</span> Panamá, Ciudad de Panamá
-            </div>
-            <div style="display:flex;align-items:center;gap:0.75rem;font-size:0.9rem;color:var(--text-body)">
-              <span style="color:var(--accent)">✉️</span> tipovisual@gmail.com
-            </div>
-          </div>
+  <main class="container section-pad">
+    <div class="about-grid">
+      
+      <!-- COLUMNA 1: FOTO STICKY -->
+      <aside class="profile-wrap">
+        <img src="img/freddy-profile.jpg" alt="Freddy Gonzalez" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:5rem;background:var(--surface2)\'>👨‍💻</div>'">
+        <div style="padding: 2.5rem; background: var(--surface2);">
+            <p class="mono" style="font-size:0.75rem; margin-bottom:1rem; color:var(--text);">📍 Panamá, Ciudad de Panamá</p>
+            <p class="mono" style="font-size:0.75rem; color:var(--accent3);">✉️ tipovisual@gmail.com</p>
         </div>
-        <div>
-          <h1 class="serif" style="font-size:4rem;margin-bottom:1rem">Freddy Gonzalez</h1>
-          <h2 class="mono" style="font-size:0.9rem;color:var(--accent);margin-bottom:2rem;letter-spacing:0.2em" data-i18n="about.role">PRODUCT OWNER & LEAD DESIGNER</h2>
-          <p class="section-sub" style="margin-bottom:1.5rem" data-i18n="about.bio1">Mi trayectoria comenzó en el diseño gráfico puro...</p>
-          <p class="section-sub" style="margin-bottom:2rem" data-i18n="about.bio2">Hoy, como parte del liderazgo en el equipo de producto...</p>
-          <div style="display:flex;gap:1rem;flex-wrap:wrap">
+      </aside>
+
+      <!-- COLUMNA 2: CONTENIDO -->
+      <div class="bio-content">
+        <span class="mono section-label" data-i18n="about.label">Sobre Mí</span>
+        <h1 class="serif" style="margin-bottom: 1.5rem;">Freddy Gonzalez</h1>
+        <h2 class="mono" style="margin-bottom: 3.5rem; font-size: 1rem; color: var(--accent-soft);" data-i18n="about.role">PRODUCT OWNER & LEAD DESIGNER</h2>
+        
+        <p class="section-sub fade-up d1" data-i18n="about.bio1" style="font-size: 1.6rem; line-height: 1.3; margin-bottom: 2.5rem; color: var(--text);"></p>
+        <p class="section-sub fade-up d2" data-i18n="about.bio2" style="margin-bottom: 4.5rem;"></p>
+
+        <div class="fade-up d3" style="display:flex; gap:1.5rem; margin-bottom: 8rem; flex-wrap:wrap;">
             <a href="contact.html" class="btn btn-primary" data-i18n="about.cta1">Hablemos de tu proyecto</a>
             <a href="#" class="btn btn-ghost" data-i18n="about.download">Descargar Currículum</a>
-          </div>
         </div>
-      </div>
 
-      <!-- SKILLS + EXPERIENCE -->
-      <div style="display:grid;grid-template-columns:1fr 2fr;gap:4rem;margin-bottom:5rem">
-        <div>
-          <div class="section-label" data-i18n="about.skillsTitle">Habilidades</div>
-          <div class="skills-group">
+        <!-- SKILLS -->
+        <div class="section-label mono" data-i18n="about.skillsTitle">Skills</div>
+        
+        <div class="skills-group">
             <h3 class="skills-group-label" data-i18n="about.techSkills">Habilidades Técnicas</h3>
-            <div>
-              <span class="skill-tag">Information Architecture</span>
-              <span class="skill-tag">Human-centered Design</span>
-              <span class="skill-tag">Design Systems</span>
-              <span class="skill-tag">Figma</span>
-              <span class="skill-tag">Prototypes Design</span>
-              <span class="skill-tag">Usability Principles</span>
-              <span class="skill-tag">Design Thinking</span>
-              <span class="skill-tag">Lean UX</span>
-              <span class="skill-tag">Problem Solving</span>
-              <span class="skill-tag">Cross Teams Communication</span>
+            <div class="tags-container">
+                <span class="skill-tag">Information Architecture</span>
+                <span class="skill-tag">Human-centered Design</span>
+                <span class="skill-tag">Design Systems</span>
+                <span class="skill-tag">Figma</span>
+                <span class="skill-tag">Prototypes Design</span>
+                <span class="skill-tag">Usability Principles</span>
+                <span class="skill-tag">Design Thinking</span>
+                <span class="skill-tag">Lean UX</span>
+                <span class="skill-tag">Problem Solving</span>
+                <span class="skill-tag">Cross Teams Communication</span>
             </div>
-          </div>
-          <div class="skills-group">
+        </div>
+
+        <div class="skills-group">
             <h3 class="skills-group-label" data-i18n="about.softSkills">Habilidades Blandas</h3>
-            <div>
-              <span class="skill-tag">Fast Learner</span>
-              <span class="skill-tag">Teamwork</span>
-              <span class="skill-tag">Agile Principles</span>
-              <span class="skill-tag">Design Ops</span>
-              <span class="skill-tag">Self Organization</span>
-              <span class="skill-tag">Effective Time Management</span>
-              <span class="skill-tag">Critical Thinking</span>
-              <span class="skill-tag">Business Needs Understanding</span>
-              <span class="skill-tag">Ability to Multitask</span>
+            <div class="tags-container">
+                <span class="skill-tag">Fast Learner</span>
+                <span class="skill-tag">Teamwork</span>
+                <span class="skill-tag">Agile Principles</span>
+                <span class="skill-tag">Design Ops</span>
+                <span class="skill-tag">Self Organization</span>
+                <span class="skill-tag">Effective Time Management</span>
+                <span class="skill-tag">Critical Thinking</span>
+                <span class="skill-tag">Business Needs Understanding</span>
+                <span class="skill-tag">Ability to Multitask</span>
             </div>
-          </div>
-          <div class="skills-group">
+        </div>
+
+        <div class="skills-group" style="margin-bottom: 8rem;">
             <h3 class="skills-group-label" data-i18n="about.tools">Herramientas</h3>
-            <div>
-              <span class="skill-tag">Figma</span>
-              <span class="skill-tag">Adobe Illustrator</span>
-              <span class="skill-tag">Adobe Photoshop</span>
-              <span class="skill-tag">Adobe After Effects</span>
+            <div class="tags-container">
+                <span class="skill-tag">Figma</span>
+                <span class="skill-tag">Adobe Illustrator</span>
+                <span class="skill-tag">Adobe Photoshop</span>
+                <span class="skill-tag">Adobe After Effects</span>
             </div>
-          </div>
         </div>
 
-        <!-- EXPERIENCE -->
-        <div>
-          <div class="section-label" data-i18n="about.expTitle">Experiencia</div>
-          <div class="exp-item">
-            <div class="exp-title" data-i18n="exp.e1_title">UI Designer in Product Team</div>
-            <div class="exp-company">MFtech s.a / Zinli</div>
-            <div class="exp-period" data-i18n="exp.e1_period">December 2019 – Present</div>
-            <div class="exp-desc" data-i18n="exp.e1_desc">Working on a digital wallet mobile app.</div>
-          </div>
-          <div class="exp-item">
-            <div class="exp-title" data-i18n="exp.e2_title">Design Lead and Product Designer</div>
-            <div class="exp-company">Keylime Technologies s.a.</div>
-            <div class="exp-period" data-i18n="exp.e2_period">September 2014 – November 2019</div>
-            <div class="exp-desc" data-i18n="exp.e2_desc">Led design initiatives and product development.</div>
-          </div>
-          <div class="exp-item">
-            <div class="exp-title" data-i18n="exp.e3_title">UX/UI Designer</div>
-            <div class="exp-company">Vozz News s.a.</div>
-            <div class="exp-period" data-i18n="exp.e3_period">July 2016 – May 2019</div>
-            <div class="exp-desc" data-i18n="exp.e3_desc">Designed UX and interface for a news digest mobile app.</div>
-          </div>
-          <div class="exp-item">
-            <div class="exp-title" data-i18n="exp.e4_title">UX Research</div>
-            <div class="exp-company">Cochez & Cia s.a.</div>
-            <div class="exp-period" data-i18n="exp.e4_period">June 2019 – August 2019</div>
-            <div class="exp-desc" data-i18n="exp.e4_desc">Conducted user research for a retail mobile app.</div>
-          </div>
-          <div class="exp-item">
-            <div class="exp-title" data-i18n="exp.e5_title">Instructor</div>
-            <div class="exp-company">CVT Center s.a.</div>
-            <div class="exp-period" data-i18n="exp.e5_period">August 2014 – January 2023</div>
-            <div class="exp-desc" data-i18n="exp.e5_desc">Taught UX/UI design courses at a visual design academy.</div>
-          </div>
-          <div class="exp-item">
-            <div class="exp-title" data-i18n="exp.e6_title">Founder</div>
-            <div class="exp-company">TWI Studio c.a</div>
-            <div class="exp-period" data-i18n="exp.e6_period">March 2008 – December 2013</div>
-            <div class="exp-desc" data-i18n="exp.e6_desc">Founded and managed a creative design studio.</div>
-          </div>
-        </div>
-      </div>
+        <!-- EXPERIENCIA (TODOS LOS 6 ITEMS) -->
+        <div class="section-label mono" data-i18n="about.expTitle">Experience</div>
+        <div class="experience-list">
+            
+            <div class="exp-item">
+                <h3 class="exp-title" data-i18n="exp.e1_title">UI Designer in Product Team</h3>
+                <p class="exp-company">MFtech s.a / Zinli</p>
+                <p class="exp-period" data-i18n="exp.e1_period">December 2019 – Present</p>
+                <p class="exp-desc" data-i18n="exp.e1_desc">Working on a digital wallet mobile app, focusing on user interface design and user experience optimization.</p>
+            </div>
 
-      <!-- EDUCATION -->
-      <div class="section-label" data-i18n="about.eduTitle">Educación</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:0.5rem">
-        <div class="edu-item">
-          <div class="edu-degree" data-i18n="exp.edu1_deg">UX/UI Design Courses</div>
-          <div class="edu-inst">Platzi, Coursera, The Interaction Design Foundation</div>
-          <div class="edu-year">2017 – 2024</div>
-          <div class="cert-grid">
-            <div class="cert-item"><span class="cert-dot"></span>AI for designers</div>
-            <div class="cert-item"><span class="cert-dot"></span>Information architecture</div>
-            <div class="cert-item"><span class="cert-dot"></span>Human-centered design</div>
-            <div class="cert-item"><span class="cert-dot"></span>Design systems</div>
-            <div class="cert-item"><span class="cert-dot"></span>Design thinking</div>
-            <div class="cert-item"><span class="cert-dot"></span>Lean UX & Scrum</div>
-            <div class="cert-item"><span class="cert-dot"></span>Usability principles</div>
-            <div class="cert-item"><span class="cert-dot"></span>Prototypes design</div>
-            <div class="cert-item"><span class="cert-dot"></span>Color semiotics</div>
-            <div class="cert-item"><span class="cert-dot"></span>Interface design principles</div>
-          </div>
-        </div>
-        <div class="edu-item">
-          <div class="edu-degree" data-i18n="exp.edu2_deg">Graphic Designer Degree</div>
-          <div class="edu-inst">Instituto de Diseño de Valencia</div>
-          <div class="edu-year">2004 – 2007</div>
-        </div>
-        <div class="edu-item">
-          <div class="edu-degree">Screen Essentials for UI Designers</div>
-          <div class="edu-inst">learnux.io</div>
-          <div class="edu-year">2020</div>
-        </div>
-      </div>
+            <div class="exp-item">
+                <h3 class="exp-title" data-i18n="exp.e2_title">Design Lead and Product Designer</h3>
+                <p class="exp-company">Keylime Technologies s.a.</p>
+                <p class="exp-period" data-i18n="exp.e2_period">September 2014 – November 2019</p>
+                <p class="exp-desc" data-i18n="exp.e2_desc">Led design initiatives and product development, creating user-centered solutions and design systems.</p>
+            </div>
 
-    </div>
-  </main>
+            <div class="exp-item">
+                <h3 class="exp-title" data-i18n="exp.e3_title">UX/UI Designer</h3>
+                <p class="exp-company">Vozz News s.a.</p>
+                <p class="exp-period" data-i18n="exp.e3_period">July 2016 – May 2019</p>
+                <p class="exp-desc" data-i18n="exp.e3_desc">Designed user experience and interface for a news digest mobile application, focusing on content presentation and readability.</p>
+            </div>
 
-  <footer class="main-footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-cta">
-                <div class="section-label" data-i18n="contact.label">Contact</div>
-                <h2 class="serif" data-i18n="footer.title">Let’s build something<br>meaningful together.</h2>
-                <p data-i18n="footer.sub">Available to lead disruptive projects and help products scale through strategic design.</p>
-                <div class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span data-i18n="footer.status">Available for new projects</span>
+            <div class="exp-item">
+                <h3 class="exp-title" data-i18n="exp.e4_title">UX Research</h3>
+                <p class="exp-company">Cochez & Cia s.a.</p>
+                <p class="exp-period" data-i18n="exp.e4_period">June 2019 – August 2019</p>
+                <p class="exp-desc" data-i18n="exp.e4_desc">Conducted user research for a retail, logistics and inventory manager mobile app, identifying user needs and pain points.</p>
+            </div>
+
+            <div class="exp-item">
+                <h3 class="exp-title" data-i18n="exp.e5_title">Instructor</h3>
+                <p class="exp-company">CVT Center s.a.</p>
+                <p class="exp-period" data-i18n="exp.e5_period">August 2014 – January 2023</p>
+                <p class="exp-desc" data-i18n="exp.e5_desc">Taught courses at a visual design academy, sharing knowledge and best practices in UX/UI design.</p>
+            </div>
+
+            <div class="exp-item">
+                <h3 class="exp-title" data-i18n="exp.e6_title">Founder</h3>
+                <p class="exp-company">TWI Studio c.a</p>
+                <p class="exp-period" data-i18n="exp.e6_period">March 2008 – December 2013</p>
+                <p class="exp-desc" data-i18n="exp.e6_desc">Founded and managed a design studio, providing creative solutions for various clients.</p>
+            </div>
+
+        </div>
+
+        <!-- EDUCACIÓN (TODOS LOS ITEMS) -->
+        <div class="section-label mono" data-i18n="about.eduTitle" style="margin-top: 8rem;">Education</div>
+        <div class="education-grid">
+            <div class="edu-item">
+                <div class="edu-degree" data-i18n="exp.edu1_deg">UX/UI Design Courses</div>
+                <div class="edu-inst">Platzi, Coursera, The Interaction Design Foundation</div>
+                <div class="edu-year">2017 – 2024</div>
+                <div class="cert-grid">
+                    <div class="cert-item"><span class="cert-dot"></span>AI for designers</div>
+                    <div class="cert-item"><span class="cert-dot"></span>Information architecture</div>
+                    <div class="cert-item"><span class="cert-dot"></span>Human-centered design</div>
+                    <div class="cert-item"><span class="cert-dot"></span>Design systems</div>
+                    <div class="cert-item"><span class="cert-dot"></span>Design thinking</div>
+                    <div class="cert-item"><span class="cert-dot"></span>Lean UX & Scrum</div>
+                    <div class="cert-item"><span class="cert-dot"></span>Usability principles</div>
+                    <div class="cert-item"><span class="cert-dot"></span>Prototypes design</div>
+                    <div class="cert-item"><span class="cert-dot"></span>Color semiotics</div>
+                    <div class="cert-item"><span class="cert-dot"></span>Interface design principles</div>
                 </div>
             </div>
 
-            <div class="footer-contact-links">
-                <div class="section-label" data-i18n="footer.label">Social & Mail</div>
-                <a href="mailto:tipovisual@gmail.com" class="footer-link">tipovisual@gmail.com</a>
-                <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" target="_blank" class="footer-link">LinkedIn</a>
+            <div class="edu-item">
+                <div class="edu-degree" data-i18n="exp.edu2_deg">Graphic Designer Degree</div>
+                <div class="edu-inst">Instituto de Diseño de Valencia</div>
+                <div class="edu-year">2004 – 2007</div>
+            </div>
+
+            <div class="edu-item">
+                <div class="edu-degree">Screen Essentials for UI Designers</div>
+                <div class="edu-inst">learnux.io</div>
+                <div class="edu-year">2020</div>
             </div>
         </div>
+      </div>
+    </div>
+  </main>
 
-        <div class="footer-bottom">
-            <div class="footer-info">
-                <span class="nav-logo">Freddy Gonzalez</span>
-                <span class="mono" style="font-size: 0.7rem; color: var(--muted);" data-i18n="footer.copy">© 2024 — HANDCRAFTED IN PANAMA</span>
-            </div>
-            <div class="footer-social">
-                <a href="index.html" class="mono" style="font-size: 0.7rem; margin-left: 2rem;" data-i18n="nav.home">HOME</a>
-                <a href="work.html" class="mono" style="font-size: 0.7rem; margin-left: 2rem;" data-i18n="nav.work">WORK</a>
-                <a href="about.html" class="mono" style="font-size: 0.7rem; margin-left: 2rem;" data-i18n="nav.about">ABOUT</a>
-            </div>
+  <footer class="main-footer container">
+    <div class="footer-grid">
+        <div>
+            <span class="mono section-label" data-i18n="contact.label">Contact</span>
+            <h2 class="serif" data-i18n="footer.title">Let’s build something together.</h2>
+            <p data-i18n="footer.sub" style="margin: 2rem 0;"></p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:1.5rem;">
+            <a href="mailto:tipovisual@gmail.com" class="footer-link">tipovisual@gmail.com</a>
+            <a href="https://linkedin.com/in/freddy-gonzalez-13a13a3a/" class="footer-link">LinkedIn</a>
         </div>
     </div>
-</footer>
+    <div class="footer-bottom">
+        <span class="nav-logo" style="font-size: 1rem;">Freddy Gonzalez</span>
+        <span class="mono" data-i18n="footer.copy"></span>
+    </div>
+  </footer>
 
   <script src="js/i18n.js"></script>
   <script>
-    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10));
+    function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
   </script>
 </body>
 </html>
