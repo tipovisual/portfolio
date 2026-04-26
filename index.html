@@ -102,96 +102,85 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/db.js"></script>
   <script src="js/i18n.js"></script>
-  <script type="module">
-    import { supabase } from './js/supabase-config.js';
+  <script>
+    window.toggleMenu = () => document.getElementById('navLinks').classList.toggle('open');
 
-    // 1. TRADUCCIONES (Mantenido intacto del original)
+    // 1. TRADUCCIONES
     function applyTranslations() {
-        const lang = Lang.current;
-        const elements = {
-            'langBtn': lang === 'en' ? 'ES' : 'EN',
-            't-home': Lang.get('nav.home'),
-            't-about': Lang.get('nav.about'),
-            't-work': Lang.get('nav.work'),
-            't-contact': Lang.get('nav.contact'),
-            't-hero-tag': Lang.get('hero.tag'),
-            't-hero-sub': Lang.get('hero.sub'),
-            't-work-label': Lang.get('work.label'),
-            't-work-title': Lang.get('work.title'),
-            't-view-all': Lang.get('work.viewAll') + ' →',
-            't-copy': Lang.get('footer.copy')
-        };
-        for (const [id, value] of Object.entries(elements)) {
-            const el = document.getElementById(id);
-            if (el) el.textContent = value;
-        }
+      const lang = Lang.current;
+      const elements = {
+        'langBtn':      lang === 'en' ? 'ES' : 'EN',
+        't-home':       Lang.get('nav.home'),
+        't-about':      Lang.get('nav.about'),
+        't-work':       Lang.get('nav.work'),
+        't-contact':    Lang.get('nav.contact'),
+        't-hero-tag':   Lang.get('hero.tag'),
+        't-hero-sub':   Lang.get('hero.sub'),
+        't-work-label': Lang.get('work.label'),
+        't-work-title': Lang.get('work.title'),
+        't-view-all':   Lang.get('work.viewAll') + ' →',
+        't-copy':       Lang.get('footer.copy')
+      };
+      for (const [id, value] of Object.entries(elements)) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      }
     }
 
-    // 2. RENDER SUPABASE (Mantenido intacto del original con límite 2)
+    // 2. RENDER SUPABASE
     async function renderFeaturedWork() {
-        const grid = document.getElementById('workGrid');
-        if (!grid) return;
-        const lang = Lang.current;
-        
-        try {
-            const { data: projects, error } = await supabase
-                .from('portfolio_projects')
-                .select('*')
-                .order('created_at', { ascending: false })
-                .limit(2);
-
-            if (error) throw error;
-            grid.innerHTML = ''; 
-
-            projects.forEach(cs => {
-                const card = document.createElement('a');
-                card.href = `case.html?id=${cs.slug}`;
-                card.className = 'case-card';
-                card.innerHTML = `
-                    <div class="case-img" style="background-image: url('${cs.image_url || ''}'); background-size: cover; background-position: center;">
-                        ${!cs.image_url ? `
-                            <div>
-                                <div class="case-emoji" style="font-size:3rem; text-align:center;">${cs.emoji}</div>
-                                <div class="mono" style="font-size:0.6rem; color:var(--muted); text-align:center; margin-top:1rem;">${(cs.category[lang] || cs.category['es']).toUpperCase()}</div>
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="case-body">
-                        <div class="section-label" style="font-size:0.6rem; margin-bottom:1rem;">${cs.category[lang] || cs.category['es']}</div>
-                        <h3 class="serif" style="font-size:1.8rem; margin-bottom:1rem;">${cs.title[lang] || cs.title['es']}</h3>
-                        <p style="font-size:1rem; color:var(--text-body);">${cs.description[lang] || cs.description['es']}</p>
-                    </div>`;
-                grid.appendChild(card);
-            });
-        } catch (error) {
-            console.error("Error Home:", error);
-            grid.innerHTML = `<p style="color:var(--muted)">Próximamente...</p>`;
-        }
+      const grid = document.getElementById('workGrid');
+      if (!grid) return;
+      const lang = Lang.current;
+      try {
+        const { data: projects, error } = await db
+          .from('portfolio_projects')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(2);
+        if (error) throw error;
+        grid.innerHTML = '';
+        projects.forEach(cs => {
+          const card = document.createElement('a');
+          card.href = `case.html?id=${cs.slug}`;
+          card.className = 'case-card';
+          card.innerHTML = `
+            <div class="case-img" style="background-image:url('${cs.image_url || ''}');background-size:cover;background-position:center;">
+              ${!cs.image_url ? `<div><div class="case-emoji">${cs.emoji}</div><div class="mono" style="font-size:0.6rem;color:var(--muted);text-align:center;margin-top:0.5rem;">${(cs.category[lang] || cs.category['es']).toUpperCase()}</div></div>` : ''}
+            </div>
+            <div class="case-body">
+              <div class="case-tag-label">${cs.category[lang] || cs.category['es']}</div>
+              <div class="case-title">${cs.title[lang] || cs.title['es']}</div>
+              <p class="case-desc">${cs.description[lang] || cs.description['es']}</p>
+            </div>`;
+          grid.appendChild(card);
+        });
+      } catch(e) {
+        console.error('Error Home:', e);
+        grid.innerHTML = '<p style="color:var(--muted)">Próximamente...</p>';
+      }
     }
 
-    // INICIALIZACIÓN SEGURA (Mantenida del original)
+    // INICIALIZACIÓN
     document.addEventListener('DOMContentLoaded', () => {
-        applyTranslations();
-        renderFeaturedWork();
+      applyTranslations();
+      renderFeaturedWork();
 
-        // Acceso Secreto (Protegido - Mantenido del original)
-        let clicks = 0, timer;
-        const copyBtn = document.getElementById('t-copy');
-        if (copyBtn) {
-            copyBtn.addEventListener('click', () => {
-                clicks++;
-                clearTimeout(timer);
-                timer = setTimeout(() => clicks = 0, 1500);
-                if (clicks >= 3) { window.location.href = 'admin.html'; clicks = 0; }
-            });
-        }
+      // Acceso secreto al admin: 3 clicks en el copyright
+      let clicks = 0, timer;
+      const copyBtn = document.getElementById('t-copy');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          clicks++;
+          clearTimeout(timer);
+          timer = setTimeout(() => clicks = 0, 1500);
+          if (clicks >= 3) { window.location.href = 'admin.html'; clicks = 0; }
+        });
+      }
     });
-
-    // Menú Mobile
-    window.toggleMenu = () => {
-        document.getElementById('navLinks').classList.toggle('open');
-    };
   </script>
 </body>
 </html>
